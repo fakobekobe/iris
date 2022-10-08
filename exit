@@ -1,0 +1,113 @@
+[33mcommit 62c749721717b0263c7b44ef3e3cbc2387ee0006[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31mheroku/master[m[33m)[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 14:22:00 2022 +0000
+
+    modification de urls
+
+[33mcommit 09b67dd5666d5f9f723b379b222ec6009c6e5e71[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 14:20:25 2022 +0000
+
+    okk
+
+[33mcommit aeda50a7f18aec700ded29a3bcda2c2abca0996f[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 14:11:41 2022 +0000
+
+    Suppression de fichier css
+
+[33mcommit c259dd5260b2ff261136b6bc471e4b332aacef33[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 14:06:51 2022 +0000
+
+    Modification du fichier css.css
+
+[33mcommit 69473a70d0045d67610ebb9802ed7e18d0583509[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 13:52:13 2022 +0000
+
+    modification du fichier urls du projet
+
+[33mcommit 5266ddefac576b0abe226617361abb3ca8672aa6[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 13:43:19 2022 +0000
+
+    Modification du fichier prod_settings pour ajouter le whitenoise
+
+[33mcommit 4e0597ce41d377089566cda0f9d4f538031da0ad[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 13:32:49 2022 +0000
+
+    Ajour de la fonction de gestion des variables d'environnement
+
+[33mcommit 4c4d55ac04b8e9d741809d884f4c8a7857f3479a[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 13:12:53 2022 +0000
+
+    Ajout de whitenoise dans prod_settings
+
+[33mcommit 5f587541a71e67d095933ec54105f97cc255a826[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:55:42 2022 +0000
+
+    Ajout de dj-database-url
+
+[33mcommit 6cc3bec931bceeeb21335617209c961dfb5519fb[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:44:56 2022 +0000
+
+    Ajout de la configuration de production
+
+[33mcommit 254eb506d240ef9acea0d6f3d7cb6f526201e487[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:30:45 2022 +0000
+
+    Modification de Procfile
+
+[33mcommit a48e2c4d9461da5f54a95ca85c200c56a890b0cf[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:16:41 2022 +0000
+
+    Modification de urls du projet
+
+[33mcommit 1487ddf7d217e187dad9e471b4e34044ea8a471d[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:07:33 2022 +0000
+
+    Ajout du Host
+
+[33mcommit b0310e7b9ab4bf85c323d7b138d87dd307031e83[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 12:02:05 2022 +0000
+
+    Modification n de runtime.txt
+
+[33mcommit 0dac287485a04ac1003d5b1994cd13f52c22d266[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 11:59:50 2022 +0000
+
+    Modification du fichier runtime.txt
+
+[33mcommit 66fe2bafc2d045d8aed6a7934b497a18f205036d[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 11:54:29 2022 +0000
+
+    Modification du fichier runtime.txt
+
+[33mcommit 695126bd1bb804d46a974bc44e2016d063105cbe[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 11:51:43 2022 +0000
+
+    Modification du fichier runtime.txt pour ajouter la version de python 3.10.7
+
+[33mcommit b7e5ec6ec2090c2f1ef2c0d3875d6fb298980912[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 11:47:31 2022 +0000
+
+    Add staticfile
+
+[33mcommit c877d1e169a615be22bf4eca1802fb36f1570c7e[m
+Author: Tano Fabien <kobejeanfabien@gmail.com>
+Date:   Sat Oct 8 11:38:06 2022 +0000
+
+    Initialisation du projet avec heroku
