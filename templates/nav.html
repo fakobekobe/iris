@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="{% url 'utilisateur:connexion' %}">IRIS</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsNavbar">
+    <ul class="navbar-nav">
+      {% if not user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'utilisateur:connexion' %}">Connexion</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'utilisateur:inscription' 0 %}">S'inscrire</a>
+      </li>
+      {% else %}
+      <!-- Menu déroulant -->
+      <li class="nav-item dropdown" style="position: relative;">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          {{user.get_username}}
+        </a>
+        <div class="dropdown-menu" style="position: absolute; left:-60px;">
+          <a class="dropdown-item" href="{% url 'utilisateur:motdepasse' user.id %}"><i class="fa fa-user-secret"></i> Mot de passe</a>
+          {% if 'auht.add_userd' in perms %}
+          <a class="dropdown-item" href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a>
+          <a class="dropdown-item" href="{% url 'utilisateur:groupe' %}"><i class="fa fa-group"></i> Groupes</a>
+          <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Paramètres</a>
+          {% endif %}
+          <a class="dropdown-item text-danger" href="{% url 'utilisateur:deconnexion' %}"><i class="fa fa-sign-out"></i> Déconnexion</a>
+        </div>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

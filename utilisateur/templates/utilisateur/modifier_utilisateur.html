@@ -1,0 +1,72 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">{{titre}}</h1>
+        </div>
+        <div class="col-md-4 offset-md-4">
+            <p>
+                <form method="post" action="{% url 'utilisateur:modifier_utilisateur' utilisateur.id %}">
+                    {% csrf_token %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="{{form.username.name}}" id="{{form.username.name}}" placeholder="{{form.username.label}}" value="{{utilisateur.username|default:''}}" required />
+                    </div>
+                    {% if form.username.errors %}
+                    {% for erreur in form.username.errors %}
+                    <span class="text-danger">{{erreur}}</span>
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="{{form.last_name.name}}" id="{{form.last_name.name}}" placeholder="{{form.last_name.label}}" value="{{utilisateur.last_name|default:''}}" />
+                    </div>
+                    {% if form.last_name.errors %}
+                    {% for erreur in form.last_name.errors %}
+                    <span class="text-danger">{{erreur}}</span>
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="{{form.first_name.name}}" id="{{form.first_name.name}}" placeholder="{{form.first_name.label}}" value="{{utilisateur.first_name|default:''}}" />
+                    </div>
+                    {% if form.first_name.errors %}
+                    {% for erreur in form.first_name.errors %}
+                    <span class="text-danger">{{erreur}}</span>
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-at"></i></span>
+                        </div>
+                        <input class="form-control" type="email" name="{{form.email.name}}" id="{{form.email.name}}" placeholder="{{form.email.label}}" value="{{utilisateur.email|default:''}}" />
+                    </div>
+                    {% if form.email.errors %}
+                    {% for erreur in form.email.errors %}
+                    <span class="text-danger">{{erreur}}</span>
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="text-center">
+                        <input class="btn btn-sm btn-success" type="submit" value="Modifier" />
+                        <a class="btn btn-sm btn-danger" href="{% url 'utilisateur:utilisateur'%}">Annuler</a>
+                    </div>
+                </form>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

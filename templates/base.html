@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'images/logo_chlohe.ico' %}" />
+
+    <!-- BOOTSTRAP LIEN CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}" />
+    <title>{% block titre %}Accueil-IRIS{% endblock %}</title>
+</head>
+<body>
+  <div id ="page">
+
+      {% block nas %}
+      <div id ="nav">
+        {% include 'nav.html' %}
+      </div>
+      {% endblock %}
+
+    <div id ="contenu" class="container-fluid">
+      {% block contenu %}
+      {% endblock %}
+    </div>
+
+    <div id ="pied_page">
+      {% block pied_page %}
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p class="text-center">
+                    {% now "Y" as annee %}
+                    {% if annee == "2022" %}
+                    &copy copyright {{annee}} - Tous droits réservés CHLOHE.
+                    {% else %}
+                    &copy copyright 2022-{{annee}} - Tous droits réservés CHLOHE.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+      {% endblock %}
+    </div>
+
+  </div>
+
+  <!-- BOOTSTRAP LIEN JAVASCRIPT-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://kit.fontawesome.com/6b64521285.js" crossorigin="anonymous"></script>
+  {% block javascript %}
+  <script src="{% static 'js/toast.js' %}"></script>
+  {% endblock javascript%}
+
+</body>
+</html>

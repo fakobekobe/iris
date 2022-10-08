@@ -1,0 +1,69 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">{{titre}}</h1>
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Erreur:</strong> {{ message }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4 offset-md-4">
+                <form method="post" action="{% url 'utilisateur:motdepasse' utilisateur.id %}">
+                    {% csrf_token %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="user" id="user" value="{{utilisateur.username}}" disabled />
+                        <input class="form-control" type="text" name="username" id="username" value="{{utilisateur.username}}" hidden />
+                    </div>
+
+                    {% if utilisateur_identique %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user-lock"></i></span>
+                        </div>
+                        <input class="form-control" type="password" name="passwordactuel" id="passwordactuel" placeholder="Mot de passe actuel" required />
+                    </div>
+                    {% if passwordactuel %}
+                    <span class="text-danger">{{passwordactuel}}</span>
+                    {% endif %}
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user-lock"></i></span>
+                        </div>
+                        <input class="form-control" type="password" name="password1" id="password1" placeholder="Nouveau mot de passe" required />
+                    </div>
+                    {% if password1 %}
+                    <span class="text-danger">{{password1}}</span>
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user-lock"></i></span>
+                        </div>
+                        <input class="form-control" type="password" name="password2" id="password2" placeholder="Confirmer mot de passe" required />
+                    </div>
+                    {% if password2 %}
+                    <span class="text-danger">{{password2}}</span>
+                    {% endif %}
+
+                    <div class="text-center">
+                        <input class="btn btn-sm btn-success" type="submit" value="Modifier" />
+                        <a class="btn btn-sm btn-danger" href="{% url 'utilisateur:index' %}">Annuler</a>
+                    </div>
+                </form>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

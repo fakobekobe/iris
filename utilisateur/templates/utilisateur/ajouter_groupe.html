@@ -1,0 +1,37 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">{{titre}}</h1>
+        </div>
+        <div class="col-md-4 offset-md-4">
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Erreur:</strong> {{ message }}
+                </div>
+            {% endif %}
+
+            <p>
+                <form method="post" action="{% url 'utilisateur:ajouter_groupe' %}">
+                    {% csrf_token %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fa fa-group"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="{{form.name.name}}" id="{{form.name.name}}" placeholder="{{form.name.label}} du groupe" value="{{form.name.value|default:''}}" required />
+                    </div>
+
+                    <div class="text-center">
+                        <input class="btn btn-sm btn-success" type="submit" value="Ajouter" />
+                        <a class="btn btn-sm btn-danger" href="{% url 'utilisateur:groupe'%}">Annuler</a>
+                    </div>
+                </form>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

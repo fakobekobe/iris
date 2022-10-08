@@ -1,0 +1,84 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<h1 class="mb-3 text-primary"><i class="fa fa-user"></i> Liste des utilisateurs</h1>
+<h3><a class="btn btn-primary" href="{% url 'utilisateur:inscription' 1 %}"><i class="fa fa-user-plus"></i> Ajouter un utilisateur</a></h3>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table  table-bordered table-hover table-responsive-md">
+            <tr class="thead-light text-center">
+                <th>Nom d'utilisateur</th>
+                <th>Nom</th>
+                <th>Prénoms</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+            {% for utilisateur in page_obj %}
+            <tr>
+                <td>{{utilisateur.get_username}}</td>
+                <td>{{utilisateur.first_name}}</td>
+                <td>{{utilisateur.last_name}}</td>
+                <td>{{utilisateur.email}}</td>
+                <td class="text-center">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}">Détail</a>
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_utilisateur' utilisateur.id %}">Modifier</a>
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{utilisateur.id}}" data-backdrop="static">Supprimer</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal{{utilisateur.id}}" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              <p class="text-center">
+                                  <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_utilisateur' utilisateur.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                  </form>
+                                  <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                    <!-- Modal Fin -->
+                </td>
+            </tr>
+            {% empty %}
+            <td colspan="5">Auncun groupe</td>
+            {% endfor %}
+        </table>
+
+        <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">{{page_obj.start_index}}-{{page_obj.end_index}} sur {{total_pages}}</a></li>
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:utilisateur' %}?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+
+                  {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:utilisateur' %}?page={{page_obj.previous_page_number}}"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% endif %}
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:utilisateur' %}?page={{page_obj.next_page_number}}"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% endif %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:utilisateur' %}?page={{page_obj.paginator.num_pages}}"><i class="fa fa-angle-double-right"></i></a></li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

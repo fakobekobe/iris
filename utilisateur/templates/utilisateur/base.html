@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block titre %}{% endblock %}
+
+{% block contenu %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1 class="text-center"><i class="fa fa-dashboard"></i> TABLEAU DE BORD</h1>
+    </div>
+
+</div>
+
+<div class="row" id = "contenu_index">
+    <div class="col-md-2 bg-primary" id = "contenu_index_gauche">
+        <div>
+            <ul>
+                <li><a href="{% url 'utilisateur:index' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a></li>
+                <li><a href="{% url 'utilisateur:groupe' %}"><i class="fa fa-group"></i> Groupes</a></li>
+                <li><a href="#"><i class="fa fa-wrench"></i> Paramètres</a></li>
+            </ul>
+        </div>
+        <!-- -->
+
+        <!-- -->
+    </div>
+    <div class="col-md-10" id = "contenu_index_droit">
+        <div class="row">
+            <div class="col-md-12">
+                {% block tableau_de_bord %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

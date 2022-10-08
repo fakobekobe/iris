@@ -1,0 +1,23 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+
+
+{% if request.session.success %}
+<div style="position: absolute; top:0;right:0" class="toast bg-success">
+    <div class="toast-header">
+        <strong class="mr-auto text-success">Info</strong>
+        <small class="text-muted">5s</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+    </div>
+    <div class="toast-body text-white">
+        {{ request.session.success }}
+    </div>
+</div>
+{% endif %}
+<div class="text-center text-primary">
+    <h1>Bienvenue dans le projet IRIS</h1>
+    <h3>Projet en cours de construction</h3>
+</div>
+{% endblock %}

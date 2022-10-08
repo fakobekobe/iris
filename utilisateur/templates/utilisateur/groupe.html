@@ -1,0 +1,81 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<h1 class="mb-3 text-primary"><i class="fa fa-group"></i> Liste des groupes</h1>
+<h3><a class="btn btn-primary" href="{% url 'utilisateur:ajouter_groupe' %}"><i class="fa fa-plus"></i> Ajouter un groupe</a></h3>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table  table-bordered table-hover table-responsive-md">
+            <tr class="thead-light text-center">
+                <th>Nom du groupe</th>
+                <th>Action</th>
+            </tr>
+            {% for groupe in page_obj %}
+            <tr>
+                <td>{{groupe.name}}</td>
+                <td class="text-center">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_groupe' groupe.id %}">Detail</a>
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_groupe' groupe.id %}">Modifier</a>
+
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{groupe.id}}" data-backdrop="static">Supprimer</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal{{groupe.id}}" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              <p class="text-center">
+                                  <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_groupe' groupe.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                  </form>
+                                  <a type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                    <!-- Modal Fin -->
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">Auncun groupe</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">{{page_obj.start_index}}-{{page_obj.end_index}} sur {{total_pages}}</a></li>
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:groupe' %}?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+
+                  {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:groupe' %}?page={{page_obj.previous_page_number}}"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% endif %}
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:groupe' %}?page={{page_obj.next_page_number}}"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% endif %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:groupe' %}?page={{page_obj.paginator.num_pages}}"><i class="fa fa-angle-double-right"></i></a></li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

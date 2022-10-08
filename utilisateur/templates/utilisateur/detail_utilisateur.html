@@ -1,0 +1,186 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<div class="card mb-5">
+  <div class="card-header text-center bg-primary">
+      <h1 class="text-white">{{titre}}</h1>
+  </div>
+  <div class="card-body">
+        <h3>Nom d'utilisateur : <strong style="color:red;">{{utilisateur.get_username}}</strong></h3>
+        <h3>Nom complet : <strong style="color:red;">{{utilisateur.get_full_name}}</strong></h3>
+        <h3>Email : <strong style="color:red;">{{utilisateur.email}}</strong></h3>
+
+	  	<div class="row">
+				<div class="col-md-6 offset-md-3 text-center">
+					<a class="btn btn-warning" href="{% url 'utilisateur:motdepasse' utilisateur.id  %}">Modifier le mot de passe</a>
+				</div>
+        	</div>
+  </div>
+  <div class="card-footer bg-primary"></div>
+</div>
+
+<div class="card mb-5">
+  <div class="card-header text-center bg-primary">
+      <h1 class="text-white">Liste des groupes de l'utilisateur</h1>
+  </div>
+  <div class="card-body">
+	  <table class="table  table-bordered table-hover table-responsive-md">
+        <tr class="thead-light text-center">
+            <th>Nom du groupe</th>
+            <th>Action</th>
+        </tr>
+        {% for groupe in page_obj %}
+        <tr>
+            <td>{{groupe.name}}</td>
+            <td class="text-center">
+				<button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{utilisateur.id}}" data-backdrop="static">Supprimer</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal{{utilisateur.id}}" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              <p class="text-center">
+                                  <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_groupe_utilisateur' utilisateur.id %}">
+                                    {% csrf_token %}
+									<input type="hidden" name="id_groupe" value="{{groupe.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                  </form>
+                                  <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                    <!-- Modal Fin -->
+            </td>
+        </tr>
+        {% empty %}
+        <td colspan="2">Auncun groupe pour cet utilisateur.</td>
+        {% endfor %}
+    </table>
+
+	  <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">{{page_obj.start_index}}-{{page_obj.end_index}} sur {{total_pages}}</a></li>
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+
+                  {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}?page={{page_obj.previous_page_number}}"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-left"></i></a></li>
+                  {% endif %}
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}?page={{page_obj.next_page_number}}"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-circle-right"></i></a></li>
+                  {% endif %}
+                  <li class="page-item"><a class="page-link" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}?page={{page_obj.paginator.num_pages}}"><i class="fa fa-angle-double-right"></i></a></li>
+                </ul>
+
+            </div>
+        </div>
+
+  </div>
+  <div class="card-footer bg-primary"></div>
+</div>
+
+<div class="card mb-5">
+  <div class="card-header text-center bg-primary">
+      <h1 class="text-white">Ajouter des permissions à l'utilisateur</h1>
+  </div>
+  <div class="card-body">
+	  {% if data %}
+		<form method="post" action="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}">
+			{% csrf_token %}
+			<div class="custom-control custom-switch">
+				<div class="bg-info pb-2 mb-2">
+					<ul class="nav nav-tabs">
+						{% for app, donnees in data.items %}
+							{% if forloop.first %}
+								<li class="nav-item"><a class="nav-link text-danger active" data-toggle="tab" href="#{{app}}">{{app}}</a></li>
+							{% else %}
+								<li class="nav-item"><a class="nav-link text-danger" data-toggle="tab" href="#{{app}}">{{app}}</a></li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+
+					<div class="tab-content">
+						{% for app, donnees in data.items %}
+							{% if forloop.first %}
+								<div class="tab-pane container active" id="{{app}}">
+							{% else %}
+								<div class="tab-pane container fade" id="{{app}}">
+							{% endif %}
+
+
+								<div class="bg-white">
+									<ul class="nav nav-tabs">
+										{% for model, permissions in donnees.items %}
+											{% if forloop.first %}
+												<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#{{model}}">{{model}}</a></li>
+											{% else %}
+												<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#{{model}}">{{model}}</a></li>
+											{% endif %}
+										{% endfor %}
+									</ul>
+
+									<div class="tab-content">
+										{% for model, permissions in donnees.items %}
+											{% if forloop.first %}
+												<div class="tab-pane container active" id="{{model}}">
+											{% else %}
+												<div class="tab-pane container fade" id="{{model}}">
+											{% endif %}
+
+												<ul>
+													{% for permission in permissions %}
+														<li>
+															{{permission|first}} :
+															<div style="display:flex;flex-direction: row;justify-content: space-between; width:115px;">
+																<label for="{{permission|last}}">Non</label>
+																<input type="checkbox" class="custom-control-input" id="{{permission|last}}" name="{{permission|last}}" value="{{permission|last}}" {{ permission|slice:"1:2"|first }} />
+																<label class="custom-control-label" for="{{permission|last}}">Oui</label>
+															</div>
+														</li>
+													{% endfor %}
+												</ul>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 offset-md-3 text-center">
+					<button type="submit" class="btn btn-success" name="permissions_utilisateur">Enregistrer</button>
+					<a class="btn btn-danger" href="{% url 'utilisateur:utilisateur' %}">Annuler</a>
+				</div>
+        	</div>
+
+		</form>
+		{% else %}
+		<p>
+			Aucune permission disponible.
+		</p>
+		{% endif %}
+  </div>
+  <div class="card-footer bg-primary"></div>
+</div>
+
+{% endblock %}

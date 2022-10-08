@@ -1,0 +1,48 @@
+{% extends 'utilisateur/base.html' %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <h1 class="text-center">Connexion</h1>
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Erreur:</strong> {{ message }}
+                </div>
+            {% endif %}
+            <p>
+                <form method="post" action="{% url 'utilisateur:connexion' %}">
+                    {% csrf_token %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input class="form-control" type="text" name="{{form.username.name}}" id="{{form.username.name}}" placeholder="{{form.username.label}}" value="{{form.username.value|default:''}}" required />
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user-lock"></i></span>
+                        </div>
+                        <input class="form-control" type="password" name="{{form.password1.name}}" id="{{form.password1.name}}" placeholder="{{form.password1.label}}" value="{{form.password1.value|default:''}}" required />
+                    </div>
+                    <div class="input-group justify-content-center">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" style="display:inline-block;">
+                              <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck" name="se_souvenir" {{checked}} />
+                                <label data-toggle="tooltip" title="Se souvenir de moi ?" class="custom-control-label" for="customCheck" > </label>
+                              </div>
+                          </span>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="Se connecter" />
+                    </div>
+                </form>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}
