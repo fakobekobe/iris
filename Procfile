@@ -1,1 +1,1 @@
-web: gunicorn chlohe.wsgi --log-file -
+web: gunicorn projet.wsgi
