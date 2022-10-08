@@ -271,20 +271,17 @@ nav div ul li a{
 /* Contenu Index présentation */
 .div_droit{
     height: 600px;
-    /*background: url("presentation1.jpg") no-repeat;*/
     font-size:1.9em;
 }
 
 .div_gauche{
     height: 600px;
-    /*background: url("objectif.jpg") no-repeat 100%;*/
     font-size:1.5em;
     padding-top: 20px;
 }
 
 .div_droit2{
     height: 600px;
-    /*background: url("mission.jpg") no-repeat;*/
     font-size:1.5em;
     color: white;
 }
