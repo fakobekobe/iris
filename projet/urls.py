@@ -23,4 +23,4 @@ urlpatterns = [
     #path('',include('presentation.urls')),
     path('',include('utilisateur.urls')),
     # path('utilisateur/',include('utilisateur.urls')),
-] #+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
