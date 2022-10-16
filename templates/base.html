@@ -9,7 +9,13 @@
 
     <!-- BOOTSTRAP LIEN CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- DATATABLES LIEN CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.css"/>
+
+    <!-- CSS DU PROJET -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}" />
+
     <title>{% block titre %}Accueil-IRIS{% endblock %}</title>
 </head>
 <body>
@@ -28,7 +34,7 @@
 
     <div id ="pied_page">
       {% block pied_page %}
-        <div class="row">
+        <div class="row" style="margin: 0px;">
             <div class="col-md-6 offset-md-3">
                 <p class="text-center">
                     {% now "Y" as annee %}
@@ -50,6 +56,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://kit.fontawesome.com/6b64521285.js" crossorigin="anonymous"></script>
+
+  <!-- DATATABLES-->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script>
+
+  <!--Recherche avancée des colonnes du tableau -->
+  <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+
+
   {% block javascript %}
   <script src="{% static 'js/toast.js' %}"></script>
   {% endblock javascript%}

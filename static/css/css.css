@@ -12,6 +12,7 @@ body{
 }
 
 
+
 nav{
     margin: 0px;
     padding: 0px;
@@ -53,254 +54,57 @@ nav div ul li a{
 }
 
 
-/* CSS du menu présentation */
-
-#nav_presentation{
-    margin:0px;
-    padding:0px;
-}
-
-#navbar{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 50px;
-    padding:0px;
-    padding:10px;
-    background: #94c341;
-}
-
-#navbar > div > a{
-    padding:0px;
-    font-size: 2.2em;
-    position:relative;
-    top:-10px;
-}
-
-#navbar ul li{
-    padding-left: 15px;
-}
-
-#navbar ul li a{
-    color: white;
-    text-decoration: none;
-}
-
-#navbar ul li a:hover{
-    color: #94c341;
-}
-
-.deroulant{
-    position: relative;
-}
-
-.deroulant ul{
-    position: absolute;
-    background: #94c341;
-    width: 200%;
-    z-index:10;
-    display:none;
-}
-
-.deroulant ul li{
-    display:block;
-    padding: 5px;
-}
-
-#navbar .deroulant ul li a:hover{
-    color: black;
-}
-
-.deroulant:hover ul{
-    display: block;
-    box-sizing: border-box;
-    background: #94c341;
-    transition: background 1s linear;
-}
-
-#navbar .deroulant .sous_deroulant{
-    position: relative;
-}
-
-#navbar .deroulant .sous_deroulant ul{
-    position: absolute;
-    top: 0;
-    left: 140px;
-    width: 250%;
-    background: #94a341;
-    z-index:12;
-    display:none;
-}
-
-#navbar .deroulant .sous_deroulant ul li{
-    display: block;
-    width: 150%;
-    padding: 5px;
-}
-
-#navbar .deroulant .sous_deroulant:hover ul{
-    display: block;
-    box-sizing: border-box;
-
-}
-
-#icon{
-    color : white;
-    outline: none;
-    text-decoration: none;
-    display:none;
-}
-
-#silder{
-    height: 600px;
-}
-
-#silder img{
-    height: 600px;
-    width: 100%;
-}
-
-
-@media (max-width: 768px){
-
-    #navbar .nav_droit{
-        display:none;
-    }
-    .monicon{
-        position: relative;
-    }
-    #navbar #icon{
-        position: absolute;
-        display:inline-block;
-    }
-
-    #navbar.responsive .nav_droit{
-        display:inline-block;
-    }
-
-    #navbar{
-    height: auto;
-    }
-
-    #navbar.responsive .nav_droit ul li{
-        display: block;
-        padding-bottom: 10px;
-    }
-
-    #navbar.responsive .deroulant{
-        position: block;
-    }
-
-
-}
-
-
-/* bannière cycle */
-#banniere{
-    height: 200px;
-    width: 100%;
-}
-
-#banniere img{
-    width: 100%;
-}
-
-.cycle{
-    height: 500px;
-}
-
-.cycle .b_gauche img{
-    width: 100%;
-    height: 500px;
-}
-
-.cycle .b_droit{
-    font-size:1.5em;
-}
-
-.s_rouge{
-    text-decoration: underline;
-    color: red;
-    /*font-size:2.2em;*/
-}
-.s_bleu{
-    text-decoration: underline;
-    color: blue;
-    /*font-size:1.9em;*/
-}
-
-.s_vert{
-    text-decoration: underline;
-    color: green;
-   /* font-size:1.5em;*/
-}
-
-@media (max-width: 768px){
-    .cycle{
-        height: auto;
-    }
-}
-
-/*********************/
 
 /* contenu index */
 
-#contenu_index_gauche a:hover{
-    color: white;
+
+/*  MENU DEROULANT   */
+
+.menu-accordeon {
+  padding:0;
+  margin:0;
+  list-style:none;
 }
 
-#contenu_index_gauche div ul{
-    margin: 0px;
-    padding: 0px;
-    list-style-type: none;
+.menu-accordeon a:hover{
+  color:white;
 }
 
-#contenu_index_gauche div ul li{
-    line-height : 30px;
+.menu-accordeon ul {
+  padding:0;
+  margin:0;
+  padding-left: 15px;
+  list-style:none;
 }
 
-#contenu_index_gauche div ul li a{
-    text-decoration : none;
-    color: black;
+.menu-accordeon li li {
+   max-height:0;
+   overflow: hidden;
+   transition: all .5s;
+   border-radius:0;
+   box-shadow: none;
+   border:none;
+   margin:0
 }
+
+.menu-accordeon a {
+  display:block;
+  text-decoration: none;
+  color: black;
+  padding: 8px 0;
+}
+
+.menu-accordeon li:hover li {
+  max-height: 15em;
+}
+
+/*  FIN MENU DEROULANT   */
+
+
+/* Contenu Index présentation */
 
 #contenu_index_droit{
     background: white;
-}
-
-/* Contenu Index présentation */
-.div_droit{
-    height: 600px;
-    font-size:1.9em;
-}
-
-.div_gauche{
-    height: 600px;
-    font-size:1.5em;
-    padding-top: 20px;
-}
-
-.div_droit2{
-    height: 600px;
-    font-size:1.5em;
-    color: white;
-}
-
-@media (max-width: 768px){
-    .div_droit, .div_gauche, .div_droit2{
-        height: 100%;
-        background: none;
-        font-size:1em;
-        word-wrap: normal;
-        padding:0px;
-        padding:10px;
-        color: black;
-    }
-
-    #banniere{
-        display:none;
-    }
-
 }
 
 

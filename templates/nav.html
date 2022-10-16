@@ -23,7 +23,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
           {{user.get_username}}
         </a>
-        <div class="dropdown-menu" style="position: absolute; left:-60px;">
+        <div class="dropdown-menu" style="position: absolute; left:-100px;">
           <a class="dropdown-item" href="{% url 'utilisateur:motdepasse' user.id %}"><i class="fa fa-user-secret"></i> Mot de passe</a>
           {% if 'auht.add_userd' in perms %}
           <a class="dropdown-item" href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a>

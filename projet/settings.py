@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'presentation',
     'utilisateur',
     'test_app',
+    'localisation',
 ]
 
 MIDDLEWARE = [
