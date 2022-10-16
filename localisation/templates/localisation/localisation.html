@@ -34,49 +34,53 @@
         <div class="row">
             <div class="col-md-12">
                 <table class="table  table-bordered table-hover table-responsive-md" id="table-district">
-                    <tr class="thead thead-light text-center">
-                        <th>N°</th>
-                        <th>Code</th>
-                        <th>Libellé</th>
-                        <th>Action</th>
-                    </tr>
-                    {% for utilisateur in page_obj %}
-                    <tr>
-                        <td>{{utilisateur.get_username}}</td>
-                        <td>{{utilisateur.first_name}}</td>
-                        <td>{{utilisateur.last_name}}</td>
-                        <td class="text-center">
-                            <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}">Détail</a>
-                            <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_utilisateur' utilisateur.id %}">Modifier</a>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{utilisateur.id}}" data-backdrop="static">Supprimer</button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal{{utilisateur.id}}" role="dialog">
-                                <div class="modal-dialog">
+                    <thead>
+                        <tr class="thead-light text-center">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Libellé</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for utilisateur in page_obj %}
+                        <tr>
+                            <td>{{utilisateur.get_username}}</td>
+                            <td>{{utilisateur.first_name}}</td>
+                            <td>{{utilisateur.last_name}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_utilisateur' utilisateur.id %}">Détail</a>
+                                <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_utilisateur' utilisateur.id %}">Modifier</a>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{utilisateur.id}}" data-backdrop="static">Supprimer</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modal{{utilisateur.id}}" role="dialog">
+                                    <div class="modal-dialog">
 
-                                  <!-- Modal content-->
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <p class="text-center">
-                                          <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_utilisateur' utilisateur.id %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                          </form>
-                                          <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-                                      </p>
-                                    </div>
-                                  </div>
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p class="text-center">
+                                              <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_utilisateur' utilisateur.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                              </form>
+                                              <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                                          </p>
+                                        </div>
+                                      </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Modal Fin -->
-                        </td>
-                    </tr>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
 
-                    {% endfor %}
+                        {% endfor %}
+                    </tbody>
                 </table>
 
 
