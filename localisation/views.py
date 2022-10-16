@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def district(request):
+    context = {
+        "titre" : "Localisation",
+    }
+    return render(request, "localisation/localisation.html", context)
