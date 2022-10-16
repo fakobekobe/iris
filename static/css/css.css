@@ -122,3 +122,27 @@ nav div ul li a{
     margin: 0px;
 }
 /*********************/
+
+/** CSS DATATABLE **/
+
+.dataTables_filter {
+    display: none;
+}
+
+.dataTables_length {
+    float: right;
+}
+
+.dt-buttons {
+    margin-bottom: 10px;
+}
+
+thead input {
+    text-align: center;
+}
+
+.sorting_disabled {
+    color: transparent !important;
+}
+
+/* FIN CSS DATATABLE */

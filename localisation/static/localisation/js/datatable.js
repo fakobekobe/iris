@@ -1,8 +1,8 @@
 $(document).ready(function() {
     // Setup - add a text input to each footer cell
-    var IdTableau = "table-district";
-    $('#'+ IdTableau +' thead tr').clone(true).addClass('filters').appendTo( '#' + IdTableau + ' thead' );
-    var table = $('#'+ IdTableau +'').DataTable( {
+    var IdTableau = "district";
+    $('#' + IdTableau + ' thead tr').clone(true).addClass('filters').appendTo( '#' + IdTableau + ' thead' );
+    var table = $('#' + IdTableau ).DataTable( {
 
         // Pagination du tableau
 
@@ -18,7 +18,7 @@ $(document).ready(function() {
 
     // Désactiver le trie d'un ou de plusieurs colonnes
     "columnDefs":[{
-        "targets":5, // [4,5]
+        "targets":3, // [4,5]
         "orderable":false,
     }],
 
@@ -62,9 +62,9 @@ $(document).ready(function() {
         className: 'btn btn-secondary',
         titleAttr: 'Copier',
         // Option pour le choix des colonnes a afficher
-        /**exportOptions:{
-            columns: [0,1,2,3,4],
-        },**/
+        exportOptions:{
+            columns: [0,1,2],
+        },
     },
 
     { // Boutton de excel
@@ -73,9 +73,9 @@ $(document).ready(function() {
         className: 'btn btn-secondary',
         titleAttr: 'Excel',
         // Option pour le choix des colonnes a afficher
-        /**exportOptions:{
-            columns: [0,1,2,3,4],
-        },**/
+        exportOptions:{
+            columns: [0,1,2],
+        },
     },
 
     { // Boutton PDF
@@ -83,6 +83,9 @@ $(document).ready(function() {
         text: '<i class="fas fa-file-pdf"></i>',
         className: 'btn btn-secondary',
         titleAttr: 'PDF',
+        exportOptions:{
+            columns: [0,1,2],
+        },
 
         tableHeader: {
             alignment: 'center',
@@ -107,9 +110,9 @@ $(document).ready(function() {
         className: 'btn btn-secondary',
         titleAttr: 'Imprimer',
         // Option pour le choix des colonnes a afficher
-        /**exportOptions:{
-            columns: [0,1,2,3,4],
-        },**/
+        exportOptions:{
+            columns: [0,1,2],
+        },
 
         // Personnalisation de l'affichage
         customize: function(win){
@@ -130,7 +133,7 @@ $(document).ready(function() {
         initComplete: function() {
             var api = this.api();
             // For each column
-            api.columns().eq(0).each(function(colIdx) {
+            api.columns([0,1,2]).eq(0).each(function(colIdx) {
                 // Set the header cell to contain the input element
                 var cell = $('.filters th').eq($(api.column(colIdx).header()).index());
                 var title = $(cell).text();
@@ -157,12 +160,12 @@ $(document).ready(function() {
 
     } );
 
-    // Recherche globale du tableau
+    /* Recherche globale du tableau
 
     var monTableau = $('#'+ IdTableau +'').DataTable(); // On récupère le tableau
     $('#rechercheDatatables').keyup(function(){
         monTableau.search($(this).val()).draw();
     });
 
-    // Fin de recherche
+     Fin de recherche*/
 } );
