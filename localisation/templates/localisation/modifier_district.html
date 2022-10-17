@@ -1,0 +1,18 @@
+{% extends 'localisation/ajouter_district.html' %}
+
+{% block modal-id %} id="modifierModal{{district.id}}" {% endblock modal-id %}
+{% block modal-label %}modifierModalLabel{{district.id}}{% endblock modal-label %}
+{% block modal-label2 %}modifierModalLabel{{district.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un district {% endblock modal-titre %}
+{% block action %} action="{% url 'localisation:modifier_district' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{district.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{district.code}}"{% endblock value-code %}
+{% block value-libelle %}value="{{district.libelle}}"{% endblock value-libelle %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

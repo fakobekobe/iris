@@ -8,8 +8,8 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-        Home
+      <button class="nav-link active" id="district1-tab" data-toggle="tab" data-target="#district1" type="button" role="tab" aria-controls="district1" aria-selected="true">
+        District
       </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -26,7 +26,7 @@
 
   <div class="tab-content" id="myTabContent">
     <!-- CONTENU 1 -->
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane fade show active" id="district1" role="tabpanel" aria-labelledby="district1-tab">
       <div>
 
         <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des districts</h1>
@@ -49,8 +49,8 @@
                             <td>{{district.code}}</td>
                             <td>{{district.libelle}}</td>
                             <td class="text-center">
-                                <a class="btn btn-outline-primary btn-sm" title="Détail" href="{% url 'utilisateur:detail_utilisateur' district.id %}"><i class="far fa-eye"></i></a>
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" href="{% url 'utilisateur:modifier_utilisateur' district.id %}"><i class="fas fa-pen"></i></a>
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="{% url 'utilisateur:detail_utilisateur' district.id %}"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#modifierModal{{district.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
                                 <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{district.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="modal{{district.id}}" role="dialog">
@@ -63,13 +63,18 @@
                                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                          <p class="text-center">
-                                              <form style="display:inline-block;" method="post" action="{% url 'utilisateur:supprimer_utilisateur' district.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                              </form>
-                                              <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-                                          </p>
+                                            <h5>
+                                                District : <strong>{{district.libelle}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <p class="text-center">
+                                                <form style="display:inline-block;" method="post" action="{% url 'localisation:supprimer_district' district.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                </form>
+                                                <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                                            </p>
                                         </div>
                                       </div>
 
@@ -78,6 +83,9 @@
                                 <!-- Modal Fin -->
                             </td>
                         </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_district.html' %}
+                        {% include 'localisation/modifier_district.html' %}
 
                         {% endfor %}
                     </tbody>
@@ -110,6 +118,13 @@
         <script>
             var m = "{{ message }}";
             swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
+        </script>
+    {% endif %}
+    {% if message.tags == 'error' %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            var m = "{{ message }}";
+            swal("Parfait !",m,"error");  // "success" ou "error" ou "info"
         </script>
     {% endif %}
 {% endfor %}

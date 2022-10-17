@@ -34,22 +34,9 @@ def ajouter_district(request):
     else:
         return HttpResponseRedirect(reverse('localisation:localisation'))
 
-def details_district(request, id):
-
-    context = {
-        "titre": "Details du district",
-    }
-    district = District.objects.get(id = id)
-    if district != None:
-        return render(request,'localisation/modifier_district.html', context)
-
-    return render(request, "localisation/localisation.html", context)
 
 def modifier_district(request):
 
-    context = {
-        "titre": "Localisation",
-    }
     if request.method == "POST":
 
         district = District.objects.get(id = request.POST.get('id'))
@@ -63,14 +50,14 @@ def modifier_district(request):
 
             return HttpResponseRedirect(reverse('localisation:localisation'))
     else:
-        return render(request, "localisation/modifier_district.html", context)
+        return HttpResponseRedirect(reverse('localisation:localisation'))
 
 
 
 def supprimer_district(request, id):
     district = District.objects.get(id=id)
     district.delete()
-    messages.success(request, "Suppression réussie.")
+    messages.error(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
