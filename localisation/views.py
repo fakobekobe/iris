@@ -5,21 +5,18 @@ from .models import *
 
 def localisation(request):
 
-    districts = District.objects.all().order_by("id")
+    districts = District.objects.all().order_by("-id")
 
     context = {
         "titre" : "Localisation",
         "districts" : districts,
     }
+
     return render(request, "localisation/localisation.html", context)
 
 # Gestion du district -----------------------------------------------
 
 def ajouter_district(request):
-
-    context = {
-        "titre": "Localisation",
-    }
 
     if request.method == "POST":
         if request.POST.get("code") and request.POST.get("libelle"):
@@ -35,7 +32,7 @@ def ajouter_district(request):
 
             return HttpResponseRedirect(reverse('localisation:localisation'))
     else:
-        return render(request, "localisation/ajouter_district.html", context)
+        return HttpResponseRedirect(reverse('localisation:localisation'))
 
 def details_district(request, id):
 
@@ -67,6 +64,8 @@ def modifier_district(request):
             return HttpResponseRedirect(reverse('localisation:localisation'))
     else:
         return render(request, "localisation/modifier_district.html", context)
+
+
 
 def supprimer_district(request, id):
     district = District.objects.get(id=id)

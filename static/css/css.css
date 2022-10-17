@@ -146,3 +146,49 @@ thead input {
 }
 
 /* FIN CSS DATATABLE */
+
+
+/* CSS SWAL
+
+.swal-modal {
+    background-color: rgba(0,0,0.2);
+    color: #fff;
+}
+
+.swal-title {
+    font-size: 20px;
+    color: #fff;
+}
+
+.swal-text {
+    font-size: 15px;
+    color: #fff;
+}
+
+.swal-button {
+    padding: 7px 19px;
+    border-radius : 5px;
+    background-color: #198754;
+    font-size: 12px;
+    border: 1px solid #198754;
+}
+
+.swal-button:focus {
+    box-shadow: none;
+}
+
+.swal-button:not([disabled]):hover {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #198754;
+}
+
+.swal-icon--success__hide-cornes {
+    background: none !important;
+}
+
+.swal-icon--success:before,
+.swal-icon--success:after {
+    background: none !important;
+}
+ FIN CSS SWAL */
