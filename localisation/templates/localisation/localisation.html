@@ -13,8 +13,8 @@
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-        Profile
+      <button class="nav-link" id="region-tab" data-toggle="tab" data-target="#region" type="button" role="tab" aria-controls="region" aria-selected="false">
+        Région
       </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -25,10 +25,9 @@
   </ul>
 
   <div class="tab-content" id="myTabContent">
-    <!-- CONTENU 1 -->
+    <!-- CONTENU District -->
     <div class="tab-pane fade show active" id="district1" role="tabpanel" aria-labelledby="district1-tab">
       <div>
-
         <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des districts</h1>
         <h3><a class="btn btn-primary" data-toggle="modal" data-target="#ajouterModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un district</a></h3>
         <div class="row">
@@ -49,7 +48,7 @@
                             <td>{{district.code}}</td>
                             <td>{{district.libelle|capfirst}}</td>
                             <td class="text-center">
-                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="{% url 'utilisateur:detail_utilisateur' district.id %}"><i class="far fa-eye"></i></a-->
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#modifierModal{{district.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
                                 <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{district.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
@@ -64,17 +63,17 @@
                                         </div>
                                         <div class="modal-body">
                                             <h5>
-                                                District : <strong>{{district.libelle}}</strong>
+                                                District : <strong>{{district.libelle|capfirst}}</strong>
                                             </h5>
                                         </div>
                                         <div class="modal-footer justify-content-center">
-                                            <p class="text-center">
-                                                <form style="display:inline-block;" method="post" action="{% url 'localisation:supprimer_district' district.id %}">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                                </form>
-                                                <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-                                            </p>
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_district' district.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
                                         </div>
                                       </div>
 
@@ -97,16 +96,86 @@
 
       </div>
     </div>
+    <!-- FIN DE CONTENU District -->
 
-    <!-- FIN DE CONTENU 1 -->
+    <!-- CONTENU Région -->
+    <div class="tab-pane fade" id="region" role="tabpanel" aria-labelledby="region-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-home"></i> Liste des régions</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#regionModal" data-backdrop="static"><i class="fas fa-home"></i> Ajouter une région</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tableregion" style="width:100%;">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Libellé</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for region in regions %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{region.code}}</td>
+                            <td>{{region.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#regionModal{{region.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{region.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modal{{region.id}}" role="dialog">
+                                    <div class="modal-dialog">
 
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-      2
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Région : <strong>{{region.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_region' region.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_region.html' %}
+                        {% include 'localisation/modifier_region.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
     </div>
+    <!-- FIN DE CONTENU Région -->
 
+    <!-- CONTENU DEPARTEMENT -->
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
       3
     </div>
+    <!-- FIN CONTENU DEPARTEMENT -->
 
   </div>
 
