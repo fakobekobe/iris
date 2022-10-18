@@ -47,7 +47,7 @@
                         <tr>
                             <td>{{forloop.counter}}</td>
                             <td>{{district.code}}</td>
-                            <td>{{district.libelle}}</td>
+                            <td>{{district.libelle|capfirst}}</td>
                             <td class="text-center">
                                 <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="{% url 'utilisateur:detail_utilisateur' district.id %}"><i class="far fa-eye"></i></a-->
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#modifierModal{{district.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
@@ -124,7 +124,14 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script>
             var m = "{{ message }}";
-            swal("Parfait !",m,"error");  // "success" ou "error" ou "info"
+            swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
+        </script>
+    {% endif %}
+{% if message.tags == 'info' %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            var m = "{{ message }}";
+            swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
         </script>
     {% endif %}
 {% endfor %}

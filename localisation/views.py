@@ -19,13 +19,31 @@ def localisation(request):
 def ajouter_district(request):
 
     if request.method == "POST":
-        if request.POST.get("code") and request.POST.get("libelle"):
-            # On vérifie si le code et le libelle existe
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
 
+        if code and libelle:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                district = District.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except District.DoesNotExist:
+                try:
+                    district = District.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except District.DoesNotExist:
+                    pass
             #----
             district = District()
-            district.code = request.POST.get("code")
-            district.libelle = request.POST.get("libelle")
+            district.code = code
+            district.libelle = libelle
             district.save()
 
             messages.success(request,"Enregistrement réussi.")
@@ -39,11 +57,21 @@ def modifier_district(request):
 
     if request.method == "POST":
 
-        district = District.objects.get(id = request.POST.get('id'))
+        try:
+            district = District.objects.get(id=request.POST.get('id'))
+        except District.DoesNotExist:
+            messages.error(request, "Ce district n'existe pas.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
 
-        if district != None:
-            district.code = request.POST.get("code")
-            district.libelle = request.POST.get("libelle")
+
+        if district:
+            # On format les chaine
+            code = request.POST.get("code")
+            libelle = request.POST.get("libelle")
+            libelle = libelle.capitalize()
+
+            district.code = code
+            district.libelle = libelle
             district.save()
 
             messages.success(request, "Modification réussie.")
@@ -55,9 +83,15 @@ def modifier_district(request):
 
 
 def supprimer_district(request, id):
-    district = District.objects.get(id=id)
-    district.delete()
-    messages.error(request, "Suppression réussie.")
+    try:
+        district = District.objects.get(id=id)
+    except District.DoesNotExist:
+        messages.error(request, "Ce district n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if district:
+        district.delete()
+        messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('localisation:localisation'))
 

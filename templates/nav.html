@@ -28,7 +28,7 @@
           {% if 'auht.add_userd' in perms %}
           <a class="dropdown-item" href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a>
           <a class="dropdown-item" href="{% url 'utilisateur:groupe' %}"><i class="fa fa-group"></i> Groupes</a>
-          <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Paramètres</a>
+          <a class="dropdown-item" href="{% url 'localisation:localisation' %}"><i class="fa fa-wrench"></i> Paramètres</a>
           {% endif %}
           <a class="dropdown-item text-danger" href="{% url 'utilisateur:deconnexion' %}"><i class="fa fa-sign-out"></i> Déconnexion</a>
         </div>
