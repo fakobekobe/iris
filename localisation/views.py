@@ -236,3 +236,107 @@ def supprimer_region(request, id):
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
 # Fin de la Gestion de la région -------------------------------------
+
+
+# Gestion du département -----------------------------------------------
+
+@login_required
+@permission_required('localisation.view_departement', raise_exception=True)
+def ajouter_departement(request):
+
+    global _active_onglet
+    _active_onglet = "departement"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        region = request.POST.get("select_region", None)
+
+        if code and libelle and region:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                departement = Departement.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except Departement.DoesNotExist:
+                try:
+                    departement = Departement.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except Departement.DoesNotExist:
+                    pass
+            #----
+            departement = Departement()
+            departement.code = code
+            departement.libelle = libelle
+            departement.region = Region.objects.get(id = region)
+            departement.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.change_departement', raise_exception=True)
+def modifier_departement(request):
+
+    global _active_onglet
+    _active_onglet = "departement"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            departement = Departement.objects.get(id=request.POST.get('id'))
+        except Departement.DoesNotExist:
+            messages.error(request, "Ce département n'existe pas.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+
+
+        if departement:
+            # On format les chaine
+            code = request.POST.get("code")
+            libelle = request.POST.get("libelle")
+            region = request.POST.get("select_region")
+            libelle = libelle.capitalize()
+
+            departement.code = code
+            departement.libelle = libelle
+            departement.region = Region.objects.get(id = region)
+            departement.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.delete_departement', raise_exception=True)
+def supprimer_departement(request, id):
+
+    global _active_onglet
+    _active_onglet = "departement"  # On initialise la variable
+
+    try:
+        departement = Departement.objects.get(id=id)
+    except Departement.DoesNotExist:
+        messages.error(request, "Ce département n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if departement:
+        departement.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+# Fin de la Gestion du département -------------------------------------

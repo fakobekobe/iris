@@ -4,7 +4,7 @@ from localisation.models import *
 
 # Liste des variables Globales
 LISTE_MODELS = {
-    'auth':{'utilisateur': User, 'groupe': Group,},
-    'localisation':{'district': District, 'region': Region,},
+    'Authentification':{'Utilisateur': User, 'Groupe': Group,},
+    'Localisation':{'District': District, 'Région': Region, 'Département':Departement},
 }
 

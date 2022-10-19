@@ -14,4 +14,9 @@ urlpatterns = [
     path('ajouter-region', views.ajouter_region, name = 'ajouter_region'),
     path('modifier-region', views.modifier_region, name = 'modifier_region'),
     path('supprimer-region/<str:id>', views.supprimer_region, name = 'supprimer_region'),
+
+    # Url de la département
+    path('ajouter-departement', views.ajouter_departement, name = 'ajouter_departement'),
+    path('modifier-departement', views.modifier_departement, name = 'modifier_departement'),
+    path('supprimer-departement/<str:id>', views.supprimer_departement, name = 'supprimer_departement'),
 ]

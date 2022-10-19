@@ -14,3 +14,11 @@ class Region(models.Model):
 
     def __str__(self):
         return self.libelle
+
+class Departement(models.Model):
+    code = models.CharField(max_length=100, unique=True)
+    libelle = models.CharField(max_length=250, verbose_name="Libellé", unique=True)
+    region = models.ForeignKey(Region,on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.libelle
