@@ -2,7 +2,7 @@ $(document).ready(function() {
 //******************** SCRIPT DE L'ONGLET DISTRICT **********************************************
     // Ajout du champ du champ de recherche
     var IdTableau = "district";
-    $('#' + IdTableau + ' thead tr').clone(true).addClass('filters').appendTo( '#' + IdTableau + ' thead' );
+    //$('#' + IdTableau + ' thead tr').clone(true).addClass('filters').appendTo( '#' + IdTableau + ' thead' );
     var table = $('#' + IdTableau ).DataTable( {
 
     // Pagination du tableau
@@ -17,10 +17,10 @@ $(document).ready(function() {
     select : true,
 
     // Désactiver le trie d'un ou de plusieurs colonnes
-    "columnDefs":[{
+   /* "columnDefs":[{
         "targets":3, // [4,5]
         "orderable":false,
-    }],
+    }],*/
 
     // Gestion de l'affichage de la langue des champs
         language: {
@@ -127,7 +127,7 @@ $(document).ready(function() {
 
         // Fin de pagination
 
-
+/*
         orderCellsTop: true,
         fixedHeader: true,
         initComplete: function() {
@@ -155,7 +155,7 @@ $(document).ready(function() {
                         $(this).focus()[0].setSelectionRange(cursorPosition, cursorPosition);
                     });
             });
-        },
+        },*/
 
 
     } );
@@ -170,7 +170,7 @@ $(document).ready(function() {
 //******************** SCRIPT DE L'ONGLET REGION **********************************************
      // Ajout du champ du champ de recherche
     var tableregion = "tableregion";
-    $('#' + tableregion + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tableregion + ' thead' );
+    //$('#' + tableregion + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tableregion + ' thead' );
     var table = $('#' + tableregion ).DataTable( {
 
     // Pagination du tableau
@@ -185,10 +185,10 @@ $(document).ready(function() {
     select : true,
 
     // Désactiver le trie d'un ou de plusieurs colonnes
-    "columnDefs":[{
+    /*"columnDefs":[{
         "targets":4, // [4,5]
         "orderable":false,
-    }],
+    }],*/
 
     // Gestion de l'affichage de la langue des champs
         language: {

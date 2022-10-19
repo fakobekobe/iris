@@ -8,12 +8,12 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="district1-tab" data-toggle="tab" data-target="#district1" type="button" role="tab" aria-controls="district1" aria-selected="true">
+      <button class="nav-link {{active_district|first}}" id="district1-tab" data-toggle="tab" data-target="#district1" type="button" role="tab" aria-controls="district1" aria-selected="active_district|slice:"1:2"|first }}">
         District
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="region-tab" data-toggle="tab" data-target="#region" type="button" role="tab" aria-controls="region" aria-selected="false">
+      <button class="nav-link {{active_region|first}}" id="region-tab" data-toggle="tab" data-target="#region" type="button" role="tab" aria-controls="region" aria-selected="active_region|slice:"1:2"|first }}">
         Région
       </button>
     </li>
@@ -26,7 +26,7 @@
 
   <div class="tab-content" id="myTabContent">
     <!-- CONTENU District -->
-    <div class="tab-pane fade show active" id="district1" role="tabpanel" aria-labelledby="district1-tab">
+    <div class="tab-pane fade {{ active_district|last }}" id="district1" role="tabpanel" aria-labelledby="district1-tab">
       <div>
         <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des districts</h1>
         <h3><a class="btn btn-primary" data-toggle="modal" data-target="#ajouterModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un district</a></h3>
@@ -99,7 +99,7 @@
     <!-- FIN DE CONTENU District -->
 
     <!-- CONTENU Région -->
-    <div class="tab-pane fade" id="region" role="tabpanel" aria-labelledby="region-tab">
+    <div class="tab-pane fade {{ active_region|last }}" id="region" role="tabpanel" aria-labelledby="region-tab">
       <div>
         <h1 class="mb-3 text-primary"><i class="fas fa-home"></i> Liste des régions</h1>
         <h3><a class="btn btn-primary" data-toggle="modal" data-target="#regionModal" data-backdrop="static"><i class="fas fa-home"></i> Ajouter une région</a></h3>
@@ -125,9 +125,9 @@
                             <td class="text-center">
                                 <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#regionModal{{region.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{region.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#regionmodal{{region.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
-                                <div class="modal fade" id="modal{{region.id}}" role="dialog">
+                                <div class="modal fade" id="regionmodal{{region.id}}" role="dialog">
                                     <div class="modal-dialog">
 
                                       <!-- Modal content-->

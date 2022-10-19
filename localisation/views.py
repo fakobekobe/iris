@@ -4,6 +4,9 @@ from django.contrib import messages
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 
+# Les constatntes et les variables globales
+_active_onglet = "" # Variable globale pour l'activation des onglets
+
 @login_required
 @permission_required('auth.view_user', raise_exception=True)
 @permission_required('auth.view_group', raise_exception=True)
@@ -12,10 +15,25 @@ def localisation(request):
     districts = District.objects.all().order_by("libelle")
     regions = Region.objects.all().order_by("libelle")
 
+    # Initialisation de l'affichage de l'onglet active
+    active_district = ['','false','']
+    active_region = ['','false','']
+
+    if _active_onglet == "district":
+        active_district =  ['active', 'true', 'show active']
+    elif _active_onglet == "region":
+        active_region = ['active', 'true', 'show active']
+    else:
+        # Affichage par défaut
+        active_district =  ['active', 'true', 'show active']
+
+
     context = {
         "titre" : "Localisation",
         "districts" : districts,
         "regions" : regions,
+        "active_region": active_region,
+        "active_district": active_district,
     }
 
     return render(request, "localisation/localisation.html", context)
@@ -25,6 +43,9 @@ def localisation(request):
 @login_required
 @permission_required('localisation.view_district', raise_exception=True)
 def ajouter_district(request):
+
+    global _active_onglet
+    _active_onglet = "district"  # On initialise la variable
 
     if request.method == "POST":
         # On initialise les variables
@@ -64,6 +85,9 @@ def ajouter_district(request):
 @permission_required('localisation.change_district', raise_exception=True)
 def modifier_district(request):
 
+    global _active_onglet
+    _active_onglet = "district"  # On initialise la variable
+
     if request.method == "POST":
 
         try:
@@ -92,6 +116,10 @@ def modifier_district(request):
 @login_required
 @permission_required('localisation.delete_district', raise_exception=True)
 def supprimer_district(request, id):
+
+    global _active_onglet
+    _active_onglet = "district"  # On initialise la variable
+
     try:
         district = District.objects.get(id=id)
     except District.DoesNotExist:
@@ -111,6 +139,9 @@ def supprimer_district(request, id):
 @login_required
 @permission_required('localisation.view_region', raise_exception=True)
 def ajouter_region(request):
+
+    global _active_onglet
+    _active_onglet = "region"  # On initialise la variable
 
     if request.method == "POST":
         # On initialise les variables
@@ -155,6 +186,9 @@ def ajouter_region(request):
 @permission_required('localisation.change_region', raise_exception=True)
 def modifier_region(request):
 
+    global _active_onglet
+    _active_onglet = "region"  # On initialise la variable
+
     if request.method == "POST":
 
         try:
@@ -185,6 +219,10 @@ def modifier_region(request):
 @login_required
 @permission_required('localisation.delete_region', raise_exception=True)
 def supprimer_region(request, id):
+
+    global _active_onglet
+    _active_onglet = "region"  # On initialise la variable
+
     try:
         region = Region.objects.get(id=id)
     except District.DoesNotExist:
