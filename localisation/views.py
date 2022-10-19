@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 @permission_required('auth.view_group', raise_exception=True)
 def localisation(request):
 
-    districts = District.objects.all().order_by("-id")
-    regions = Region.objects.all().order_by("-id")
+    districts = District.objects.all().order_by("libelle")
+    regions = Region.objects.all().order_by("libelle")
 
     context = {
         "titre" : "Localisation",
@@ -116,8 +116,9 @@ def ajouter_region(request):
         # On initialise les variables
         code = request.POST.get("code", None)
         libelle = request.POST.get("libelle", None)
+        district = request.POST.get("select_district", None)
 
-        if code and libelle:
+        if code and libelle and district:
             # On vérifie si le code et le libelle existe
             # On format les chaine
             libelle = libelle.capitalize()
@@ -138,10 +139,14 @@ def ajouter_region(request):
             region = Region()
             region.code = code
             region.libelle = libelle
+            region.district = District.objects.get(id = district)
             region.save()
 
             messages.success(request,"Enregistrement réussi.")
 
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
             return HttpResponseRedirect(reverse('localisation:localisation'))
     else:
         return HttpResponseRedirect(reverse('localisation:localisation'))
@@ -163,10 +168,12 @@ def modifier_region(request):
             # On format les chaine
             code = request.POST.get("code")
             libelle = request.POST.get("libelle")
+            district = request.POST.get("select_district")
             libelle = libelle.capitalize()
 
             region.code = code
             region.libelle = libelle
+            region.district = District.objects.get(id = district)
             region.save()
 
             messages.success(request, "Modification réussie.")

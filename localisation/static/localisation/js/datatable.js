@@ -186,7 +186,7 @@ $(document).ready(function() {
 
     // Désactiver le trie d'un ou de plusieurs colonnes
     "columnDefs":[{
-        "targets":3, // [4,5]
+        "targets":4, // [4,5]
         "orderable":false,
     }],
 
@@ -225,7 +225,7 @@ $(document).ready(function() {
         titleAttr: 'Copier',
         // Option pour le choix des colonnes a afficher
         exportOptions:{
-            columns: [0,1,2],
+            columns: [0,1,2,3],
         },
     },
 
@@ -236,7 +236,7 @@ $(document).ready(function() {
         titleAttr: 'Excel',
         // Option pour le choix des colonnes a afficher
         exportOptions:{
-            columns: [0,1,2],
+            columns: [0,1,2,3],
         },
     },
 
@@ -246,7 +246,7 @@ $(document).ready(function() {
         className: 'btn btn-secondary',
         titleAttr: 'PDF',
         exportOptions:{
-            columns: [0,1,2],
+            columns: [0,1,2,3],
         },
 
         tableHeader: {
@@ -273,7 +273,7 @@ $(document).ready(function() {
         titleAttr: 'Imprimer',
         // Option pour le choix des colonnes a afficher
         exportOptions:{
-            columns: [0,1,2],
+            columns: [0,1,2,3],
         },
 
         // Personnalisation de l'affichage
@@ -289,13 +289,13 @@ $(document).ready(function() {
 
         // Fin de pagination
 
-
+/*
         orderCellsTop: true,
         fixedHeader: true,
         initComplete: function() {
             var api = this.api();
             // For each column
-            api.columns([0,1,2]).eq(0).each(function(colIdx) {
+            api.columns([0,1,2,3]).eq(0).each(function(colIdx) {
                 // Set the header cell to contain the input element
                 var cell = $('.filters th').eq($(api.column(colIdx).header()).index());
                 var title = $(cell).text();
@@ -317,7 +317,7 @@ $(document).ready(function() {
                         $(this).focus()[0].setSelectionRange(cursorPosition, cursorPosition);
                     });
             });
-        },
+        },*/
 
 
     } );

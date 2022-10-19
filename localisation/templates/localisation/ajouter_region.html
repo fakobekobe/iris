@@ -29,6 +29,21 @@
                   <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le libellé" required>
               </div>
 
+              {% block select-district %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_district"><i class="fas fa-marker"></i></label>
+                  </div>
+
+                  <select name="select_district" id="select_district">
+                      <option value="" selected>---Sélectionnez un district---</option>
+                      {% for district in districts %}
+                      <option value="{{district.id}}" >{{district.libelle}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              {% endblock select-district %}
+
           </div>
 
           <div class="modal-footer text-center">

@@ -15,4 +15,27 @@
 {% endblock modifier-id %}
 {% block value-code %}value="{{region.code}}"{% endblock value-code %}
 {% block value-libelle %}value="{{region.libelle}}"{% endblock value-libelle %}
+
+{% block select-district %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_district{{region.id}}"><i class="fas fa-marker"></i></label>
+        </div>
+
+        <select name="select_district" id="select_district{{region.id}}">
+            <option value="" selected>---Sélectionnez un district---</option>
+            {% for district in districts %}
+
+                {% if district.id == region.district.id %}
+                    <option value="{{district.id}}" selected>{{district.libelle}}</option>
+                {% else %}
+                    <option value="{{district.id}}" >{{district.libelle}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-district %}
+
 {% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}
