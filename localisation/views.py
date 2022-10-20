@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib import messages
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
+from django.http import JsonResponse
 
 # Les constatntes et les variables globales
 _active_onglet = "" # Variable globale pour l'activation des onglets
@@ -12,17 +13,35 @@ _active_onglet = "" # Variable globale pour l'activation des onglets
 @permission_required('auth.view_group', raise_exception=True)
 def localisation(request):
 
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_regions = Region.objects.filter(district = id).order_by('libelle')
+
+            if ajax_regions:
+                data = [{'id':region.id,'libelle':region.libelle} for region in ajax_regions]
+
+                return  JsonResponse({'data':data}, status = 200)
+
+
+
+
+
     districts = District.objects.all().order_by("libelle")
     regions = Region.objects.all().order_by("libelle")
+    departements = Departement.objects.all().order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_district = ['','false','']
     active_region = ['','false','']
+    active_departement = ['','false','']
 
     if _active_onglet == "district":
         active_district =  ['active', 'true', 'show active']
     elif _active_onglet == "region":
         active_region = ['active', 'true', 'show active']
+    elif _active_onglet == "departement":
+        active_departement = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_district =  ['active', 'true', 'show active']
@@ -32,8 +51,10 @@ def localisation(request):
         "titre" : "Localisation",
         "districts" : districts,
         "regions" : regions,
+        "departements" : departements,
         "active_region": active_region,
         "active_district": active_district,
+        "active_departement": active_departement,
     }
 
     return render(request, "localisation/localisation.html", context)
@@ -234,6 +255,20 @@ def supprimer_region(request, id):
         messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.view_region', raise_exception=True)
+def details_region(request):
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            print(id)
+            pass
+
+    messages.error(request, "Accès impossible.")
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+
 
 # Fin de la Gestion de la région -------------------------------------
 

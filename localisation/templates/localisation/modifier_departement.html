@@ -1,0 +1,63 @@
+{% extends 'localisation/ajouter_departement.html' %}
+
+{% block modal-id %} id="departementModal{{departement.id}}" {% endblock modal-id %}
+{% block modal-label %}departementModalLabel{{departement.id}}{% endblock modal-label %}
+{% block modal-label2 %}departementModalLabel{{departement.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un département {% endblock modal-titre %}
+{% block action %} action="{% url 'localisation:modifier_departement' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{departement.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{departement.code}}"{% endblock value-code %}
+{% block value-libelle %}value="{{departement.libelle}}"{% endblock value-libelle %}
+
+{% block select-district %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_district{{departement.id}}"><i class="fas fa-marker"></i></label>
+        </div>
+
+        <select name="select_district" id="select_district{{departement.id}}">
+            <option value="" selected>---Sélectionnez un district---</option>
+            {% for district in districts %}
+
+                {% if district.id == departement.region.district.id %}
+                    <option value="{{district.id}}" selected>{{district.libelle}}</option>
+                {% else %}
+                    <option value="{{district.id}}" >{{district.libelle}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-district %}
+
+{% block select-region %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_region{{departement.id}}"><i class="fas fa-marker"></i></label>
+        </div>
+
+        <select name="select_region" id="select_region{{departement.id}}">
+            <option value="" selected>---Sélectionnez une région---</option>
+            {% for region in regions %}
+
+                {% if region.id == departement.region.id %}
+                    <option value="{{region.id}}" selected>{{region.libelle}}</option>
+                {% else %}
+                    <option value="{{region.id}}" >{{region.libelle}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-region %}
+
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

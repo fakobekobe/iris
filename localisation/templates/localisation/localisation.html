@@ -8,18 +8,18 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_district|first}}" id="district1-tab" data-toggle="tab" data-target="#district1" type="button" role="tab" aria-controls="district1" aria-selected="active_district|slice:"1:2"|first }}">
+      <button class="nav-link {{active_district|first}}" id="district1-tab" data-toggle="tab" data-target="#district1" type="button" role="tab" aria-controls="district1" aria-selected="{{ active_district|slice:'1:2'|first }}">
         District
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_region|first}}" id="region-tab" data-toggle="tab" data-target="#region" type="button" role="tab" aria-controls="region" aria-selected="active_region|slice:"1:2"|first }}">
+      <button class="nav-link {{active_region|first}}" id="region-tab" data-toggle="tab" data-target="#region" type="button" role="tab" aria-controls="region" aria-selected="{{ active_region|slice:'1:2'|first }}">
         Région
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
-        Contact
+      <button class="nav-link {{active_departement|first}}" id="departement-tab" data-toggle="tab" data-target="#departement" type="button" role="tab" aria-controls="departement" aria-selected="{{ active_departement|slice:'1:2'|first }}">
+        Département
       </button>
     </li>
   </ul>
@@ -174,8 +174,79 @@
     <!-- FIN DE CONTENU Région -->
 
     <!-- CONTENU DEPARTEMENT -->
-    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-      3
+    <div class="tab-pane fade {{ active_departement|last }}" id="departement" role="tabpanel" aria-labelledby="departement-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-building"></i> Liste des départements</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#departementModal" data-backdrop="static"><i class="fas fa-building"></i> Ajouter un département</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tabledepartement" style="width:100%;">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Libellé</th>
+                            <th>District</th>
+                            <th>Région</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for departement in departements %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{departement.code}}</td>
+                            <td>{{departement.libelle|capfirst}}</td>
+                            <td>{{departement.region.district.libelle|capfirst}}</td>
+                            <td>{{departement.region.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#departementModal{{departement.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#departementmodal{{departement.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="departementmodal{{departement.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Département : <strong>{{departement.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_departement' departement.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_departement.html' %}
+                        {% include 'localisation/modifier_departement.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
     </div>
     <!-- FIN CONTENU DEPARTEMENT -->
 
