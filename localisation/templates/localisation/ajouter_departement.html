@@ -24,18 +24,18 @@
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-marker"></i></span>
+                      <span class="input-group-text"><i class="fas fa-building"></i></span>
                   </div>
-                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le libellé" required>
+                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le département" required>
               </div>
 
               {% block select-district %}
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <label class="input-group-text" for="select_district"><i class="fas fa-marker"></i></label>
+                      <label class="input-group-text" for="select_district"><i class="fas fa-igloo"></i></label>
                   </div>
 
-                  <select name="select_district" id="select_district">
+                  <select name="select_district" id="select_district" required>
                       <option value="" selected>---Sélectionnez un district---</option>
                       {% for district in districts %}
                       <option value="{{district.id}}" >{{district.libelle}}</option>
@@ -47,14 +47,11 @@
               {% block select-region %}
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <label class="input-group-text" for="select_region"><i class="fas fa-marker"></i></label>
+                      <label class="input-group-text" for="select_region"><i class="fas fa-home"></i></label>
                   </div>
 
-                  <select name="select_region" id="select_region">
+                  <select name="select_region" id="select_region" required>
                       <option value="" selected>---Sélectionnez une région---</option>
-                      {% for region in regions %}
-                      <option value="{{region.id}}" >{{region.libelle}}</option>
-                      {% endfor %}
                   </select>
               </div>
               {% endblock select-region %}

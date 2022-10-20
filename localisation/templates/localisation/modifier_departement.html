@@ -19,10 +19,10 @@
 {% block select-district %}
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <label class="input-group-text" for="select_district{{departement.id}}"><i class="fas fa-marker"></i></label>
+            <label class="input-group-text" for="select_district{{departement.id}}"><i class="fas fa-igloo"></i></label>
         </div>
 
-        <select name="select_district" id="select_district{{departement.id}}">
+        <select name="select_district" id="select_district{{departement.id}}" required>
             <option value="" selected>---Sélectionnez un district---</option>
             {% for district in districts %}
 
@@ -41,17 +41,30 @@
 {% block select-region %}
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <label class="input-group-text" for="select_region{{departement.id}}"><i class="fas fa-marker"></i></label>
+            <label class="input-group-text" for="select_region{{departement.id}}"><i class="fas fa-home"></i></label>
         </div>
 
         <select name="select_region" id="select_region{{departement.id}}">
             <option value="" selected>---Sélectionnez une région---</option>
-            {% for region in regions %}
 
-                {% if region.id == departement.region.id %}
-                    <option value="{{region.id}}" selected>{{region.libelle}}</option>
-                {% else %}
-                    <option value="{{region.id}}" >{{region.libelle}}</option>
+            {% for district in districts %} # On parcours la liste des districts
+
+                {% if district.id == departement.region.district.id %}
+
+                    {% for region in regions %} # On parcours la liste des regions
+
+                        {% if region.district.id == district.id %} # On vérifie si la région est du district sélectionné
+
+                            {% if region.id == departement.region.id %} # On vérifie si la région correspond à la région à modifier
+                                <option value="{{region.id}}" selected>{{region.libelle}}</option>
+                            {% else %}
+                                <option value="{{region.id}}" >{{region.libelle}}</option>
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% endfor %}
+
                 {% endif %}
 
             {% endfor %}

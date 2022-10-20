@@ -37,7 +37,7 @@
                         <tr class="thead-light">
                             <th>N°</th>
                             <th>Code</th>
-                            <th>Libellé</th>
+                            <th>District</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -110,7 +110,7 @@
                         <tr class="thead-light">
                             <th>N°</th>
                             <th>Code</th>
-                            <th>Libellé</th>
+                            <th>Région</th>
                             <th>District</th>
                             <th>Action</th>
                         </tr>
@@ -185,7 +185,7 @@
                         <tr class="thead-light">
                             <th>N°</th>
                             <th>Code</th>
-                            <th>Libellé</th>
+                            <th>Département</th>
                             <th>District</th>
                             <th>Région</th>
                             <th>Action</th>
@@ -254,32 +254,24 @@
 
 </div>
 
-{% for message in messages %}
-    {% if message.tags == 'success' %}
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>
-            var m = "{{ message }}";
-            swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
-        </script>
-    {% endif %}
-    {% if message.tags == 'error' %}
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>
-            var m = "{{ message }}";
-            swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
-        </script>
-    {% endif %}
-{% if message.tags == 'info' %}
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>
-            var m = "{{ message }}";
-            swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
-        </script>
-    {% endif %}
-{% endfor %}
-
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'localisation/js/datatable.js' %}"></script>
+    <script>// Gestion des notifications
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'error' %}
+                var m = "{{ message }}";
+                swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'info' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
+            {% endif %}
+        {% endfor %}
+    </script>
+    <script src="{% static 'localisation/js/datatable.js' %}"></script>
 {% endblock javascript %}

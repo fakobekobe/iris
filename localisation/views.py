@@ -329,29 +329,37 @@ def modifier_departement(request):
     _active_onglet = "departement"  # On initialise la variable
 
     if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        region = request.POST.get("select_region", None)
 
-        try:
-            departement = Departement.objects.get(id=request.POST.get('id'))
-        except Departement.DoesNotExist:
-            messages.error(request, "Ce département n'existe pas.")
+        if code and libelle and region:
+            try:
+                departement = Departement.objects.get(id=request.POST.get('id'))
+            except Departement.DoesNotExist:
+                messages.error(request, "Ce département n'existe pas.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            if departement:
+                # On format les chaine
+                code = request.POST.get("code")
+                libelle = request.POST.get("libelle")
+                region = request.POST.get("select_region")
+                libelle = libelle.capitalize()
+
+                departement.code = code
+                departement.libelle = libelle
+                departement.region = Region.objects.get(id=region)
+                departement.save()
+
+                messages.success(request, "Modification réussie.")
+
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
             return HttpResponseRedirect(reverse('localisation:localisation'))
 
-
-        if departement:
-            # On format les chaine
-            code = request.POST.get("code")
-            libelle = request.POST.get("libelle")
-            region = request.POST.get("select_region")
-            libelle = libelle.capitalize()
-
-            departement.code = code
-            departement.libelle = libelle
-            departement.region = Region.objects.get(id = region)
-            departement.save()
-
-            messages.success(request, "Modification réussie.")
-
-            return HttpResponseRedirect(reverse('localisation:localisation'))
     else:
         return HttpResponseRedirect(reverse('localisation:localisation'))
 

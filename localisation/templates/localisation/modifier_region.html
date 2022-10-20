@@ -19,10 +19,10 @@
 {% block select-district %}
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <label class="input-group-text" for="select_district{{region.id}}"><i class="fas fa-marker"></i></label>
+            <label class="input-group-text" for="select_district{{region.id}}"><i class="fas fa-igloo"></i></label>
         </div>
 
-        <select name="select_district" id="select_district{{region.id}}">
+        <select name="select_district" id="select_district{{region.id}}" required>
             <option value="" selected>---Sélectionnez un district---</option>
             {% for district in districts %}
 
