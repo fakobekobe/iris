@@ -491,7 +491,7 @@ $(document).ready(function() {
 
             // On utilise ajax pour récupérer les régions
             $.ajax({
-                url: "",
+                url: "/localisation/details-region", // On ajoute l'url absolue en commençant par la racine
                 type: 'get',
                 data: {
                     id: $(this).val(),

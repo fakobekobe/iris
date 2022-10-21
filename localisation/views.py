@@ -13,20 +13,6 @@ _active_onglet = "" # Variable globale pour l'activation des onglets
 @permission_required('auth.view_group', raise_exception=True)
 def localisation(request):
 
-    if request.method == "GET":
-        id = request.GET.get('id', None)
-        if id:
-            ajax_regions = Region.objects.filter(district = id).order_by('libelle')
-
-            if ajax_regions:
-                data = [{'id':region.id,'libelle':region.libelle} for region in ajax_regions]
-
-                return  JsonResponse({'data':data}, status = 200)
-
-
-
-
-
     districts = District.objects.all().order_by("libelle")
     regions = Region.objects.all().order_by("libelle")
     departements = Departement.objects.all().order_by("libelle")
@@ -259,16 +245,18 @@ def supprimer_region(request, id):
 @login_required
 @permission_required('localisation.view_region', raise_exception=True)
 def details_region(request):
+
     if request.method == "GET":
         id = request.GET.get('id', None)
         if id:
-            print(id)
-            pass
+            ajax_regions = Region.objects.filter(district=id).order_by('libelle')
 
-    messages.error(request, "Accès impossible.")
+            if ajax_regions:
+                data = [{'id': region.id, 'libelle': region.libelle} for region in ajax_regions]
+
+                return JsonResponse({'data': data}, status=200)
+
     return HttpResponseRedirect(reverse('localisation:localisation'))
-
-
 
 # Fin de la Gestion de la région -------------------------------------
 
