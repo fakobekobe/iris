@@ -16,11 +16,13 @@ def localisation(request):
     districts = District.objects.all().order_by("libelle")
     regions = Region.objects.all().order_by("libelle")
     departements = Departement.objects.all().order_by("libelle")
+    villes = Ville.objects.all().order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_district = ['','false','']
     active_region = ['','false','']
     active_departement = ['','false','']
+    active_ville = ['','false','']
 
     if _active_onglet == "district":
         active_district =  ['active', 'true', 'show active']
@@ -28,6 +30,8 @@ def localisation(request):
         active_region = ['active', 'true', 'show active']
     elif _active_onglet == "departement":
         active_departement = ['active', 'true', 'show active']
+    elif _active_onglet == "ville":
+        active_ville = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_district =  ['active', 'true', 'show active']
@@ -41,6 +45,8 @@ def localisation(request):
         "active_region": active_region,
         "active_district": active_district,
         "active_departement": active_departement,
+        "active_ville": active_ville,
+        "villes": villes,
     }
 
     return render(request, "localisation/localisation.html", context)
@@ -48,7 +54,7 @@ def localisation(request):
 # Gestion du district -----------------------------------------------
 
 @login_required
-@permission_required('localisation.view_district', raise_exception=True)
+@permission_required('localisation.add_district', raise_exception=True)
 def ajouter_district(request):
 
     global _active_onglet
@@ -144,7 +150,7 @@ def supprimer_district(request, id):
 # Gestion de la région -----------------------------------------------
 
 @login_required
-@permission_required('localisation.view_region', raise_exception=True)
+@permission_required('localisation.add_region', raise_exception=True)
 def ajouter_region(request):
 
     global _active_onglet
@@ -264,7 +270,7 @@ def details_region(request):
 # Gestion du département -----------------------------------------------
 
 @login_required
-@permission_required('localisation.view_departement', raise_exception=True)
+@permission_required('localisation.add_departement', raise_exception=True)
 def ajouter_departement(request):
 
     global _active_onglet
@@ -371,3 +377,130 @@ def supprimer_departement(request, id):
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
 # Fin de la Gestion du département -------------------------------------
+
+# Gestion de la ville -----------------------------------------------
+
+@login_required
+@permission_required('localisation.add_ville', raise_exception=True)
+def ajouter_ville(request):
+
+    global _active_onglet
+    _active_onglet = "ville"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        departement = request.POST.get("select_departement", None)
+
+        if code and libelle and departement:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                ville = Ville.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except Ville.DoesNotExist:
+                try:
+                    ville = Ville.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except Ville.DoesNotExist:
+                    pass
+            #----
+            ville = Ville()
+            ville.code = code
+            ville.libelle = libelle
+            ville.departement = Departement.objects.get(id = departement)
+            ville.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.change_ville', raise_exception=True)
+def modifier_ville(request):
+
+    global _active_onglet
+    _active_onglet = "ville"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        departement = request.POST.get("select_departement", None)
+
+        if code and libelle and departement:
+            try:
+                ville = Ville.objects.get(id=request.POST.get('id'))
+            except Ville.DoesNotExist:
+                messages.error(request, "Cette ville n'existe pas.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            if ville:
+                # On format les chaine
+                code = request.POST.get("code")
+                libelle = request.POST.get("libelle")
+                departement = request.POST.get("select_departement")
+                libelle = libelle.capitalize()
+
+                ville.code = code
+                ville.libelle = libelle
+                ville.departement = Ville.objects.get(id=departement)
+                ville.save()
+
+                messages.success(request, "Modification réussie.")
+
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.delete_ville', raise_exception=True)
+def supprimer_ville(request, id):
+
+    global _active_onglet
+    _active_onglet = "ville"  # On initialise la variable
+
+    try:
+        ville = Ville.objects.get(id=id)
+    except Ville.DoesNotExist:
+        messages.error(request, "Cette ville n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if ville:
+        ville.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.view_ville', raise_exception=True)
+def details_departement(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_departement = Departement.objects.filter(region=id).order_by('libelle')
+
+            if ajax_departement:
+                data = [{'id': departement.id, 'libelle': departement.libelle} for departement in ajax_departement]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+# Fin de la Gestion de la ville -------------------------------------

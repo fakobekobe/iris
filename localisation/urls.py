@@ -20,4 +20,10 @@ urlpatterns = [
     path('ajouter-departement', views.ajouter_departement, name = 'ajouter_departement'),
     path('modifier-departement', views.modifier_departement, name = 'modifier_departement'),
     path('supprimer-departement/<str:id>', views.supprimer_departement, name = 'supprimer_departement'),
+
+    # Url de la ville
+    path('ajouter-ville', views.ajouter_ville, name = 'ajouter_ville'),
+    path('modifier-ville', views.modifier_ville, name = 'modifier_ville'),
+    path('supprimer-ville/<str:id>', views.supprimer_ville, name = 'supprimer_ville'),
+    path('details-departement', views.details_departement, name = 'details_departement'),
 ]

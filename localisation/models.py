@@ -26,7 +26,7 @@ class Departement(models.Model):
 class Ville(models.Model):
     code = models.CharField(max_length=100, unique=True)
     libelle = models.CharField(max_length=250, verbose_name="Ville", unique=True)
-    region = models.ForeignKey(Departement,on_delete=models.SET_NULL, null=True)
+    departement = models.ForeignKey(Departement,on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.libelle
