@@ -1,16 +1,16 @@
 <!-- Modal -->
-<div class="modal fade" {% block modal-id %} id="quartierModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}quartierModalLabel{% endblock modal-label %}" aria-hidden="true">
+<div class="modal fade" {% block modal-id %} id="marcheModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}marcheModalLabel{% endblock modal-label %}" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="{% block modal-label2 %}quartierModalLabel{% endblock modal-label2 %}">
-            <i class="fas fa-hotel"></i>{% block modal-titre %} Ajouter un quartier {% endblock modal-titre %}
+        <h5 class="modal-title" id="{% block modal-label2 %}marcheModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-store-alt"></i>{% block modal-titre %} Ajouter un marché {% endblock modal-titre %}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" {% block action %} action="{% url 'localisation:ajouter_quartier' %}" {% endblock action %} autocomplete="off">
+      <form method="post" {% block action %} action="{% url 'localisation:ajouter_marche' %}" {% endblock action %} autocomplete="off">
           {%  csrf_token %}
           <div class="modal-body">
               {% block modifier-id %}{% endblock modifier-id %}
@@ -24,9 +24,9 @@
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-hotel"></i></span>
+                      <span class="input-group-text"><i class="fas fa-store-alt"></i></span>
                   </div>
-                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le quartier" required>
+                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le marché" required>
               </div>
 
               {% block select-district %}
@@ -91,6 +91,18 @@
                   </select>
               </div>
               {% endblock select-commune %}
+
+              {% block select-quartier %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
+                  </div>
+
+                  <select name="select_quartier" id="select_quartier" required>
+                      <option value="" selected>--- Sélectionnez un quartier ---</option>
+                  </select>
+              </div>
+              {% endblock select-quartier %}
 
           </div>
 

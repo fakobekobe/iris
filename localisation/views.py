@@ -19,6 +19,7 @@ def localisation(request):
     villes = Ville.objects.all().order_by("libelle")
     communes = Commune.objects.all().order_by("libelle")
     quartiers = Quartier.objects.all().order_by("libelle")
+    marches = Marche.objects.all().order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_district = ['','false','']
@@ -27,6 +28,7 @@ def localisation(request):
     active_ville = ['','false','']
     active_commune = ['','false','']
     active_quartier = ['','false','']
+    active_marche = ['','false','']
 
     if _active_onglet == "district":
         active_district =  ['active', 'true', 'show active']
@@ -40,6 +42,8 @@ def localisation(request):
         active_commune = ['active', 'true', 'show active']
     elif _active_onglet == "quartier":
         active_quartier = ['active', 'true', 'show active']
+    elif _active_onglet == "marche":
+        active_marche = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_district =  ['active', 'true', 'show active']
@@ -53,6 +57,7 @@ def localisation(request):
         "villes": villes,
         "communes": communes,
         "quartiers": quartiers,
+        "marches": marches,
 
         "active_district": active_district,
         "active_region": active_region,
@@ -60,6 +65,7 @@ def localisation(request):
         "active_ville": active_ville,
         "active_commune": active_commune,
         "active_quartier": active_quartier,
+        "active_marche": active_marche,
 
     }
 
@@ -772,3 +778,130 @@ def details_commune(request):
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
 # Fin de la Gestion du quartier -------------------------------------
+
+# Gestion du marché -----------------------------------------------
+
+@login_required
+@permission_required('localisation.add_marche', raise_exception=True)
+def ajouter_marche(request):
+
+    global _active_onglet
+    _active_onglet = "marche"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        quartier = request.POST.get("select_quartier", None)
+
+        if code and libelle and quartier:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                marche = Marche.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except Marche.DoesNotExist:
+                try:
+                    marche = Marche.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except Marche.DoesNotExist:
+                    pass
+            #----
+            marche = Marche()
+            marche.code = code
+            marche.libelle = libelle
+            marche.quartier = Quartier.objects.get(id = quartier)
+            marche.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.change_marche', raise_exception=True)
+def modifier_marche(request):
+
+    global _active_onglet
+    _active_onglet = "marche"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        quartier = request.POST.get("select_quartier", None)
+
+        if code and libelle and quartier:
+            try:
+                marche = Marche.objects.get(id=request.POST.get('id'))
+            except Marche.DoesNotExist:
+                messages.error(request, "Ce marché n'existe pas.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            if marche:
+                # On format les chaine
+                code = request.POST.get("code")
+                libelle = request.POST.get("libelle")
+                quartier = request.POST.get("select_quartier")
+                libelle = libelle.capitalize()
+
+                marche.code = code
+                marche.libelle = libelle
+                marche.quartier = Quartier.objects.get(id=quartier)
+                marche.save()
+
+                messages.success(request, "Modification réussie.")
+
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.delete_marche', raise_exception=True)
+def supprimer_marche(request, id):
+
+    global _active_onglet
+    _active_onglet = "marche"  # On initialise la variable
+
+    try:
+        marche = Marche.objects.get(id=id)
+    except Marche.DoesNotExist:
+        messages.error(request, "Ce marché n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if marche:
+        marche.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.view_marche', raise_exception=True)
+def details_quartier(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_quartier = Quartier.objects.filter(commune=id).order_by('libelle')
+
+            if ajax_quartier:
+                data = [{'id': quartier.id, 'libelle': quartier.libelle} for quartier in ajax_quartier]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+# Fin de la Gestion du marché -------------------------------------

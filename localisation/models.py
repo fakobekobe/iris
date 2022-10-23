@@ -46,3 +46,11 @@ class Quartier(models.Model):
 
     def __str__(self):
         return self.libelle
+
+class Marche(models.Model):
+    code = models.CharField(max_length=100, unique=True)
+    libelle = models.CharField(max_length=250, verbose_name="Marché", unique=True)
+    quartier = models.ForeignKey(Quartier,on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.libelle

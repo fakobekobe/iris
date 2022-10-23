@@ -12,6 +12,7 @@ LISTE_MODELS = {
         'Ville': Ville,
         'Commune' : Commune,
         'Quartier' : Quartier,
+        'Marché' : Marche,
     },
 }
 

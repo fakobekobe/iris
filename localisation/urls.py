@@ -38,4 +38,10 @@ urlpatterns = [
     path('modifier-quartier', views.modifier_quartier, name = 'modifier_quartier'),
     path('supprimer-quartier/<str:id>', views.supprimer_quartier, name = 'supprimer_quartier'),
     path('details-commune', views.details_commune, name = 'details_commune'),
+
+    # Url du Marché
+    path('ajouter-marche', views.ajouter_marche, name='ajouter_marche'),
+    path('modifier-marche', views.modifier_marche, name='modifier_marche'),
+    path('supprimer-marche/<str:id>', views.supprimer_marche, name='supprimer_marche'),
+    path('details-quartier', views.details_quartier, name='details_quartier'),
 ]

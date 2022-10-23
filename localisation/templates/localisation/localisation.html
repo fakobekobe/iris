@@ -37,6 +37,11 @@
         Quartier
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_marche|first}}" id="marche-tab" data-toggle="tab" data-target="#marche" type="button" role="tab" aria-controls="marche" aria-selected="{{ active_marche|slice:'1:2'|first }}">
+        Marché
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
@@ -522,6 +527,93 @@
       </div>
     </div>
     <!-- FIN CONTENU QUARTIER -->
+
+    <!-- CONTENU MARCHE -->
+    <div class="tab-pane fade {{ active_marche|last }}" id="marche" role="tabpanel" aria-labelledby="marche-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-store-alt"></i> Liste des marchés</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#marcheModal" data-backdrop="static"><i class="fas fa-store-alt"></i> Ajouter un marché</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tablemarche" style="width:100%;">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Marché</th>
+                            <th>Quartier</th>
+                            <th>Commune</th>
+                            <th>Ville</th>
+                            <th>Département</th>
+                            <th>Région</th>
+                            <th>District</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for marche in marches %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{marche.code}}</td>
+                            <td>{{marche.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.commune.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.commune.ville.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.commune.ville.departement.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.commune.ville.departement.region.libelle|capfirst}}</td>
+                            <td>{{marche.quartier.commune.ville.departement.region.district.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#marcheModal{{marche.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#marchemodal{{marche.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="marchemodal{{marche.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Marché : <strong>{{marche.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_marche' marche.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_marche.html' %}
+                        {% include 'localisation/modifier_marche.html' %}
+
+                        {% empty %}
+                            {% include 'localisation/ajouter_marche.html' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN CONTENU MARCHE -->
 
   </div>
 
