@@ -17,12 +17,16 @@ def localisation(request):
     regions = Region.objects.all().order_by("libelle")
     departements = Departement.objects.all().order_by("libelle")
     villes = Ville.objects.all().order_by("libelle")
+    communes = Commune.objects.all().order_by("libelle")
+    quartiers = Quartier.objects.all().order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_district = ['','false','']
     active_region = ['','false','']
     active_departement = ['','false','']
     active_ville = ['','false','']
+    active_commune = ['','false','']
+    active_quartier = ['','false','']
 
     if _active_onglet == "district":
         active_district =  ['active', 'true', 'show active']
@@ -32,6 +36,10 @@ def localisation(request):
         active_departement = ['active', 'true', 'show active']
     elif _active_onglet == "ville":
         active_ville = ['active', 'true', 'show active']
+    elif _active_onglet == "commune":
+        active_commune = ['active', 'true', 'show active']
+    elif _active_onglet == "quartier":
+        active_quartier = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_district =  ['active', 'true', 'show active']
@@ -42,11 +50,17 @@ def localisation(request):
         "districts" : districts,
         "regions" : regions,
         "departements" : departements,
-        "active_region": active_region,
+        "villes": villes,
+        "communes": communes,
+        "quartiers": quartiers,
+
         "active_district": active_district,
+        "active_region": active_region,
         "active_departement": active_departement,
         "active_ville": active_ville,
-        "villes": villes,
+        "active_commune": active_commune,
+        "active_quartier": active_quartier,
+
     }
 
     return render(request, "localisation/localisation.html", context)
@@ -455,7 +469,7 @@ def modifier_ville(request):
 
                 ville.code = code
                 ville.libelle = libelle
-                ville.departement = Ville.objects.get(id=departement)
+                ville.departement = Departement.objects.get(id=departement)
                 ville.save()
 
                 messages.success(request, "Modification réussie.")
@@ -504,3 +518,257 @@ def details_departement(request):
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
 # Fin de la Gestion de la ville -------------------------------------
+
+# Gestion de la commune -----------------------------------------------
+
+@login_required
+@permission_required('localisation.add_commune', raise_exception=True)
+def ajouter_commune(request):
+
+    global _active_onglet
+    _active_onglet = "commune"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        ville = request.POST.get("select_ville", None)
+
+        if code and libelle and ville:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                commune = Commune.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except Commune.DoesNotExist:
+                try:
+                    commune = Commune.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except Commune.DoesNotExist:
+                    pass
+            #----
+            commune = Commune()
+            commune.code = code
+            commune.libelle = libelle
+            commune.ville = Ville.objects.get(id = ville)
+            commune.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.change_commune', raise_exception=True)
+def modifier_commune(request):
+
+    global _active_onglet
+    _active_onglet = "commune"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        ville = request.POST.get("select_ville", None)
+
+        if code and libelle and ville:
+            try:
+                commune = Commune.objects.get(id=request.POST.get('id'))
+            except Commune.DoesNotExist:
+                messages.error(request, "Cette commune n'existe pas.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            if commune:
+                # On format les chaine
+                code = request.POST.get("code")
+                libelle = request.POST.get("libelle")
+                ville = request.POST.get("select_ville")
+                libelle = libelle.capitalize()
+
+                commune.code = code
+                commune.libelle = libelle
+                commune.ville = Ville.objects.get(id=ville)
+                commune.save()
+
+                messages.success(request, "Modification réussie.")
+
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.delete_commune', raise_exception=True)
+def supprimer_commune(request, id):
+
+    global _active_onglet
+    _active_onglet = "commune"  # On initialise la variable
+
+    try:
+        commune = Commune.objects.get(id=id)
+    except Commune.DoesNotExist:
+        messages.error(request, "Cette commune n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if commune:
+        commune.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.view_commune', raise_exception=True)
+def details_ville(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_ville = Ville.objects.filter(departement=id).order_by('libelle')
+
+            if ajax_ville:
+                data = [{'id': ville.id, 'libelle': ville.libelle} for ville in ajax_ville]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+# Fin de la Gestion de la commune -------------------------------------
+
+# Gestion du quartier -----------------------------------------------
+
+@login_required
+@permission_required('localisation.add_quartier', raise_exception=True)
+def ajouter_quartier(request):
+
+    global _active_onglet
+    _active_onglet = "quartier"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        commune = request.POST.get("select_commune", None)
+
+        if code and libelle and commune:
+            # On vérifie si le code et le libelle existe
+            # On format les chaine
+            libelle = libelle.capitalize()
+
+            try:
+                quartier = Quartier.objects.get(code = code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            except Quartier.DoesNotExist:
+                try:
+                    quartier = Quartier.objects.get(libelle = libelle)
+                    messages.error(request, f"Ce libellé :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('localisation:localisation'))
+                except Quartier.DoesNotExist:
+                    pass
+            #----
+            quartier = Quartier()
+            quartier.code = code
+            quartier.libelle = libelle
+            quartier.commune = Commune.objects.get(id = commune)
+            quartier.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.change_quartier', raise_exception=True)
+def modifier_quartier(request):
+
+    global _active_onglet
+    _active_onglet = "quartier"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+        commune = request.POST.get("select_commune", None)
+
+        if code and libelle and commune:
+            try:
+                quartier = Quartier.objects.get(id=request.POST.get('id'))
+            except Quartier.DoesNotExist:
+                messages.error(request, "Ce quartier n'existe pas.")
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+
+            if quartier:
+                # On format les chaine
+                code = request.POST.get("code")
+                libelle = request.POST.get("libelle")
+                commune = request.POST.get("select_commune")
+                libelle = libelle.capitalize()
+
+                quartier.code = code
+                quartier.libelle = libelle
+                quartier.commune = Commune.objects.get(id=commune)
+                quartier.save()
+
+                messages.success(request, "Modification réussie.")
+
+                return HttpResponseRedirect(reverse('localisation:localisation'))
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    else:
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.delete_quartier', raise_exception=True)
+def supprimer_quartier(request, id):
+
+    global _active_onglet
+    _active_onglet = "quartier"  # On initialise la variable
+
+    try:
+        quartier = Quartier.objects.get(id=id)
+    except Quartier.DoesNotExist:
+        messages.error(request, "Ce quartier n'existe pas.")
+        return HttpResponseRedirect(reverse('localisation:localisation'))
+
+    if quartier:
+        quartier.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+@login_required
+@permission_required('localisation.view_quartier', raise_exception=True)
+def details_commune(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_commune = Commune.objects.filter(ville=id).order_by('libelle')
+
+            if ajax_commune:
+                data = [{'id': commune.id, 'libelle': commune.libelle} for commune in ajax_commune]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
+# Fin de la Gestion du quartier -------------------------------------

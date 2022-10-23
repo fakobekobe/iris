@@ -1,0 +1,103 @@
+<!-- Modal -->
+<div class="modal fade" {% block modal-id %} id="communeModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}communeModalLabel{% endblock modal-label %}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{% block modal-label2 %}communeModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-warehouse"></i>{% block modal-titre %} Ajouter une commune {% endblock modal-titre %}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" {% block action %} action="{% url 'localisation:ajouter_commune' %}" {% endblock action %} autocomplete="off">
+          {%  csrf_token %}
+          <div class="modal-body">
+              {% block modifier-id %}{% endblock modifier-id %}
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                  </div>
+                  <input type="text" name="code" class="form-control" placeholder="Saisir le code" {% block value-code %}{% endblock value-code %} required>
+              </div>
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
+                  </div>
+                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir la commune" required>
+              </div>
+
+              {% block select-district %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_district"><i class="fas fa-igloo"></i></label>
+                  </div>
+
+                  <select name="select_district" id="select_district" required>
+                      <option value="" selected>--- Sélectionnez un district ---</option>
+                      {% for district in districts %}
+                      <option value="{{district.id}}" >{{district.libelle}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              {% endblock select-district %}
+
+              {% block select-region %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_region"><i class="fas fa-home"></i></label>
+                  </div>
+
+                  <select name="select_region" id="select_region" required>
+                      <option value="" selected>--- Sélectionnez une région ---</option>
+                  </select>
+              </div>
+              {% endblock select-region %}
+
+              {% block select-departement %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_departement"><i class="fas fa-building"></i></label>
+                  </div>
+
+                  <select name="select_departement" id="select_departement" required>
+                      <option value="" selected>--- Sélectionnez un département ---</option>
+                  </select>
+              </div>
+              {% endblock select-departement %}
+
+              {% block select-ville %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_ville"><i class="fas fa-city"></i></label>
+                  </div>
+
+                  <select name="select_ville" id="select_ville" required>
+                      <option value="" selected>--- Sélectionnez une ville ---</option>
+                  </select>
+              </div>
+              {% endblock select-ville %}
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width: 100%;">
+                  <button type="submit" class="btn btn-success">
+                      {% block btn-action %}<i class="fas fa-plus"></i> Enregistrer {% endblock btn-action %}
+                  </button>
+                  <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                      <i class="fas fa-sync-alt"></i> Annuler
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

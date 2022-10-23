@@ -26,4 +26,16 @@ urlpatterns = [
     path('modifier-ville', views.modifier_ville, name = 'modifier_ville'),
     path('supprimer-ville/<str:id>', views.supprimer_ville, name = 'supprimer_ville'),
     path('details-departement', views.details_departement, name = 'details_departement'),
+
+    # Url de la Commune
+    path('ajouter-commune', views.ajouter_commune, name = 'ajouter_commune'),
+    path('modifier-commune', views.modifier_commune, name = 'modifier_commune'),
+    path('supprimer-commune/<str:id>', views.supprimer_commune, name = 'supprimer_commune'),
+    path('details-ville', views.details_ville, name = 'details_ville'),
+
+    # Url du Quartier
+    path('ajouter-quartier', views.ajouter_quartier, name = 'ajouter_quartier'),
+    path('modifier-quartier', views.modifier_quartier, name = 'modifier_quartier'),
+    path('supprimer-quartier/<str:id>', views.supprimer_quartier, name = 'supprimer_quartier'),
+    path('details-commune', views.details_commune, name = 'details_commune'),
 ]

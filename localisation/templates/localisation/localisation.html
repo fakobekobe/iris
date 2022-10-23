@@ -27,6 +27,16 @@
         Ville
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_commune|first}}" id="commune-tab" data-toggle="tab" data-target="#commune" type="button" role="tab" aria-controls="commune" aria-selected="{{ active_commune|slice:'1:2'|first }}">
+        Commune
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_quartier|first}}" id="quartier-tab" data-toggle="tab" data-target="#quartier" type="button" role="tab" aria-controls="quartier" aria-selected="{{ active_quartier|slice:'1:2'|first }}">
+        Quartier
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
@@ -90,6 +100,9 @@
                         <!-- LISTE DES INCLUDES -->
                         {% include 'localisation/ajouter_district.html' %}
                         {% include 'localisation/modifier_district.html' %}
+
+                        {% empty %}
+                            {% include 'localisation/ajouter_district.html' %}
 
                         {% endfor %}
                     </tbody>
@@ -166,6 +179,8 @@
                         {% include 'localisation/ajouter_region.html' %}
                         {% include 'localisation/modifier_region.html' %}
 
+                        {% empty %}
+                            {% include 'localisation/ajouter_region.html' %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -191,8 +206,8 @@
                             <th>N°</th>
                             <th>Code</th>
                             <th>Département</th>
-                            <th>District</th>
                             <th>Région</th>
+                            <th>District</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -202,8 +217,8 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{departement.code}}</td>
                             <td>{{departement.libelle|capfirst}}</td>
-                            <td>{{departement.region.district.libelle|capfirst}}</td>
                             <td>{{departement.region.libelle|capfirst}}</td>
+                            <td>{{departement.region.district.libelle|capfirst}}</td>
                             <td class="text-center">
                                 <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#departementModal{{departement.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
@@ -242,6 +257,9 @@
                         <!-- LISTE DES INCLUDES -->
                         {% include 'localisation/ajouter_departement.html' %}
                         {% include 'localisation/modifier_departement.html' %}
+
+                        {% empty %}
+                            {% include 'localisation/ajouter_departement.html' %}
 
                         {% endfor %}
                     </tbody>
@@ -322,6 +340,9 @@
                         {% include 'localisation/ajouter_ville.html' %}
                         {% include 'localisation/modifier_ville.html' %}
 
+                        {% empty %}
+                            {% include 'localisation/ajouter_ville.html' %}
+
                         {% endfor %}
                     </tbody>
                 </table>
@@ -333,6 +354,174 @@
       </div>
     </div>
     <!-- FIN CONTENU VILLE -->
+
+    <!-- CONTENU COMMUNE -->
+    <div class="tab-pane fade {{ active_commune|last }}" id="commune" role="tabpanel" aria-labelledby="commune-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-warehouse"></i> Liste des communes</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#communeModal" data-backdrop="static"><i class="fas fa-warehouse"></i> Ajouter une commune</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tablecommune" style="width:100%;">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Commune</th>
+                            <th>Ville</th>
+                            <th>Département</th>
+                            <th>Région</th>
+                            <th>District</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for commune in communes %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{commune.code}}</td>
+                            <td>{{commune.libelle|capfirst}}</td>
+                            <td>{{commune.ville.libelle|capfirst}}</td>
+                            <td>{{commune.ville.departement.libelle|capfirst}}</td>
+                            <td>{{commune.ville.departement.region.libelle|capfirst}}</td>
+                            <td>{{commune.ville.departement.region.district.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#communeModal{{commune.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#communemodal{{commune.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="communemodal{{commune.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Commune : <strong>{{commune.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_commune' commune.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_commune.html' %}
+                        {% include 'localisation/modifier_commune.html' %}
+
+                        {% empty %}
+                            {% include 'localisation/ajouter_commune.html' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN CONTENU COMMUNE -->
+
+    <!-- CONTENU QUARTIER -->
+    <div class="tab-pane fade {{ active_quartier|last }}" id="quartier" role="tabpanel" aria-labelledby="quartier-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-hotel"></i> Liste des quartier</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#quartierModal" data-backdrop="static"><i class="fas fa-hotel"></i> Ajouter un quartier</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tablequartier" style="width:100%;">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Quartier</th>
+                            <th>Commune</th>
+                            <th>Ville</th>
+                            <th>Département</th>
+                            <th>Région</th>
+                            <th>District</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quartier in quartiers %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{quartier.code}}</td>
+                            <td>{{quartier.libelle|capfirst}}</td>
+                            <td>{{quartier.commune.libelle|capfirst}}</td>
+                            <td>{{quartier.commune.ville.libelle|capfirst}}</td>
+                            <td>{{quartier.commune.ville.departement.libelle|capfirst}}</td>
+                            <td>{{quartier.commune.ville.departement.region.libelle|capfirst}}</td>
+                            <td>{{quartier.commune.ville.departement.region.district.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#quartierModal{{quartier.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#quartiermodal{{quartier.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="quartiermodal{{quartier.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Quartier : <strong>{{quartier.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'localisation:supprimer_quartier' quartier.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'localisation/ajouter_quartier.html' %}
+                        {% include 'localisation/modifier_quartier.html' %}
+
+                        {% empty %}
+                            {% include 'localisation/ajouter_quartier.html' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN CONTENU QUARTIER -->
 
   </div>
 

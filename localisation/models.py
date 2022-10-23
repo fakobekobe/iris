@@ -30,3 +30,19 @@ class Ville(models.Model):
 
     def __str__(self):
         return self.libelle
+
+class Commune(models.Model):
+    code = models.CharField(max_length=100, unique=True)
+    libelle = models.CharField(max_length=250, verbose_name="Commune", unique=True)
+    ville = models.ForeignKey(Ville,on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.libelle
+
+class Quartier(models.Model):
+    code = models.CharField(max_length=100, unique=True)
+    libelle = models.CharField(max_length=250, verbose_name="Quartier", unique=True)
+    commune = models.ForeignKey(Commune,on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.libelle
