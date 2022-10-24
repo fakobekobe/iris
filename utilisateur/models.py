@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from localisation.models import *
+from etatcivil.models import *
 
 # Liste des variables Globales
 LISTE_MODELS = {
@@ -13,6 +14,9 @@ LISTE_MODELS = {
         'Commune' : Commune,
         'Quartier' : Quartier,
         'Marché' : Marche,
+    },
+    'Etat_civil':{
+        'Type de pièce': TypePiece,
     },
 }
 

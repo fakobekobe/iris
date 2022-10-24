@@ -1,0 +1,18 @@
+{% extends 'etatcivil/ajouter_typepiece.html' %}
+
+{% block modal-id %} id="typepieceModal{{typepiece.id}}" {% endblock modal-id %}
+{% block modal-label %}typepieceModalLabel{{typepiece.id}}{% endblock modal-label %}
+{% block modal-label2 %}typepieceModalLabel{{typepiece.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un type de pièce {% endblock modal-titre %}
+{% block action %} action="{% url 'etatcivil:modifier_typepiece' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{typepiece.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{typepiece.type}}"{% endblock value-code %}
+{% block value-libelle %}value="{{typepiece.libelle}}"{% endblock value-libelle %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

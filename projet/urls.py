@@ -9,5 +9,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('utilisateur.urls')),
     path('localisation/',include('localisation.urls')),
-    # path('utilisateur/',include('utilisateur.urls')),
+    path('etatcivil/',include('etatcivil.urls')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
