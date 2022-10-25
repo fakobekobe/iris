@@ -1,32 +1,25 @@
 <!-- Modal -->
-<div class="modal fade" {% block modal-id %} id="typepieceModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}typepieceModalLabel{% endblock modal-label %}" aria-hidden="true">
+<div class="modal fade" {% block modal-id %} id="niveauModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}niveauModalLabel{% endblock modal-label %}" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="{% block modal-label2 %}typepieceModalLabel{% endblock modal-label2 %}">
-            <i class="fas fa-id-card"></i>{% block modal-titre %} Ajouter un type de pièce {% endblock modal-titre %}
+        <h5 class="modal-title" id="{% block modal-label2 %}niveauModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-graduation-cap"></i>{% block modal-titre %} Ajouter un niveau {% endblock modal-titre %}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" {% block action %} action="{% url 'etatcivil:ajouter_typepiece' %}" {% endblock action %} autocomplete="off">
+      <form method="post" {% block action %} action="{% url 'etatcivil:ajouter_niveau' %}" {% endblock action %} autocomplete="off">
           {%  csrf_token %}
           <div class="modal-body">
               {% block modifier-id %}{% endblock modifier-id %}
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                      <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
                   </div>
-                  <input type="text" name="type" class="form-control" placeholder="Saisir le type" {% block value-code %}{% endblock value-code %} required autofocus >
-              </div>
-
-              <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                  </div>
-                  <input type="text" name="libelle" class="form-control" {% block value-libelle %}{% endblock value-libelle %} placeholder="Saisir le libellé" required>
+                  <input type="text" name="niveau" class="form-control" placeholder="Saisir le niveau" {% block value-niveau %}{% endblock value-niveau %} required autofocus >
               </div>
 
           </div>

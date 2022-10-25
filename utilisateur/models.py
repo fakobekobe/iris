@@ -16,7 +16,9 @@ LISTE_MODELS = {
         'Marché' : Marche,
     },
     'Etat_civil':{
-        'Type de pièce': TypePiece,
+        'Type_de_pièce': TypePiece,
+        'Niveau': Niveau,
+        'Niveau_scolaire': NiveauScolaire,
     },
 }
 

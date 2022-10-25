@@ -12,14 +12,19 @@
         Type de pièce
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_niveau|first}}" id="niveau-tab" data-toggle="tab" data-target="#niveau" type="button" role="tab" aria-controls="niveau" aria-selected="{{ active_niveau|slice:'1:2'|first }}">
+        Niveau
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
     <!-- CONTENU Type de pièce -->
     <div class="tab-pane fade {{ active_typepiece|last }}" id="typepiece" role="tabpanel" aria-labelledby="typepiece-tab">
       <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des types de pièce</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typepieceModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un type de pièce</a></h3>
+        <h1 class="mb-3 text-primary"><i class="fas fa-id-card"></i> Liste des types de pièce</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typepieceModal" data-backdrop="static"><i class="fas fa-id-card"></i> Ajouter un type de pièce</a></h3>
         <div class="row">
             <div class="col-md-12">
                 <table class="table  table-bordered table-hover table-responsive-md" id="tabletypepiece">
@@ -90,6 +95,80 @@
       </div>
     </div>
     <!-- FIN DE CONTENU Type de pièce -->
+
+    <!-- CONTENU Niveau -->
+    <div class="tab-pane fade {{ active_niveau|last }}" id="niveau" role="tabpanel" aria-labelledby="niveau-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-graduation-cap"></i> Liste des niveaux</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#niveauModal" data-backdrop="static"><i class="fas fa-graduation-cap"></i> Ajouter un niveau</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tableniveau">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Niveau</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for niveau in niveaux %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{niveau.niveau|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#niveauModal{{niveau.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{niveau.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modal{{niveau.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Niveau : <strong>{{niveau.niveau|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'etatcivil:supprimer_niveau' niveau.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'etatcivil/ajouter_niveau.html' %}
+                        {% include 'etatcivil/modifier_niveau.html' %}
+
+                        {% empty %}
+                            {% include 'etatcivil/ajouter_niveau.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Niveau -->
 
   </div>
 
