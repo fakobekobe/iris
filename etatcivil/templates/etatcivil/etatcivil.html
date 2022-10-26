@@ -17,9 +17,15 @@
         Niveau
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_niveauscolaire|first}}" id="scolaire-tab" data-toggle="tab" data-target="#scolaire" type="button" role="tab" aria-controls="scolaire" aria-selected="{{ active_niveauscolaire|slice:'1:2'|first }}">
+        Niveau scolaire
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
+
     <!-- CONTENU Type de pièce -->
     <div class="tab-pane fade {{ active_typepiece|last }}" id="typepiece" role="tabpanel" aria-labelledby="typepiece-tab">
       <div>
@@ -169,6 +175,82 @@
       </div>
     </div>
     <!-- FIN DE CONTENU Niveau -->
+
+    <!-- CONTENU Niveau scolaire -->
+    <div class="tab-pane fade {{ active_niveauscolaire|last }}" id="scolaire" role="tabpanel" aria-labelledby="scolaire-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-user-graduate"></i> Liste des niveaux scolaires</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#scolaireModal" data-backdrop="static"><i class="fas fa-user-graduate"></i> Ajouter un niveau scolaire</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tableniveauscolaire">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Classe</th>
+                            <th>Niveau</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for niveauscolaire in niveauscolaires %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{niveauscolaire.classe|upper}}</td>
+                            <td>{{niveauscolaire.niveau.niveau|capfirst}}</td>
+                            <td class="text-center">
+                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#scolaireModal{{niveauscolaire.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{niveauscolaire.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modal{{niveauscolaire.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Niveau scolaire : <strong>{{niveauscolaire.classe}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'etatcivil:supprimer_niveauscolaire' niveauscolaire.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'etatcivil/ajouter_niveauscolaire.html' %}
+                        {% include 'etatcivil/modifier_niveauscolaire.html' %}
+
+                        {% empty %}
+                            {% include 'etatcivil/ajouter_niveauscolaire.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Niveau scolaire -->
 
   </div>
 

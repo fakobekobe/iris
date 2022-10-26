@@ -14,4 +14,10 @@ urlpatterns = [
     path('ajouter-niveau', views.ajouter_niveau, name = 'ajouter_niveau'),
     path('modifier-niveau', views.modifier_niveau, name = 'modifier_niveau'),
     path('supprimer-niveau/<str:id>', views.supprimer_niveau, name = 'supprimer_niveau'),
+
+    # Url du niveau scolaire
+    path('ajouter-niveauscolaire', views.ajouter_niveauscolaire, name='ajouter_niveauscolaire'),
+    path('modifier-niveauscolaire', views.modifier_niveauscolaire, name='modifier_niveauscolaire'),
+    path('supprimer-niveauscolaire/<str:id>', views.supprimer_niveauscolaire, name='supprimer_niveauscolaire'),
+
 ]

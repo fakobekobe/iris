@@ -1,0 +1,60 @@
+<!-- Modal -->
+<div class="modal fade" {% block modal-id %} id="scolaireModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}scolaireModalLabel{% endblock modal-label %}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{% block modal-label2 %}scolaireModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-user-graduate"></i>{% block modal-titre %} Ajouter un niveau scolaire {% endblock modal-titre %}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" {% block action %} action="{% url 'etatcivil:ajouter_niveauscolaire' %}" {% endblock action %} autocomplete="off">
+          {%  csrf_token %}
+          <div class="modal-body">
+              {% block modifier-id %}{% endblock modifier-id %}
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
+                  </div>
+                  <input type="text" name="classe" class="form-control" placeholder="Saisir la classe" {% block value-classe %}{% endblock value-classe %} required autofocus >
+              </div>
+
+              {% block select-niveau %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_niveau"><i class="fas fa-graduation-cap"></i></label>
+                  </div>
+
+                  <select name="select_niveau" id="select_niveau" required>
+                      <option value="" selected>--- Sélectionnez un niveau ---</option>
+                      {% for niveau in niveaux %}
+                      <option value="{{niveau.id}}" >{{niveau.niveau}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              {% endblock select-niveau %}
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width: 100%;">
+                  <button type="submit" class="btn btn-success">
+                      {% block btn-action %}<i class="fas fa-plus"></i> Enregistrer {% endblock btn-action %}
+                  </button>
+                  <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                      <i class="fas fa-sync-alt"></i> Annuler
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

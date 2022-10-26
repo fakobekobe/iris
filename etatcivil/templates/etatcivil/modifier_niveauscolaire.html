@@ -1,0 +1,40 @@
+{% extends 'etatcivil/ajouter_niveauscolaire.html' %}
+
+{% block modal-id %} id="scolaireModal{{niveauscolaire.id}}" {% endblock modal-id %}
+{% block modal-label %}scolaireModalLabel{{niveauscolaire.id}}{% endblock modal-label %}
+{% block modal-label2 %}scolaireModalLabel{{niveauscolaire.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un niveau scolaire {% endblock modal-titre %}
+{% block action %} action="{% url 'etatcivil:modifier_niveauscolaire' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{niveauscolaire.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-classe %}value="{{niveauscolaire.classe}}"{% endblock value-classe %}
+
+{% block select-niveau %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_niveau{{niveauscolaire.id}}"><i class="fas fa-graduation-cap"></i></label>
+        </div>
+
+        <select name="select_niveau" id="select_niveau{{niveauscolaire.id}}" required>
+            <option value="" selected>--- Sélectionnez un niveau ---</option>
+            {% for niveau in niveaux %}
+
+                {% if niveau.id == niveauscolaire.niveau.id %}
+                    <option value="{{niveau.id}}" selected>{{niveau.niveau|capfirst}}</option>
+                {% else %}
+                    <option value="{{niveau.id}}" >{{niveau.niveau|capfirst}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-niveau %}
+
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}
