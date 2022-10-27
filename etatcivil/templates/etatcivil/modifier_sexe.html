@@ -13,6 +13,6 @@
         <input type="text" name="id" class="form-control" value="{{sexe.id}}" readonly >
     </div>
 {% endblock modifier-id %}
-{% block value-code %}value="{{sexe.code}}"{% endblock value-code %}
-{% block value-libelle %}value="{{sexe.libelle}}"{% endblock value-libelle %}
+{% block value-code %}value="{{sexe.code|upper}}"{% endblock value-code %}
+{% block value-libelle %}value="{{sexe.libelle|capfirst}}"{% endblock value-libelle %}
 {% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

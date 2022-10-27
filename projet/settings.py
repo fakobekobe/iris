@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'test_app',
     'localisation',
     'etatcivil',
+    'vieprofessionnelle',
 ]
 
 MIDDLEWARE = [

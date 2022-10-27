@@ -441,15 +441,17 @@ def modifier_sexe(request):
                     return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
 
                 except Sexe.DoesNotExist:
-                    if libelle_nouveau != libelle_ancien:
-                        # On vérifie si le valeur modifié existe déjà
-                        try:
-                            Sexe.objects.get(libelle=libelle_nouveau)
-                            messages.error(request, f"Ce libelle [{libelle_nouveau}] existe déjà.")
-                            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+                    pass
 
-                        except Sexe.DoesNotExist:
-                            pass
+            if libelle_nouveau != libelle_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    Sexe.objects.get(libelle=libelle_nouveau)
+                    messages.error(request, f"Ce libelle [{libelle_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Sexe.DoesNotExist:
+                    pass
 
             # On effectue la modification
             sexe.code = code_nouveau
