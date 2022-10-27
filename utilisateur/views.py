@@ -140,6 +140,7 @@ def index(request):
 
     return reponse
 
+@login_required
 @permission_required('auth.view_user', raise_exception=True)
 def utilisateur(request):
     # On récupère la liste des 10 derniers utilisateurs
@@ -158,6 +159,7 @@ def utilisateur(request):
     }
     return render(request, 'utilisateur/utilisateur.html', context)
 
+@login_required
 @permission_required('auth.view_user', raise_exception=True)
 def detail_utilisateur(request, id):
     # Les variables
@@ -231,6 +233,7 @@ def detail_utilisateur(request, id):
 
     return render(request, 'utilisateur/detail_utilisateur.html', context)
 
+@login_required
 @permission_required('auth.delete_user', raise_exception=True)
 def supprimer_groupe_utilisateur(request, id):
     # On récupère l'utilisateur à supprimer
@@ -266,6 +269,7 @@ def supprimer_groupe_utilisateur(request, id):
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
 
+@login_required
 @permission_required('auth.delete_user', raise_exception=True)
 def supprimer_utilisateur(request, id):
     # on vérifie si l'utilisateur à supprimer existe et on le supprime
@@ -282,6 +286,7 @@ def supprimer_utilisateur(request, id):
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:utilisateur'))
 
+@login_required
 @permission_required('auth.change_user', raise_exception=True)
 def modifier_utilisateur(request, id):
 
@@ -361,6 +366,7 @@ def modifier_utilisateur(request, id):
                 context['form'] = form
                 return render(request, 'utilisateur/modifier_utilisateur.html', context)
 
+@login_required
 @permission_required('auth.view_group', raise_exception=True)
 def groupe(request):
     # On récupère la liste des 10 derniers groupes
@@ -380,6 +386,7 @@ def groupe(request):
     }
     return render(request, 'utilisateur/groupe.html', context)
 
+@login_required
 @permission_required('auth.add_group', raise_exception=True)
 def ajouter_groupe(request):
     # On créé un formulaire vide
@@ -423,6 +430,7 @@ def ajouter_groupe(request):
 
     return render(request, 'utilisateur/ajouter_groupe.html', context)
 
+@login_required
 @permission_required('auth.delete_group', raise_exception=True)
 def supprimer_groupe(request, id):
     # on vérifie si le groupe à supprimer existe et on le supprime
@@ -437,6 +445,7 @@ def supprimer_groupe(request, id):
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:groupe'))
 
+@login_required
 @permission_required('auth.view_group', raise_exception=True)
 def detail_groupe(request, id):
     # Les variables
@@ -555,6 +564,7 @@ def detail_groupe(request, id):
 
     return render(request, 'utilisateur/detail_groupe.html', context)
 
+@login_required
 @permission_required('auth.delete_group', raise_exception=True)
 def supprimer_utilisateur_groupe(request, id):
     # On récupère l'utilisateur à supprimer
@@ -590,6 +600,7 @@ def supprimer_utilisateur_groupe(request, id):
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
 
+@login_required
 @permission_required('auth.change_group', raise_exception=True)
 def modifier_groupe(request, id):
 
@@ -735,3 +746,44 @@ def motdepasse(request, id):
                 return render(request, 'utilisateur/motdepasse.html', context)
 
     return render(request, 'utilisateur/motdepasse.html', context)
+
+
+# ---- Gestion des erreurs --------------------------
+
+def handler404(request, exception):
+
+    context = {
+        'titre':'ERREUR 404',
+        'message':"La page que vous désirez n'existe pas",
+    }
+
+    return render(request,'erreur/erreur.html', status=404, context=context)
+
+def handler500(request):
+
+    context = {
+        'titre':'ERREUR 500',
+        'message':"Le serveur ne parvient pas à traiter votre requête",
+    }
+
+    return render(request,'erreur/erreur.html', status=500, context=context)
+
+def handler400(request, exception):
+
+    context = {
+        'titre':'ERREUR 400',
+        'message':"Votre requête est erronée",
+    }
+
+    return render(request,'erreur/erreur.html', status=400, context=context)
+
+def handler403(request, exception):
+
+    context = {
+        'titre':'ERREUR 403',
+        'message':"Vous n'avez pas accès à cette ressource",
+    }
+
+    return render(request,'erreur/erreur.html', status=403, context=context)
+
+# ---- Fin de la Gestion des erreurs ----------------
