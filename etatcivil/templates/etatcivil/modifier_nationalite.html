@@ -1,0 +1,19 @@
+{% extends 'etatcivil/ajouter_nationalite.html' %}
+
+{% block modal-id %} id="nationaliteModal{{nationalite.id}}" {% endblock modal-id %}
+{% block modal-label %}nationaliteModalLabel{{nationalite.id}}{% endblock modal-label %}
+{% block modal-label2 %}nationaliteModalLabel{{nationalite.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier une nationalité {% endblock modal-titre %}
+{% block action %} action="{% url 'etatcivil:modifier_nationalite' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{nationalite.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{nationalite.code|upper}}"{% endblock value-code %}
+{% block value-nationalite %}value="{{nationalite.nationalite|capfirst}}"{% endblock value-nationalite %}
+{% block value-pays %}value="{{nationalite.pays|capfirst}}"{% endblock value-pays %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

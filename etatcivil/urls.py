@@ -25,4 +25,9 @@ urlpatterns = [
     path('modifier-sexe', views.modifier_sexe, name='modifier_sexe'),
     path('supprimer-sexe/<str:id>', views.supprimer_sexe, name='supprimer_sexe'),
 
+    # Url du Nationalité
+    path('ajouter-nationalite', views.ajouter_nationalite, name='ajouter_nationalite'),
+    path('modifier-nationalite', views.modifier_nationalite, name='modifier_nationalite'),
+    path('supprimer-nationalite/<str:id>', views.supprimer_nationalite, name='supprimer_nationalite'),
+
 ]

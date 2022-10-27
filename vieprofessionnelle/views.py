@@ -25,13 +25,13 @@ def ajouter_metier(request):
 
 @login_required
 @permission_required('vieprofessionnelle.change_metier', raise_exception=True)
-def modifier_typepiece(request):
+def modifier_metier(request):
     pass
 
 
 @login_required
 @permission_required('vieprofessionnelle.delete_metier', raise_exception=True)
-def supprimer_typepiece(request, id):
+def supprimer_metier(request, id):
     pass
 
 

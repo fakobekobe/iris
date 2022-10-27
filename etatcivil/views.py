@@ -17,12 +17,14 @@ def etatcivil(request):
     niveaux = Niveau.objects.all().order_by("id")
     niveauscolaires = NiveauScolaire.objects.all().order_by("id")
     sexes = Sexe.objects.all().order_by("id")
+    nationalites = Nationalite.objects.all().order_by("nationalite")
 
     # Initialisation de l'affichage de l'onglet active
     active_typepiece = ['','false','']
     active_niveau = ['','false','']
     active_niveauscolaire = ['','false','']
     active_sexe = ['','false','']
+    active_nationalite = ['','false','']
 
     if _active_onglet == "typepiece":
         active_typepiece =  ['active', 'true', 'show active']
@@ -32,6 +34,8 @@ def etatcivil(request):
         active_niveauscolaire =  ['active', 'true', 'show active']
     elif _active_onglet == "sexe":
         active_sexe =  ['active', 'true', 'show active']
+    elif _active_onglet == "nationalite":
+        active_nationalite =  ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typepiece =  ['active', 'true', 'show active']
@@ -43,11 +47,13 @@ def etatcivil(request):
         "niveaux" : niveaux,
         "niveauscolaires" : niveauscolaires,
         "sexes" : sexes,
+        "nationalites" : nationalites,
 
         "active_typepiece": active_typepiece,
         "active_niveau": active_niveau,
         "active_niveauscolaire": active_niveauscolaire,
         "active_sexe": active_sexe,
+        "active_nationalite": active_nationalite,
 
     }
 
@@ -483,3 +489,153 @@ def supprimer_sexe(request, id):
 
     return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
 # Fin de la Gestion du sexe -------------------------------------
+
+# Gestion du nationalité -------------------------------------
+@login_required
+@permission_required('etatcivil.add_nationalite', raise_exception=True)
+def ajouter_nationalite(request):
+
+    global _active_onglet
+    _active_onglet = "nationalite"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        nationalite = request.POST.get("nationalite", None)
+        pays = request.POST.get("pays", None)
+
+        if code and nationalite and pays: # On vérifie si les champs ont été renseignés
+
+            # On format les chaines
+            code = code.upper()
+            nationalite = nationalite.capitalize()
+            pays = pays.capitalize()
+
+            try:
+                objet_nationalite = Nationalite.objects.get(code=code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+            except Nationalite.DoesNotExist:
+                try:
+                    objet_nationalite = Nationalite.objects.get(nationalite=nationalite)
+                    messages.error(request, f"Cette nationalité :[{nationalite}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Nationalite.DoesNotExist:
+                    try:
+                        objet_nationalite = Nationalite.objects.get(pays=pays)
+                        messages.error(request, f"Ce pays :[{pays}] existe déjà.")
+                        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                    except Nationalite.DoesNotExist:
+                        pass
+
+
+            #----
+            objet_nationalite = Nationalite()
+            objet_nationalite.code = code
+            objet_nationalite.nationalite = nationalite
+            objet_nationalite.pays = pays
+            objet_nationalite.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.change_nationalite', raise_exception=True)
+def modifier_nationalite(request):
+
+    global _active_onglet
+    _active_onglet = "nationalite"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_nationalite = Nationalite.objects.get(id=request.POST.get('id'))
+        except Nationalite.DoesNotExist:
+            messages.error(request, "Cette nationalité n'existe pas.")
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+
+        if objet_nationalite:
+            # On format les chaine
+            code_nouveau = request.POST.get("code",None)
+            code_nouveau = code_nouveau.upper()
+
+            nationalite_nouveau = request.POST.get("nationalite", None)
+            nationalite_nouveau = nationalite_nouveau.capitalize()
+
+            pays_nouveau = request.POST.get("pays", None)
+            pays_nouveau = pays_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            code_ancien = objet_nationalite.code
+            nationalite_ancien = objet_nationalite.nationalite
+            pays_ancien = objet_nationalite.pays
+
+            # On vérifie si la valeur a changé
+            if code_nouveau != code_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    Nationalite.objects.get(code=code_nouveau)
+                    messages.error(request, f"Ce code [{code_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Nationalite.DoesNotExist:
+                    pass
+
+            if nationalite_nouveau != nationalite_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    Nationalite.objects.get(nationalite=nationalite_nouveau)
+                    messages.error(request, f"Cette nationalité [{nationalite_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Nationalite.DoesNotExist:
+                    pass
+
+            if pays_nouveau != pays_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    Nationalite.objects.get(pays=pays_nouveau)
+                    messages.error(request, f"Ce pays [{pays_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Nationalite.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_nationalite.code = code_nouveau
+            objet_nationalite.nationalite = nationalite_nouveau
+            objet_nationalite.pays = pays_nouveau
+            objet_nationalite.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.delete_nationalite', raise_exception=True)
+def supprimer_nationalite(request, id):
+
+    global _active_onglet
+    _active_onglet = "nationalite"  # On initialise la variable
+
+    try:
+        objet_nationalite = Nationalite.objects.get(id=id)
+    except Nationalite.DoesNotExist:
+        messages.error(request, "Cette nationalité n'existe pas.")
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+    if objet_nationalite:
+        objet_nationalite.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+# Fin de la Gestion du nationalité -------------------------------------

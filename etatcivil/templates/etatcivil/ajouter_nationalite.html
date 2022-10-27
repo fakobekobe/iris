@@ -1,0 +1,59 @@
+<!-- Modal -->
+<div class="modal fade" {% block modal-id %} id="nationaliteModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}nationaliteModalLabel{% endblock modal-label %}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{% block modal-label2 %}nationaliteModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-id-card"></i>{% block modal-titre %} Ajouter une nationalité {% endblock modal-titre %}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" {% block action %} action="{% url 'etatcivil:ajouter_nationalite' %}" {% endblock action %} autocomplete="off">
+          {%  csrf_token %}
+          <div class="modal-body">
+              {% block modifier-id %}{% endblock modifier-id %}
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                  </div>
+                  <input type="text" name="code" class="form-control" placeholder="Saisir le code" {% block value-code %}{% endblock value-code %} required autofocus >
+              </div>
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-flag-alt"></i></span>
+                  </div>
+                  <input type="text" name="nationalite" class="form-control" {% block value-nationalite %}{% endblock value-nationalite %} placeholder="Saisir la nationalité" required>
+              </div>
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                  </div>
+                  <input type="text" name="pays" class="form-control" {% block value-pays %}{% endblock value-pays %} placeholder="Saisir le pays" required>
+              </div>
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width: 100%;">
+                  <button type="submit" class="btn btn-success">
+                      {% block btn-action %}<i class="fas fa-plus"></i> Enregistrer {% endblock btn-action %}
+                  </button>
+                  <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                      <i class="fas fa-sync-alt"></i> Annuler
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

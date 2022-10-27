@@ -26,3 +26,11 @@ class Sexe(models.Model):
 
     def __str__(self):
         return self.libelle
+
+class Nationalite(models.Model):
+    code = models.CharField(max_length=3, unique=True)
+    nationalite = models.CharField(max_length=100, verbose_name="Nationalité", unique=True)
+    pays = models.CharField(max_length=250, verbose_name="Pays", unique=True)
+
+    def __str__(self):
+        return self.nationalite
