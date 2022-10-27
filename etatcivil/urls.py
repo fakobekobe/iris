@@ -20,4 +20,9 @@ urlpatterns = [
     path('modifier-niveauscolaire', views.modifier_niveauscolaire, name='modifier_niveauscolaire'),
     path('supprimer-niveauscolaire/<str:id>', views.supprimer_niveauscolaire, name='supprimer_niveauscolaire'),
 
+    # Url du sexe
+    path('ajouter-sexe', views.ajouter_sexe, name='ajouter_sexe'),
+    path('modifier-sexe', views.modifier_sexe, name='modifier_sexe'),
+    path('supprimer-sexe/<str:id>', views.supprimer_sexe, name='supprimer_sexe'),
+
 ]

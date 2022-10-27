@@ -16,11 +16,13 @@ def etatcivil(request):
     typepieces = TypePiece.objects.all().order_by("libelle")
     niveaux = Niveau.objects.all().order_by("id")
     niveauscolaires = NiveauScolaire.objects.all().order_by("id")
+    sexes = Sexe.objects.all().order_by("id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typepiece = ['','false','']
     active_niveau = ['','false','']
     active_niveauscolaire = ['','false','']
+    active_sexe = ['','false','']
 
     if _active_onglet == "typepiece":
         active_typepiece =  ['active', 'true', 'show active']
@@ -28,6 +30,8 @@ def etatcivil(request):
         active_niveau =  ['active', 'true', 'show active']
     elif _active_onglet == "niveauscolaire":
         active_niveauscolaire =  ['active', 'true', 'show active']
+    elif _active_onglet == "sexe":
+        active_sexe =  ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typepiece =  ['active', 'true', 'show active']
@@ -38,10 +42,12 @@ def etatcivil(request):
         "typepieces" : typepieces,
         "niveaux" : niveaux,
         "niveauscolaires" : niveauscolaires,
+        "sexes" : sexes,
 
         "active_typepiece": active_typepiece,
         "active_niveau": active_niveau,
         "active_niveauscolaire": active_niveauscolaire,
+        "active_sexe": active_sexe,
 
     }
 
@@ -247,7 +253,6 @@ def supprimer_niveau(request, id):
 # Fin de la Gestion du niveau -------------------------------------
 
 # Gestion du niveau scolaire -----------------------------------------------
-
 @login_required
 @permission_required('etatcivil.add_niveauscolaire', raise_exception=True)
 def ajouter_niveauscolaire(request):
@@ -350,5 +355,129 @@ def supprimer_niveauscolaire(request, id):
         messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
-
 # Fin de la Gestion du niveau scoalire -------------------------------------
+
+
+# Gestion du sexe -------------------------------------
+@login_required
+@permission_required('etatcivil.add_sexe', raise_exception=True)
+def ajouter_sexe(request):
+
+    global _active_onglet
+    _active_onglet = "sexe"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        code = request.POST.get("code", None)
+        libelle = request.POST.get("libelle", None)
+
+        if code and libelle:
+            # On vérifie si la classe existe
+            # On format les chaine
+            code = code.upper()
+            libelle = libelle.capitalize()
+
+            try:
+                sexe = Sexe.objects.get(code=code)
+                messages.error(request, f"Ce code :[{code}] existe déjà.")
+                return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+            except Sexe.DoesNotExist:
+                try:
+                    sexe = Sexe.objects.get(libelle=libelle)
+                    messages.error(request, f"Ce libelle :[{libelle}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Sexe.DoesNotExist:
+                    pass
+
+
+            #----
+            sexe = Sexe()
+            sexe.code = code
+            sexe.libelle = libelle
+            sexe.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.change_sexe', raise_exception=True)
+def modifier_sexe(request):
+
+    global _active_onglet
+    _active_onglet = "sexe"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            sexe = Sexe.objects.get(id=request.POST.get('id'))
+        except Sexe.DoesNotExist:
+            messages.error(request, "Ce sexe n'existe pas.")
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+
+        if sexe:
+            # On format les chaine
+            code_nouveau = request.POST.get("code",None)
+            code_nouveau = code_nouveau.upper()
+
+            libelle_nouveau = request.POST.get("libelle", None)
+            libelle_nouveau = libelle_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            code_ancien = sexe.code
+            libelle_ancien = sexe.libelle
+
+            # On vérifie si la valeur a changé
+            if code_nouveau != code_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    Sexe.objects.get(code=code_nouveau)
+                    messages.error(request, f"Ce code [{code_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except Sexe.DoesNotExist:
+                    if libelle_nouveau != libelle_ancien:
+                        # On vérifie si le valeur modifié existe déjà
+                        try:
+                            Sexe.objects.get(libelle=libelle_nouveau)
+                            messages.error(request, f"Ce libelle [{libelle_nouveau}] existe déjà.")
+                            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                        except Sexe.DoesNotExist:
+                            pass
+
+            # On effectue la modification
+            sexe.code = code_nouveau
+            sexe.libelle = libelle_nouveau
+            sexe.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.delete_sexe', raise_exception=True)
+def supprimer_sexe(request, id):
+
+    global _active_onglet
+    _active_onglet = "sexe"  # On initialise la variable
+
+    try:
+        sexe = Sexe.objects.get(id=id)
+    except Sexe.DoesNotExist:
+        messages.error(request, "Ce sexe n'existe pas.")
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+    if sexe:
+        sexe.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+# Fin de la Gestion du sexe -------------------------------------

@@ -15,7 +15,14 @@ class Niveau(models.Model):
 
 class NiveauScolaire(models.Model):
     classe = models.CharField(max_length=250, verbose_name="Classe", unique=True)
-    niveau = models.ForeignKey(Niveau, on_delete=models.CASCADE)
+    niveau = models.ForeignKey(Niveau,null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.classe
+
+class Sexe(models.Model):
+    code = models.CharField(max_length=1, unique=True)
+    libelle = models.CharField(max_length=50, verbose_name="Libellé", unique=True)
+
+    def __str__(self):
+        return self.libelle

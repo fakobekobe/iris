@@ -3,7 +3,7 @@ $(document).ready(function() {
     // Ajout du champ du champ de recherche
     var IdTableau = "district";
     //$('#' + IdTableau + ' thead tr').clone(true).addClass('filters').appendTo( '#' + IdTableau + ' thead' );
-    var table = $('#' + IdTableau ).DataTable( {
+    var table1 = $('#' + IdTableau ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -172,7 +172,7 @@ $(document).ready(function() {
      // Ajout du champ du champ de recherche
     var tableregion = "tableregion";
     //$('#' + tableregion + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tableregion + ' thead' );
-    var table = $('#' + tableregion ).DataTable( {
+    var table2 = $('#' + tableregion ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -329,7 +329,7 @@ $(document).ready(function() {
      // Ajout du champ du champ de recherche
     var tabledepartement = "tabledepartement";
     //$('#' + tabledepartement + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tabledepartement + ' thead' );
-    var table = $('#' + tabledepartement ).DataTable( {
+    var table3 = $('#' + tabledepartement ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -487,7 +487,7 @@ $(document).ready(function() {
     var colonneville = [0,1,2,3,4,5];
 
     //$('#' + tableville + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tableville + ' thead' );
-    var table = $('#' + tableville ).DataTable( {
+    var table4 = $('#' + tableville ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -645,7 +645,7 @@ $(document).ready(function() {
     var colonnecommune = [0,1,2,3,4,5,6];
 
     //$('#' + tablecommune + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tablecommune + ' thead' );
-    var table = $('#' + tablecommune ).DataTable( {
+    var table5 = $('#' + tablecommune ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -804,7 +804,7 @@ $(document).ready(function() {
     var colonnequartier = [0,1,2,3,4,5,6,7];
 
     //$('#' + tablequartier + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tablequartier + ' thead' );
-    var table = $('#' + tablequartier ).DataTable( {
+    var table6 = $('#' + tablequartier ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES
@@ -962,7 +962,7 @@ $(document).ready(function() {
     var colonnemarche = [0,1,2,3,4,5,6,7,8];
 
     //$('#' + tablemarche + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tablemarche + ' thead' );
-    var table = $('#' + tablemarche ).DataTable( {
+    var table7 = $('#' + tablemarche ).DataTable( {
 
     // Pagination du tableau
     // Paramètres optionnels du DATATABLES

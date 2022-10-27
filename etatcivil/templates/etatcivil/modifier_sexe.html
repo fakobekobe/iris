@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'etatcivil/ajouter_sexe.html' %}
+
+{% block modal-id %} id="sexeModal{{sexe.id}}" {% endblock modal-id %}
+{% block modal-label %}sexeModalLabel{{sexe.id}}{% endblock modal-label %}
+{% block modal-label2 %}sexeModalLabel{{sexe.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un sexe {% endblock modal-titre %}
+{% block action %} action="{% url 'etatcivil:modifier_sexe' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{sexe.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{sexe.code}}"{% endblock value-code %}
+{% block value-libelle %}value="{{sexe.libelle}}"{% endblock value-libelle %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

@@ -22,6 +22,11 @@
         Niveau scolaire
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_sexe|first}}" id="sexe-tab" data-toggle="tab" data-target="#sexe" type="button" role="tab" aria-controls="sexe" aria-selected="{{ active_sexe|slice:'1:2'|first }}">
+        Sexe
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
@@ -123,7 +128,6 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{niveau.niveau|capfirst}}</td>
                             <td class="text-center">
-                                <!--a class="btn btn-outline-primary btn-sm" title="Détail" href="#"><i class="far fa-eye"></i></a-->
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#niveauModal{{niveau.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
                                 <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{niveau.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
@@ -251,6 +255,81 @@
       </div>
     </div>
     <!-- FIN DE CONTENU Niveau scolaire -->
+
+    <!-- CONTENU Sexe -->
+    <div class="tab-pane fade {{ active_sexe|last }}" id="sexe" role="tabpanel" aria-labelledby="sexe-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-male"></i> Liste des sexes</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#sexe" data-backdrop="static"><i class="fas fa-male"></i> Ajouter un sexe</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tablesexe">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Code</th>
+                            <th>Libellé</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sexe in sexes %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{sexe.code|upper}}</td>
+                            <td>{{sexe.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#sexeModal{{sexe.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{sexe.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modal{{sexe.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Sexe : <strong>{{sexe.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'etatcivil:supprimer_sexe' sexe.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'etatcivil/ajouter_sexe.html' %}
+                        {% include 'etatcivil/modifier_sexe.html' %}
+
+                        {% empty %}
+                            {% include 'etatcivil/ajouter_sexe.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Sexe -->
 
   </div>
 
