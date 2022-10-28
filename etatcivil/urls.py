@@ -30,4 +30,9 @@ urlpatterns = [
     path('modifier-nationalite', views.modifier_nationalite, name='modifier_nationalite'),
     path('supprimer-nationalite/<str:id>', views.supprimer_nationalite, name='supprimer_nationalite'),
 
+    # Url du Situation matrimoniale
+    path('ajouter-situationmatrimoniale', views.ajouter_situationmatrimoniale, name='ajouter_situationmatrimoniale'),
+    path('modifier-situationmatrimoniale', views.modifier_situationmatrimoniale, name='modifier_situationmatrimoniale'),
+    path('supprimer-situationmatrimoniale/<str:id>', views.supprimer_situationmatrimoniale, name='supprimer_situationmatrimoniale'),
+
 ]

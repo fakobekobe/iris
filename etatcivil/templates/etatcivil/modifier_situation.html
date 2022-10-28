@@ -1,0 +1,17 @@
+{% extends 'etatcivil/ajouter_situation.html' %}
+
+{% block modal-id %} id="situationModal{{situation.id}}" {% endblock modal-id %}
+{% block modal-label %}situationModalLabel{{situation.id}}{% endblock modal-label %}
+{% block modal-label2 %}situationModalLabel{{situation.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier une situation matrimoniale {% endblock modal-titre %}
+{% block action %} action="{% url 'etatcivil:modifier_situationmatrimoniale' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{situation.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-situation %}value="{{situation.situation|capfirst}}"{% endblock value-situation %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

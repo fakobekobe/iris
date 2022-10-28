@@ -34,3 +34,9 @@ class Nationalite(models.Model):
 
     def __str__(self):
         return self.nationalite
+
+class SituationMatrimoniale(models.Model):
+    situation = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.situation

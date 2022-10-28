@@ -18,6 +18,7 @@ def etatcivil(request):
     niveauscolaires = NiveauScolaire.objects.all().order_by("id")
     sexes = Sexe.objects.all().order_by("id")
     nationalites = Nationalite.objects.all().order_by("nationalite")
+    situations = SituationMatrimoniale.objects.all().order_by("id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typepiece = ['','false','']
@@ -25,6 +26,7 @@ def etatcivil(request):
     active_niveauscolaire = ['','false','']
     active_sexe = ['','false','']
     active_nationalite = ['','false','']
+    active_situation = ['','false','']
 
     if _active_onglet == "typepiece":
         active_typepiece =  ['active', 'true', 'show active']
@@ -36,6 +38,8 @@ def etatcivil(request):
         active_sexe =  ['active', 'true', 'show active']
     elif _active_onglet == "nationalite":
         active_nationalite =  ['active', 'true', 'show active']
+    elif _active_onglet == "situation":
+        active_situation =  ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typepiece =  ['active', 'true', 'show active']
@@ -48,12 +52,14 @@ def etatcivil(request):
         "niveauscolaires" : niveauscolaires,
         "sexes" : sexes,
         "nationalites" : nationalites,
+        "situations" : situations,
 
         "active_typepiece": active_typepiece,
         "active_niveau": active_niveau,
         "active_niveauscolaire": active_niveauscolaire,
         "active_sexe": active_sexe,
         "active_nationalite": active_nationalite,
+        "active_situation": active_situation,
 
     }
 
@@ -639,3 +645,106 @@ def supprimer_nationalite(request, id):
 
     return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
 # Fin de la Gestion du nationalité -------------------------------------
+
+# Gestion de la situation matrimoniale -------------------------------------
+@login_required
+@permission_required('etatcivil.add_situationmatrimoniale', raise_exception=True)
+def ajouter_situationmatrimoniale(request):
+
+    global _active_onglet
+    _active_onglet = "situation"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        situation = request.POST.get("situation", None)
+
+        if situation: # On vérifie si les champs ont été renseignés
+
+            # On format les chaines
+            situation = situation.capitalize()
+
+
+            try:
+                objet_situation = SituationMatrimoniale.objects.get(situation=situation)
+                messages.error(request, f"Cette situation matrimoniale :[{situation}] existe déjà.")
+                return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+            except SituationMatrimoniale.DoesNotExist:
+                pass
+
+            #----
+            objet_situation = SituationMatrimoniale()
+            objet_situation.situation = situation
+            objet_situation.save()
+
+            messages.success(request,"Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.change_situationmatrimoniale', raise_exception=True)
+def modifier_situationmatrimoniale(request):
+
+    global _active_onglet
+    _active_onglet = "situation"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_situation = SituationMatrimoniale.objects.get(id=request.POST.get('id'))
+        except SituationMatrimoniale.DoesNotExist:
+            messages.error(request, "Cette situation matrimoniale n'existe pas.")
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+
+        if objet_situation:
+            # On format les chaine
+            situation_nouveau = request.POST.get("situation",None)
+            situation_nouveau = situation_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            situation_ancien = objet_situation.situation
+
+            # On vérifie si la valeur a changé
+            if situation_nouveau != situation_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    SituationMatrimoniale.objects.get(situation=situation_nouveau)
+                    messages.error(request, f"Cette situation matrimoniale [{situation_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+                except SituationMatrimoniale.DoesNotExist:
+                    pass
+
+
+            # On effectue la modification
+            objet_situation.situation = situation_nouveau
+            objet_situation.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+    else:
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+@login_required
+@permission_required('etatcivil.delete_situationmatrimoniale', raise_exception=True)
+def supprimer_situationmatrimoniale(request, id):
+
+    global _active_onglet
+    _active_onglet = "situation"  # On initialise la variable
+
+    try:
+        objet_situation = SituationMatrimoniale.objects.get(id=id)
+    except SituationMatrimoniale.DoesNotExist:
+        messages.error(request, "Cette situation matrimoniale n'existe pas.")
+        return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+
+    if objet_situation:
+        objet_situation.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('etatcivil:etatcivil'))
+# Fin de la Gestion de la situation matrimoniale -------------------------------------

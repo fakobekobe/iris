@@ -19,6 +19,9 @@ LISTE_MODELS = {
         'Type_de_pièce': TypePiece,
         'Niveau': Niveau,
         'Niveau_scolaire': NiveauScolaire,
+        'Sexe': Sexe,
+        'Nationalité': Nationalite,
+        'Situation_matrimoniale': SituationMatrimoniale,
     },
 }
 
