@@ -6,9 +6,9 @@ urlpatterns = [
     path('', views.vieprofessionnelle, name = 'vieprofessionnelle'),
 
     # Url du Métier
-    path('ajouter-metier', views.ajouter_metier, name = 'ajouter_metier'),
-    path('modifier-metier', views.modifier_metier, name = 'modifier_metier'),
-    path('supprimer-metier/<str:id>', views.supprimer_metier, name = 'supprimer_metier'),
+    path('ajouter-typesecteur', views.ajouter_typesecteur, name = 'ajouter_typesecteur'),
+    path('modifier-typesecteur', views.modifier_typesecteur, name = 'modifier_typesecteur'),
+    path('supprimer-typesecteur/<str:id>', views.supprimer_typesecteur, name = 'supprimer_typesecteur'),
 
 
 ]

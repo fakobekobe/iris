@@ -15,24 +15,21 @@ def vieprofessionnelle(request):
 
     pass
 
-# Gestion du type de pièce -----------------------------------------------
-
+# Gestion du type de secteur -----------------------------------------------
 @login_required
-@permission_required('vieprofessionnelle.add_metier', raise_exception=True)
-def ajouter_metier(request):
+@permission_required('vieprofessionnelle.add_typesecteur', raise_exception=True)
+def ajouter_typesecteur(request):
     pass
 
 
 @login_required
-@permission_required('vieprofessionnelle.change_metier', raise_exception=True)
-def modifier_metier(request):
+@permission_required('vieprofessionnelle.change_typesecteur', raise_exception=True)
+def modifier_typesecteur(request):
     pass
 
 
 @login_required
-@permission_required('vieprofessionnelle.delete_metier', raise_exception=True)
-def supprimer_metier(request, id):
+@permission_required('vieprofessionnelle.delete_typesecteur', raise_exception=True)
+def supprimer_typesecteur(request, id):
     pass
-
-
-# Fin de la Gestion du type de pièce -------------------------------------
+# Fin de la Gestion du type de secteur -------------------------------------

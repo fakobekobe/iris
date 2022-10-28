@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from localisation.models import *
 from etatcivil.models import *
+from vieprofessionnelle.models import *
 
 # Liste des variables Globales
 LISTE_MODELS = {
@@ -22,6 +23,9 @@ LISTE_MODELS = {
         'Sexe': Sexe,
         'Nationalité': Nationalite,
         'Situation_matrimoniale': SituationMatrimoniale,
+    },
+    'Vie_professionnelle':{
+        'Type_secteur': TypeSecteur,
     },
 }
 
