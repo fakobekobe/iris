@@ -1,0 +1,17 @@
+{% extends 'vieprofessionnelle/ajouter_typesecteur.html' %}
+
+{% block modal-id %} id="typesecteurmodifierModal{{typesecteur.id}}" {% endblock modal-id %}
+{% block modal-label %}typesecteurmodifierModalLabel{{typesecteur.id}}{% endblock modal-label %}
+{% block modal-label2 %}typesecteurmodifierModalLabel{{typesecteur.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un type de secteur {% endblock modal-titre %}
+{% block action %} action="{% url 'vieprofessionnelle:modifier_typesecteur' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{typesecteur.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+{% block value-code %}value="{{typesecteur.type|upper}}"{% endblock value-code %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}
