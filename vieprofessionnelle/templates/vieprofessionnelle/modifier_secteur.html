@@ -1,0 +1,40 @@
+{% extends 'vieprofessionnelle/ajouter_secteur.html' %}
+
+{% block modal-id %} id="secteurmodifierModal{{secteur.id}}" {% endblock modal-id %}
+{% block modal-label %}secteurmodifierModalLabel{{secteur.id}}{% endblock modal-label %}
+{% block modal-label2 %}secteurmodifierModalLabel{{secteur.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un secteur {% endblock modal-titre %}
+{% block action %} action="{% url 'vieprofessionnelle:modifier_secteur' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{secteur.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+
+{% block select-typesecteur %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_typesecteur{{secteur.id}}"><i class="fas fa-igloo"></i></label>
+        </div>
+
+        <select name="select_typesecteur" id="select_typesecteur{{secteur.id}}" required>
+            <option value="" selected>--- Sélectionnez un secteur ---</option>
+            {% for typesecteur in typesecteurs %}
+
+                {% if typesecteur.id == secteur.typesecteur.id %}
+                    <option value="{{typesecteur.id}}" selected>{{typesecteur.type|upper}}</option>
+                {% else %}
+                    <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-typesecteur %}
+
+{% block value-secteur %}value="{{secteur.secteur|capfirst}}"{% endblock value-secteur %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

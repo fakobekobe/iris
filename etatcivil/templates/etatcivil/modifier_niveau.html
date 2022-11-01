@@ -1,8 +1,8 @@
 {% extends 'etatcivil/ajouter_niveau.html' %}
 
-{% block modal-id %} id="niveauModal{{niveau.id}}" {% endblock modal-id %}
-{% block modal-label %}niveauModalLabel{{niveau.id}}{% endblock modal-label %}
-{% block modal-label2 %}niveauModalLabel{{niveau.id}}{% endblock modal-label2 %}
+{% block modal-id %} id="niveaumodifierModal{{niveau.id}}" {% endblock modal-id %}
+{% block modal-label %}niveaumodifierModalLabel{{niveau.id}}{% endblock modal-label %}
+{% block modal-label2 %}niveaumodifierModalLabel{{niveau.id}}{% endblock modal-label2 %}
 {% block modal-titre %} Modifier un niveau {% endblock modal-titre %}
 {% block action %} action="{% url 'etatcivil:modifier_niveau' %}" {% endblock action %}
 {% block modifier-id %}
