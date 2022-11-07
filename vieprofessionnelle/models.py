@@ -34,7 +34,7 @@ class SecteurAgricole(SecteurActive):
     gps_longitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Longitude")
     gps_latitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Latitude")
 
-    membre = models.ManyToManyField(Membre)
+    membres = models.ManyToManyField(Membre)
 
     def __str__(self):
         return self.nom
@@ -42,7 +42,7 @@ class SecteurAgricole(SecteurActive):
 class SecteurInformel(SecteurActive):
     metier = models.CharField(max_length=250, null=False, blank=False, verbose_name="Métier")
 
-    membre = models.ManyToManyField(Membre)
+    membres = models.ManyToManyField(Membre)
 
     def __str__(self):
         return self.metier
