@@ -15,5 +15,15 @@ urlpatterns = [
     path('modifier-secteur', views.modifier_secteur, name='modifier_secteur'),
     path('supprimer-secteur/<str:id>', views.supprimer_secteur, name='supprimer_secteur'),
 
+    # Url Type de Parent
+    path('ajouter-typeparent', views.ajouter_typeparent, name='ajouter_typeparent'),
+    path('modifier-typeparent', views.modifier_typeparent, name='modifier_typeparent'),
+    path('supprimer-typeparent/<str:id>', views.supprimer_typeparent, name='supprimer_typeparent'),
+
+    # Url Parent
+    path('ajouter-parent', views.ajouter_parent, name='ajouter_parent'),
+    path('modifier-parent', views.modifier_parent, name='modifier_parent'),
+    path('supprimer-parent/<str:id>', views.supprimer_parent, name='supprimer_parent'),
+
 
 ]

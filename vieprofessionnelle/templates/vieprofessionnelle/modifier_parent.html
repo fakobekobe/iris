@@ -1,0 +1,41 @@
+{% extends 'vieprofessionnelle/ajouter_parent.html' %}
+
+{% block modal-id %} id="parentmodifierModal{{parent.id}}" {% endblock modal-id %}
+{% block modal-label %}parentmodifierModalLabel{{parent.id}}{% endblock modal-label %}
+{% block modal-label2 %}parentmodifierModalLabel{{parent.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un parent {% endblock modal-titre %}
+{% block action %} action="{% url 'vieprofessionnelle:modifier_parent' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{parent.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+
+{% block select-typeparent %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_typeparent{{parent.id}}"><i class="fas fa-igloo"></i></label>
+        </div>
+
+        <select name="select_typeparent" id="select_typeparent{{parent.id}}" required>
+            <option value="" selected>--- Sélectionnez un type de parent ---</option>
+            {% for typeparent in typeparents %}
+
+                {% if typeparent.id == parent.typeparent.id %}
+                    <option value="{{typeparent.id}}" selected>{{typeparent.libelle|capfirst}}</option>
+                {% else %}
+                    <option value="{{typeparent.id}}" >{{typeparent.libelle|capfirst}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-typeparent %}
+
+{% block value-nomprenoms %}value="{{parent.nomprenoms|title}}"{% endblock value-nomprenoms %}
+{% block value-date %}value="{{parent.datenaissance|date:"Y-m-d"}}"{% endblock value-date %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

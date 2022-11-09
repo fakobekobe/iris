@@ -48,7 +48,24 @@ class SecteurInformel(SecteurActive):
         return self.metier
 
 class SecteurFemmeActive(SecteurActive):
-    personne_ressource = models.ManyToManyField(Membre)
+    personne_ressource = models.ForeignKey(Membre, related_name='personne_membre_set',null=True,blank=True, on_delete=models.SET_NULL)
+
+    membres = models.ManyToManyField(Membre)
 
     def __str__(self):
         return self.nom
+
+class TypeParent(models.Model):
+    libelle = models.CharField(max_length=100, verbose_name="Libellé", unique=True)
+
+    def __str__(self):
+        return self.libelle
+
+class Parent(models.Model):
+    nomprenoms = models.CharField(max_length=250, verbose_name="Nom et prénoms")
+    datenaissance = models.DateField(null=True, blank=True, verbose_name="Date de naissance")
+
+    typeparent = models.ForeignKey(TypeParent, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nomprenoms

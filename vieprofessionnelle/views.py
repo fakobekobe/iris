@@ -12,17 +12,25 @@ _active_onglet = "" # Variable globale pour l'activation des onglets
 @permission_required('auth.view_user', raise_exception=True)
 @permission_required('auth.view_group', raise_exception=True)
 def vieprofessionnelle(request):
-    typesecteurs = TypeSecteur.objects.all().order_by("type")
-    secteurs = Secteur.objects.all().order_by("secteur")
+    typesecteurs = TypeSecteur.objects.order_by("type")
+    secteurs = Secteur.objects.order_by("secteur")
+    typeparents = TypeParent.objects.order_by("libelle")
+    parents = Parent.objects.order_by("nomprenoms")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
     active_secteur = ['', 'false', '']
+    active_typeparent = ['', 'false', '']
+    active_parent = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
     elif _active_onglet == "secteur":
         active_secteur = ['active', 'true', 'show active']
+    elif _active_onglet == "typeparent":
+        active_typeparent = ['active', 'true', 'show active']
+    elif _active_onglet == "parent":
+        active_parent = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -31,10 +39,14 @@ def vieprofessionnelle(request):
         "titre": "Vie professionnelle",
         "typesecteurs": typesecteurs,
         "secteurs": secteurs,
+        "typeparents": typeparents,
+        "parents": parents,
 
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
+        "active_typeparent": active_typeparent,
+        "active_parent": active_parent,
 
     }
 
@@ -242,3 +254,192 @@ def supprimer_secteur(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du secteur -------------------------------------
+
+# Gestion du type de parent -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_typeparent', raise_exception=True)
+def ajouter_typeparent(request):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        libelle = request.POST.get("libelle", None)
+
+        if libelle:  # On vérifie si le champ a été renseigné
+
+            # On format les chaines
+            libelle = libelle.capitalize()
+
+            try:
+                objet_typeparent = TypeParent.objects.get(libelle=libelle)
+                messages.error(request, f"Ce type de parent :[{libelle}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except TypeParent.DoesNotExist:
+                pass
+
+            # ----
+            objet_typeparent = TypeParent()
+            objet_typeparent.libelle = libelle
+            objet_typeparent.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_typeparent', raise_exception=True)
+def modifier_typeparent(request):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_typeparent = TypeParent.objects.get(id=request.POST.get('id'))
+        except TypeParent.DoesNotExist:
+            messages.error(request, "Ce type de parent n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_typeparent:
+            # On format les chaine
+            libelle_nouveau = request.POST.get("libelle", None)
+            libelle_nouveau = libelle_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            libelle_ancien = objet_typeparent.libelle
+
+            # On vérifie si la valeur a changé
+            if libelle_nouveau != libelle_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    TypeParent.objects.get(libelle=libelle_nouveau)
+                    messages.error(request, f"Ce type de parent [{libelle_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except TypeParent.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_typeparent.libelle = libelle_nouveau
+            objet_typeparent.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_typeparent', raise_exception=True)
+def supprimer_typeparent(request, id):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    try:
+        objet_typeparent = TypeParent.objects.get(id=id)
+    except TypeParent.DoesNotExist:
+        messages.error(request, "Ce type de parent n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typeparent:
+        objet_typeparent.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type de parent -------------------------------------
+
+# Gestion du parent -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_parent', raise_exception=True)
+def ajouter_parent(request):
+    global _active_onglet
+    _active_onglet = "parent"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        nomprenoms = request.POST.get("nomprenoms", None)
+        datenaissance = request.POST.get("datenaissance", None)
+        if not datenaissance : # On teste si la date n'existe pas
+            datenaissance = None
+
+        typeparent = request.POST.get("select_typeparent", None)
+
+        if nomprenoms and typeparent:  # On vérifie si les champs ont été renseignés
+
+            # On format les chaines
+            nomprenoms = nomprenoms.title()
+
+            # ----
+            objet_parent = Parent()
+            objet_parent.nomprenoms = nomprenoms
+            objet_parent.datenaissance = datenaissance
+            objet_parent.typeparent = TypeParent.objects.get(id=typeparent)
+            objet_parent.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_parent', raise_exception=True)
+def modifier_parent(request):
+    global _active_onglet
+    _active_onglet = "parent"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_parent = Parent.objects.get(id=request.POST.get('id'))
+        except Parent.DoesNotExist:
+            messages.error(request, "Ce parent n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_parent:
+            # On format les chaine
+            parent_nouveau = request.POST.get("nomprenoms", None)
+            parent_nouveau = parent_nouveau.title()
+
+            date_nouveau = request.POST.get("datenaissance", None)
+
+            typeparent = request.POST.get("select_typeparent", None)
+
+            # On effectue la modification
+            objet_parent.nomprenoms = parent_nouveau
+            objet_parent.datenaissance = date_nouveau
+            objet_parent.typeparent = TypeParent.objects.get(id=typeparent)
+            objet_parent.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_parent', raise_exception=True)
+def supprimer_parent(request, id):
+    global _active_onglet
+    _active_onglet = "parent"  # On initialise la variable
+
+    try:
+        objet_parent = Parent.objects.get(id=id)
+    except Parent.DoesNotExist:
+        messages.error(request, "Ce parent n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_parent:
+        objet_parent.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du parent -------------------------------------

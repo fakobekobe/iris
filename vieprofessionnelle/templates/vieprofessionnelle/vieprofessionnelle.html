@@ -17,6 +17,16 @@
         Secteur
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_typeparent|first}}" id="typeparent-tab" data-toggle="tab" data-target="#typeparent" type="button" role="tab" aria-controls="typeparent" aria-selected="{{ active_typeparent|slice:'1:2'|first }}">
+        Type de parent
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_parent|first}}" id="parent-tab" data-toggle="tab" data-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="{{ active_parent|slice:'1:2'|first }}">
+        Parent
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
@@ -168,6 +178,156 @@
       </div>
     </div>
     <!-- FIN DE CONTENU secteur -->
+
+    <!-- CONTENU type de parent -->
+    <div class="tab-pane fade {{ active_typeparent|last }}" id="typeparent" role="tabpanel" aria-labelledby="typeparent-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des types de parents</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeparentModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un type de parent</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tabletypeparent">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Libellé</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for typeparent in typeparents %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{typeparent.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeparentmodifierModal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeparentsupprimermodal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="typeparentsupprimermodal{{typeparent.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Type de parent : <strong>{{typeparent.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeparent' typeparent.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'vieprofessionnelle/ajouter_typeparent.html' %}
+                        {% include 'vieprofessionnelle/modifier_typeparent.html' %}
+
+                        {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_typeparent.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU type de parent -->
+
+    <!-- CONTENU parent -->
+    <div class="tab-pane fade {{ active_parent|last }}" id="parent" role="tabpanel" aria-labelledby="parent-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des parents</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#parentModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un parent</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tableparent">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Nom et prénoms</th>
+                            <th>Date de naissance</th>
+                            <th>Type de parent</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for parent in parents %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{parent.nomprenoms|title}}</td>
+                            <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
+                            <td>{{parent.typeparent.libelle|capfirst}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#parentmodifierModal{{parent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{parent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="parentsupprimermodal{{parent.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Parent : <strong>{{parent.nomprenoms|title}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_parent' parent.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'vieprofessionnelle/ajouter_parent.html' %}
+                        {% include 'vieprofessionnelle/modifier_parent.html' %}
+
+                        {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_parent.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU parent -->
 
   </div>
 
