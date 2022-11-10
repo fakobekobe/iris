@@ -70,11 +70,13 @@ class Parent(models.Model):
     def __str__(self):
         return self.nomprenoms
 
+
 class TypeEtatSante(models.Model):
     libelle = models.CharField(max_length=250, verbose_name="Libellé", unique=True)
 
     def __str__(self):
         return self.libelle
+
 
 class EtatSante(models.Model):
     dateenre = models.DateField(null=True, blank=True, verbose_name="Date d'enregistrement")
@@ -85,4 +87,10 @@ class EtatSante(models.Model):
     def __str__(self):
         return self.typeetatsante + " le " + self.dateenre
 
+
+class TypeDocument(models.Model):
+    libelle = models.CharField(max_length=250, verbose_name="Libellé", unique=True)
+
+    def __str__(self):
+        return self.libelle
 

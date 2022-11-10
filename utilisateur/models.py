@@ -25,7 +25,17 @@ LISTE_MODELS = {
         'Situation_matrimoniale': SituationMatrimoniale,
     },
     'Vie_professionnelle':{
-        'Type_secteur': TypeSecteur,
+        'Type_de_secteur': TypeSecteur,
+        'Secteur': Secteur,
+        'Membre': Membre,
+        'Secteur_agricole': SecteurAgricole,
+        'Secteur_informel': SecteurInformel,
+        'Secteur_femme_active': SecteurFemmeActive,
+        'Type_de_parent': TypeParent,
+        'Parent': Parent,
+        'Type_état_de_santé': TypeEtatSante,
+        'Etat_de_santé': EtatSante,
+        'Type_document': TypeDocument,
     },
 }
 

@@ -17,6 +17,7 @@ def vieprofessionnelle(request):
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
     typeetatsantes = TypeEtatSante.objects.order_by("libelle")
+    typedocuments = TypeDocument.objects.order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -24,6 +25,7 @@ def vieprofessionnelle(request):
     active_typeparent = ['', 'false', '']
     active_parent = ['', 'false', '']
     active_typeetatsante = ['', 'false', '']
+    active_typedocument = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -35,6 +37,8 @@ def vieprofessionnelle(request):
         active_parent = ['active', 'true', 'show active']
     elif _active_onglet == "typeetatsante":
         active_typeetatsante = ['active', 'true', 'show active']
+    elif _active_onglet == "typedocument":
+        active_typedocument = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -46,6 +50,7 @@ def vieprofessionnelle(request):
         "typeparents": typeparents,
         "parents": parents,
         "typeetatsantes": typeetatsantes,
+        "typedocuments": typedocuments,
 
 
         "active_typesecteur": active_typesecteur,
@@ -53,6 +58,7 @@ def vieprofessionnelle(request):
         "active_typeparent": active_typeparent,
         "active_parent": active_parent,
         "active_typeetatsante": active_typeetatsante,
+        "active_typedocument": active_typedocument,
 
     }
 
@@ -548,3 +554,102 @@ def supprimer_typeetatsante(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du type d'etat de santé -------------------------------------
+
+# Gestion du type de document -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_typedocument', raise_exception=True)
+def ajouter_typedocument(request):
+    global _active_onglet
+    _active_onglet = "typedocument"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        libelle = request.POST.get("libelle", None)
+
+        if libelle:  # On vérifie si le champ a été renseigné
+
+            # On format les chaines
+            libelle = libelle.capitalize()
+
+            try:
+                objet_typedocument = TypeDocument.objects.get(libelle=libelle)
+                messages.error(request, f"Ce type de document :[{libelle}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except TypeDocument.DoesNotExist:
+                pass
+
+            # ----
+            objet_typedocument = TypeDocument()
+            objet_typedocument.libelle = libelle
+            objet_typedocument.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_typedocument', raise_exception=True)
+def modifier_typedocument(request):
+    global _active_onglet
+    _active_onglet = "typedocument"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_typedocument = TypeDocument.objects.get(id=request.POST.get('id'))
+        except TypeDocument.DoesNotExist:
+            messages.error(request, "Ce type de document n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_typedocument:
+            # On format les chaine
+            libelle_nouveau = request.POST.get("libelle", None)
+            libelle_nouveau = libelle_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            libelle_ancien = objet_typedocument.libelle
+
+            # On vérifie si la valeur a changé
+            if libelle_nouveau != libelle_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    TypeDocument.objects.get(libelle=libelle_nouveau)
+                    messages.error(request, f"Ce type de document[{libelle_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except TypeDocument.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_typedocument.libelle = libelle_nouveau
+            objet_typedocument.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_typedocument', raise_exception=True)
+def supprimer_typedocument(request, id):
+    global _active_onglet
+    _active_onglet = "typedocument"  # On initialise la variable
+
+    try:
+        objet_typedocument = TypeDocument.objects.get(id=id)
+    except TypeDocument.DoesNotExist:
+        messages.error(request, "Ce type de document n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typedocument:
+        objet_typedocument.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type de document -------------------------------------
