@@ -69,3 +69,20 @@ class Parent(models.Model):
 
     def __str__(self):
         return self.nomprenoms
+
+class TypeEtatSante(models.Model):
+    libelle = models.CharField(max_length=250, verbose_name="Libellé", unique=True)
+
+    def __str__(self):
+        return self.libelle
+
+class EtatSante(models.Model):
+    dateenre = models.DateField(null=True, blank=True, verbose_name="Date d'enregistrement")
+
+    typeetatsante = models.ForeignKey(TypeEtatSante, on_delete=models.CASCADE)
+    typeparent = models.ForeignKey(TypeParent, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.typeetatsante + " le " + self.dateenre
+
+

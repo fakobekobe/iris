@@ -25,5 +25,10 @@ urlpatterns = [
     path('modifier-parent', views.modifier_parent, name='modifier_parent'),
     path('supprimer-parent/<str:id>', views.supprimer_parent, name='supprimer_parent'),
 
+    # Url Type d'état de santé
+    path('ajouter-typeetatsante', views.ajouter_typeetatsante, name='ajouter_typeetatsante'),
+    path('modifier-typeetatsante', views.modifier_typeetatsante, name='modifier_typeetatsante'),
+    path('supprimer-typeetatsante/<str:id>', views.supprimer_typeetatsante, name='supprimer_typeetatsante'),
+
 
 ]

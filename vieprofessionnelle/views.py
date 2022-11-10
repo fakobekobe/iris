@@ -443,3 +443,102 @@ def supprimer_parent(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du parent -------------------------------------
+
+# Gestion du type d'etat de santé -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_typeetatsante', raise_exception=True)
+def ajouter_typeetatsante(request):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        libelle = request.POST.get("libelle", None)
+
+        if libelle:  # On vérifie si le champ a été renseigné
+
+            # On format les chaines
+            libelle = libelle.capitalize()
+
+            try:
+                objet_typeparent = TypeParent.objects.get(libelle=libelle)
+                messages.error(request, f"Ce type de parent :[{libelle}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except TypeParent.DoesNotExist:
+                pass
+
+            # ----
+            objet_typeparent = TypeParent()
+            objet_typeparent.libelle = libelle
+            objet_typeparent.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_typeetatsante', raise_exception=True)
+def modifier_typeetatsante(request):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_typeparent = TypeParent.objects.get(id=request.POST.get('id'))
+        except TypeParent.DoesNotExist:
+            messages.error(request, "Ce type de parent n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_typeparent:
+            # On format les chaine
+            libelle_nouveau = request.POST.get("libelle", None)
+            libelle_nouveau = libelle_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            libelle_ancien = objet_typeparent.libelle
+
+            # On vérifie si la valeur a changé
+            if libelle_nouveau != libelle_ancien:
+                # On vérifie si le valeur modifié existe déjà
+                try:
+                    TypeParent.objects.get(libelle=libelle_nouveau)
+                    messages.error(request, f"Ce type de parent [{libelle_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except TypeParent.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_typeparent.libelle = libelle_nouveau
+            objet_typeparent.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_typeetatsante', raise_exception=True)
+def supprimer_typeetatsante(request, id):
+    global _active_onglet
+    _active_onglet = "typeparent"  # On initialise la variable
+
+    try:
+        objet_typeparent = TypeParent.objects.get(id=id)
+    except TypeParent.DoesNotExist:
+        messages.error(request, "Ce type de parent n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typeparent:
+        objet_typeparent.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type d'etat de santé -------------------------------------
