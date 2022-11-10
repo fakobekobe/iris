@@ -16,12 +16,14 @@ def vieprofessionnelle(request):
     secteurs = Secteur.objects.order_by("secteur")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
+    typeetatsantes = TypeEtatSante.objects.order_by("libelle")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
     active_secteur = ['', 'false', '']
     active_typeparent = ['', 'false', '']
     active_parent = ['', 'false', '']
+    active_typeetatsante = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -31,6 +33,8 @@ def vieprofessionnelle(request):
         active_typeparent = ['active', 'true', 'show active']
     elif _active_onglet == "parent":
         active_parent = ['active', 'true', 'show active']
+    elif _active_onglet == "typeetatsante":
+        active_typeetatsante = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -41,12 +45,14 @@ def vieprofessionnelle(request):
         "secteurs": secteurs,
         "typeparents": typeparents,
         "parents": parents,
+        "typeetatsantes": typeetatsantes,
 
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
         "active_typeparent": active_typeparent,
         "active_parent": active_parent,
+        "active_typeetatsante": active_typeetatsante,
 
     }
 
@@ -449,7 +455,7 @@ def supprimer_parent(request, id):
 @permission_required('vieprofessionnelle.add_typeetatsante', raise_exception=True)
 def ajouter_typeetatsante(request):
     global _active_onglet
-    _active_onglet = "typeparent"  # On initialise la variable
+    _active_onglet = "typeetatsante"  # On initialise la variable
 
     if request.method == "POST":
         # On initialise les variables
@@ -461,17 +467,17 @@ def ajouter_typeetatsante(request):
             libelle = libelle.capitalize()
 
             try:
-                objet_typeparent = TypeParent.objects.get(libelle=libelle)
-                messages.error(request, f"Ce type de parent :[{libelle}] existe déjà.")
+                objet_typeetatsante = TypeEtatSante.objects.get(libelle=libelle)
+                messages.error(request, f"Ce type d'état de santé :[{libelle}] existe déjà.")
                 return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
-            except TypeParent.DoesNotExist:
+            except TypeEtatSante.DoesNotExist:
                 pass
 
             # ----
-            objet_typeparent = TypeParent()
-            objet_typeparent.libelle = libelle
-            objet_typeparent.save()
+            objet_typeetatsante = TypeEtatSante()
+            objet_typeetatsante.libelle = libelle
+            objet_typeetatsante.save()
 
             messages.success(request, "Enregistrement réussi.")
 
@@ -484,38 +490,38 @@ def ajouter_typeetatsante(request):
 @permission_required('vieprofessionnelle.change_typeetatsante', raise_exception=True)
 def modifier_typeetatsante(request):
     global _active_onglet
-    _active_onglet = "typeparent"  # On initialise la variable
+    _active_onglet = "typeetatsante"  # On initialise la variable
 
     if request.method == "POST":
 
         try:
-            objet_typeparent = TypeParent.objects.get(id=request.POST.get('id'))
-        except TypeParent.DoesNotExist:
-            messages.error(request, "Ce type de parent n'existe pas.")
+            objet_typeetatsante = TypeEtatSante.objects.get(id=request.POST.get('id'))
+        except TypeEtatSante.DoesNotExist:
+            messages.error(request, "Ce type d'état de santé n'existe pas.")
             return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
-        if objet_typeparent:
+        if objet_typeetatsante:
             # On format les chaine
             libelle_nouveau = request.POST.get("libelle", None)
             libelle_nouveau = libelle_nouveau.capitalize()
 
             # On récupère l'ancienne valeur
-            libelle_ancien = objet_typeparent.libelle
+            libelle_ancien = objet_typeetatsante.libelle
 
             # On vérifie si la valeur a changé
             if libelle_nouveau != libelle_ancien:
                 # On vérifie si le valeur modifié existe déjà
                 try:
-                    TypeParent.objects.get(libelle=libelle_nouveau)
-                    messages.error(request, f"Ce type de parent [{libelle_nouveau}] existe déjà.")
+                    TypeEtatSante.objects.get(libelle=libelle_nouveau)
+                    messages.error(request, f"Ce type d'état de santé [{libelle_nouveau}] existe déjà.")
                     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
-                except TypeParent.DoesNotExist:
+                except TypeEtatSante.DoesNotExist:
                     pass
 
             # On effectue la modification
-            objet_typeparent.libelle = libelle_nouveau
-            objet_typeparent.save()
+            objet_typeetatsante.libelle = libelle_nouveau
+            objet_typeetatsante.save()
 
             messages.success(request, "Modification réussie.")
 
@@ -528,16 +534,16 @@ def modifier_typeetatsante(request):
 @permission_required('vieprofessionnelle.delete_typeetatsante', raise_exception=True)
 def supprimer_typeetatsante(request, id):
     global _active_onglet
-    _active_onglet = "typeparent"  # On initialise la variable
+    _active_onglet = "typeetatsante"  # On initialise la variable
 
     try:
-        objet_typeparent = TypeParent.objects.get(id=id)
-    except TypeParent.DoesNotExist:
-        messages.error(request, "Ce type de parent n'existe pas.")
+        objet_typeetatsante = TypeEtatSante.objects.get(id=id)
+    except TypeEtatSante.DoesNotExist:
+        messages.error(request, "Ce type d'éta de santé n'existe pas.")
         return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
-    if objet_typeparent:
-        objet_typeparent.delete()
+    if objet_typeetatsante:
+        objet_typeetatsante.delete()
         messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))

@@ -80,7 +80,7 @@ class EtatSante(models.Model):
     dateenre = models.DateField(null=True, blank=True, verbose_name="Date d'enregistrement")
 
     typeetatsante = models.ForeignKey(TypeEtatSante, on_delete=models.CASCADE)
-    typeparent = models.ForeignKey(TypeParent, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.typeetatsante + " le " + self.dateenre
