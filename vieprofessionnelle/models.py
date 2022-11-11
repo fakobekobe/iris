@@ -1,5 +1,11 @@
 from django.db import models
-from datetime import date
+from django.utils import timezone
+from datetime import datetime
+
+# Fonction pour ajouter les détails du temps devant le nom du fichier
+def nomfichier(self, fichier):
+    return f"{datetime.now().strftime('%d%m%Y%H%M%S')}_{fichier}"
+#----------------------------------
 
 class TypeSecteur(models.Model):
     type = models.CharField(max_length=250, unique=True)
@@ -96,9 +102,10 @@ class TypeDocument(models.Model):
         return self.libelle
 
 class Document(models.Model):
-    dateenre = models.DateField(default=date.today(), null=True, blank=True, verbose_name="Date d'enregistrement")
+    dateenre = models.DateField(default=timezone.now(), null=True, blank=True, verbose_name="Date d'enregistrement")
+    photo = models.ImageField(null=True, blank=True, upload_to=nomfichier)
     typedocument = models.ForeignKey(TypeDocument,default=None, on_delete=models.CASCADE)
-    membre = models.ManyToManyField(Membre)
+    membre = models.ForeignKey(Membre,default=None, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.typedocument.libelle
+        return self.membre.nom + " - " + self.typedocument.libelle

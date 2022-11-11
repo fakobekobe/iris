@@ -35,5 +35,10 @@ urlpatterns = [
     path('modifier-typedocument', views.modifier_typedocument, name='modifier_typedocument'),
     path('supprimer-typedocument/<str:id>', views.supprimer_typedocument, name='supprimer_typedocument'),
 
+    # Url Type du ocument
+    path('ajouter-document', views.ajouter_document, name='ajouter_document'),
+    path('modifier-document', views.modifier_document, name='modifier_document'),
+    path('supprimer-document/<str:id>', views.supprimer_document, name='supprimer_document'),
+
 
 ]

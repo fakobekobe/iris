@@ -1,0 +1,84 @@
+<!-- Modal -->
+<div class="modal fade" {% block modal-id %} id="documentModal" {% endblock modal-id %} tabindex="-1" aria-labelledby="{% block modal-label %}documentModalLabel{% endblock modal-label %}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{% block modal-label2 %}documentModalLabel{% endblock modal-label2 %}">
+            <i class="fas fa-igloo"></i>{% block modal-titre %} Ajouter un document {% endblock modal-titre %}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" {% block action %} action="{% url 'vieprofessionnelle:ajouter_document' %}" {% endblock action %} autocomplete="off" enctype="multipart/form-data">
+          {%  csrf_token %}
+          <div class="modal-body">
+              {% block modifier-id %}{% endblock modifier-id %}
+
+              {% block select-membre %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_membre"><i class="fas fa-igloo"></i></label>
+                  </div>
+
+                  <select name="select_membre" id="select_membre" required>
+                      <option value="" selected>--- Sélectionnez un propriétaire ---</option>
+                      {% for membre in membres %}
+                      <option value="{{membre.id}}" >{{membre.nom|title}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              {% endblock select-membre %}
+
+              {% block select-typedocument %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_typedocument"><i class="fas fa-igloo"></i></label>
+                  </div>
+
+                  <select name="select_typedocument" id="select_typedocument" required>
+                      <option value="" selected>--- Sélectionnez un type de document ---</option>
+                      {% for typedocument in typedocuments %}
+                      <option value="{{typedocument.id}}" >{{typedocument.libelle|capfirst}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              {% endblock select-typedocument %}
+
+              {% block value-image %}{% endblock value-image %}
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-image"></i></span>
+                  </div>
+                  <input type="file" name="photo" class="form-control" {% block value-photo %}{% endblock value-photo %} >
+              </div>
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                  </div>
+                  <input type="date" name="dateenre" value="{% now 'Y-m-d' %}" class="form-control" {% block value-date %}{% endblock value-date %} >
+              </div>
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width: 100%;">
+                  <button type="submit" class="btn btn-success">
+                      {% block btn-action %}<i class="fas fa-plus"></i> Enregistrer {% endblock btn-action %}
+                  </button>
+                  <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                      <i class="fas fa-sync-alt"></i> Annuler
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

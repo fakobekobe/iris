@@ -1,0 +1,70 @@
+{% extends 'vieprofessionnelle/ajouter_document.html' %}
+
+{% block modal-id %} id="documentmodifierModal{{document.id}}" {% endblock modal-id %}
+{% block modal-label %}documentmodifierModalLabel{{document.id}}{% endblock modal-label %}
+{% block modal-label2 %}documentmodifierModalLabel{{document.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un document {% endblock modal-titre %}
+{% block action %} action="{% url 'vieprofessionnelle:modifier_document' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{document.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+
+{% block select-membre %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_membre{{document.id}}"><i class="fas fa-igloo"></i></label>
+        </div>
+
+        <select name="select_membre" id="select_membre{{document.id}}" required>
+            <option value="" selected>--- Sélectionnez un propriétaire ---</option>
+            {% for membre in membres %}
+
+                {% if membre.id == document.membre.id %}
+                    <option value="{{membre.id}}" selected>{{membre.nom|title}}</option>
+                {% else %}
+                    <option value="{{membre.id}}" >{{membre.nom|title}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-membre %}
+
+{% block select-typedocument %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_typedocument{{document.id}}"><i class="fas fa-igloo"></i></label>
+        </div>
+
+        <select name="select_typedocument" id="select_typedocument{{document.id}}" required>
+            <option value="" selected>--- Sélectionnez un type de document ---</option>
+            {% for typedocument in typedocuments %}
+
+                {% if typedocument.id == document.typedocument.id %}
+                    <option value="{{typedocument.id}}" selected>{{typedocument.libelle|capfirst}}</option>
+                {% else %}
+                    <option value="{{typedocument.id}}" >{{typedocument.libelle|capfirst}}</option>
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+    </div>
+{% endblock select-typedocument %}
+
+{% block value-image %}
+{% if document.photo %}
+    <div class="input-group mb-3">
+        <img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" >
+    </div>
+{% endif %}
+{% endblock value-image %}
+{% block value-photo %}value="{{document.photo.name}}"{% endblock value-photo %}
+{% block value-date %}value="{{document.dateenre|date:"Y-m-d"}}"{% endblock value-date %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

@@ -154,8 +154,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),] # Variable pour la localisation des fichiers statics
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Variable pour la localisation des fichiers statics en ligne
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Variable pour la localisation des fichiers uploder(enregistrer)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media') # Variable pour la localisation des fichiers uploder(enregistrer)
 
 LOGIN_URL = 'utilisateur:connexion' # Variable pour la redirection de l'utilisateur lorsque @Permission_required est activée
 

@@ -37,6 +37,11 @@
         Type de document
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_document|first}}" id="document-tab" data-toggle="tab" data-target="#document" type="button" role="tab" aria-controls="document" aria-selected="{{ active_document|slice:'1:2'|first }}">
+        Document
+      </button>
+    </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
@@ -484,6 +489,85 @@
       </div>
     </div>
     <!-- FIN DE CONTENU type état de document -->
+
+    <!-- CONTENU du document -->
+    <div class="tab-pane fade {{ active_document|last }}" id="document" role="tabpanel" aria-labelledby="document-tab">
+      <div>
+        <h1 class="mb-3 text-primary"><i class="fas fa-igloo"></i> Liste des documents</h1>
+        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#documentModal" data-backdrop="static"><i class="fas fa-igloo"></i> Ajouter un document</a></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table  table-bordered table-hover table-responsive-md" id="tabledocument">
+                    <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Libellé</th>
+                            <th>Date</th>
+                            <th>Propriétaire</th>
+                            <th>Photo</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for document in documents %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{document.typedocument.libelle|capfirst}}</td>
+                            <td>{{document.dateenre|date:"d/m/Y"}}</td>
+                            <td>{{document.membre.nom|title}}</td>
+                            <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#documentmodifierModal{{document.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="documentsupprimermodal{{document.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_document' document.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'vieprofessionnelle/ajouter_document.html' %}
+                        {% include 'vieprofessionnelle/modifier_document.html' %}
+
+                        {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_document.html' %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU du document -->
 
   </div>
 

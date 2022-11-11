@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.contrib import messages
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
+import os
+
 from django.http import JsonResponse
 
 # Les constatntes et les variables globales
@@ -18,6 +20,8 @@ def vieprofessionnelle(request):
     parents = Parent.objects.order_by("nomprenoms")
     typeetatsantes = TypeEtatSante.objects.order_by("libelle")
     typedocuments = TypeDocument.objects.order_by("libelle")
+    documents = Document.objects.order_by("-id")
+    membres = Membre.objects.order_by("-id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -26,6 +30,7 @@ def vieprofessionnelle(request):
     active_parent = ['', 'false', '']
     active_typeetatsante = ['', 'false', '']
     active_typedocument = ['', 'false', '']
+    active_document = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -39,6 +44,8 @@ def vieprofessionnelle(request):
         active_typeetatsante = ['active', 'true', 'show active']
     elif _active_onglet == "typedocument":
         active_typedocument = ['active', 'true', 'show active']
+    elif _active_onglet == "document":
+        active_document = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -51,6 +58,8 @@ def vieprofessionnelle(request):
         "parents": parents,
         "typeetatsantes": typeetatsantes,
         "typedocuments": typedocuments,
+        "documents": documents,
+        "membres": membres,
 
 
         "active_typesecteur": active_typesecteur,
@@ -59,6 +68,7 @@ def vieprofessionnelle(request):
         "active_parent": active_parent,
         "active_typeetatsante": active_typeetatsante,
         "active_typedocument": active_typedocument,
+        "active_document": active_document,
 
     }
 
@@ -653,3 +663,127 @@ def supprimer_typedocument(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du type de document -------------------------------------
+
+
+# Gestion du document -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_document', raise_exception=True)
+def ajouter_document(request):
+    global _active_onglet
+    _active_onglet = "document"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        membre = request.POST.get("select_membre", None)
+        typedocument = request.POST.get("select_typedocument", None)
+        dateenre = request.POST.get("dateenre", None)
+
+        if membre and typedocument:  # On vérifie si le champ a été renseigné
+            if len(request.FILES) != 0:
+                photo = request.FILES["photo"]
+            else:
+                photo = "armoirie.png"
+
+            if not dateenre:
+                dateenre = None
+
+            membre = Membre.objects.get(id=membre)
+            typedocument = TypeDocument.objects.get(id=typedocument)
+        else:
+            messages.error(request, f"Veuillez renseigner les champs.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        # ----
+        objet_document = Document()
+        objet_document.membre = membre
+        objet_document.typedocument = typedocument
+        objet_document.dateenre = dateenre
+        objet_document.photo = photo
+        objet_document.save()
+
+        messages.success(request, "Enregistrement réussi.")
+
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_document', raise_exception=True)
+def modifier_document(request):
+    global _active_onglet
+    _active_onglet = "document"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_document = Document.objects.get(id=request.POST.get('id'))
+        except Document.DoesNotExist:
+            messages.error(request, "Ce document n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_document:
+            membre = request.POST.get("select_membre", None)
+            typedocument = request.POST.get("select_typedocument", None)
+            dateenre = request.POST.get("dateenre", None)
+
+            if membre and typedocument:  # On vérifie si le champ a été renseigné
+                if len(request.FILES) != 0:
+                    photo = request.FILES["photo"]
+                else:
+                    photo = ""
+
+                if not dateenre:
+                    dateenre = None
+
+                membre = Membre.objects.get(id=membre)
+                typedocument = TypeDocument.objects.get(id=typedocument)
+            else:
+                messages.error(request, f"Veuillez renseigner les champs.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            # ----
+            objet_document.membre = membre
+            objet_document.typedocument = typedocument
+            objet_document.dateenre = dateenre
+            if len(photo) > 0:
+                try:
+                    if objet_document.photo.size > 0:
+                        os.remove(objet_document.photo.path)
+                except FileNotFoundError:
+                    pass
+                objet_document.photo = photo
+            objet_document.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_document', raise_exception=True)
+def supprimer_document(request, id):
+    global _active_onglet
+    _active_onglet = "document"  # On initialise la variable
+
+    try:
+        objet_document = Document.objects.get(id=id)
+    except Document.DoesNotExist:
+        messages.error(request, "Ce document n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_document:
+        try:
+            if objet_document.photo.size > 0:
+                os.remove(objet_document.photo.path)
+                objet_document.delete()
+        except FileNotFoundError:
+            messages.error(request, "Le fichier à supprimer n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du document -------------------------------------
