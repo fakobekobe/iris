@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 class TypeSecteur(models.Model):
     type = models.CharField(max_length=250, unique=True)
@@ -94,3 +95,10 @@ class TypeDocument(models.Model):
     def __str__(self):
         return self.libelle
 
+class Document(models.Model):
+    dateenre = models.DateField(default=date.today(), null=True, blank=True, verbose_name="Date d'enregistrement")
+    typedocument = models.ForeignKey(TypeDocument,default=None, on_delete=models.CASCADE)
+    membre = models.ManyToManyField(Membre)
+
+    def __str__(self):
+        return self.typedocument.libelle
