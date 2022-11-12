@@ -42,9 +42,11 @@ class Membre(models.Model):
     actif = models.BooleanField(default=False)
     numerobadge = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="N°Badge")
     qrcode = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="QR Code")
-    dateenre = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
+    dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
+    date_naissance = models.DateField(default=None, null=True, blank=True, verbose_name="Date de naissance")
     contact = models.CharField(max_length=50, null=True, blank=True,default="", verbose_name="Contact")
     adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
+    numeropiece = models.CharField(max_length=100, null=True, blank=True,default="", verbose_name="N°de la pièce")
 
     # Les relations
     secteurs = models.ManyToManyField(Secteur)

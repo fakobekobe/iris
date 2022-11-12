@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import *
 from vieprofessionnelle.models import *
 from django.contrib.auth.decorators import login_required, permission_required
+from etatcivil.models import TypePiece, Nationalite
 import os
 
 
@@ -24,6 +25,23 @@ def index(request):
         reponse.delete_cookie('id_utilisateur')
 
     return reponse
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_secteuragricole(request):
+
+    typepieces = TypePiece.objects.order_by('id')
+    nationalites = Nationalite.objects.order_by('id')
+
+    context = {
+        'titre': "Identification - Secteur Agricole",
+        'typepieces': typepieces,
+        'nationalites': nationalites,
+    }
+
+
+    return render(request,"presentation/secteuragricole.html", context)
 
 
 @login_required

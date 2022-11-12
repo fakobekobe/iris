@@ -51,6 +51,11 @@ nav div ul li a{
     height:50px;
 }
 
+.label-sans-fond{
+    background:none;
+    border:none;
+}
+
 /*  Fin Menu nav */
 
 /* Le contenu */
