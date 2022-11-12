@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="{% block modal-label2 %}secteurModalLabel{% endblock modal-label2 %}">
-            <i class="fas fa-igloo"></i>{% block modal-titre %} Ajouter un secteur {% endblock modal-titre %}
+            <i class="fas fa-hospital-user"></i>{% block modal-titre %} Ajouter un secteur {% endblock modal-titre %}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -17,7 +17,7 @@
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                      <span class="input-group-text"><i class="fas fa-hospital-user"></i></span>
                   </div>
                   <input type="text" name="secteur" class="form-control" placeholder="Saisir le secteur" {% block value-secteur %}{% endblock value-secteur %} required autofocus >
               </div>
@@ -25,7 +25,7 @@
               {% block select-typesecteur %}
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <label class="input-group-text" for="select_typesecteur"><i class="fas fa-igloo"></i></label>
+                      <label class="input-group-text" for="select_typesecteur"><i class="fas fa-tasks"></i></label>
                   </div>
 
                   <select name="select_typesecteur" id="select_typesecteur" required>

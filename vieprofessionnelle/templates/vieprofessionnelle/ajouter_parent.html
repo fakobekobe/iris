@@ -18,7 +18,7 @@
               {% block select-typeparent %}
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <label class="input-group-text" for="select_typeparent"><i class="fas fa-igloo"></i></label>
+                      <label class="input-group-text" for="select_typeparent"><i class="fas fa-user-friends"></i></label>
                   </div>
 
                   <select name="select_typeparent" id="select_typeparent" required>
@@ -32,14 +32,14 @@
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                      <span class="input-group-text"><i class="fas fa-user-check"></i></span>
                   </div>
                   <input type="text" name="nomprenoms" class="form-control" placeholder="Saisir le nom et prénoms" {% block value-nomprenoms %}{% endblock value-nomprenoms %} required autofocus >
               </div>
 
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-qrcode"></i></span>
+                      <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                   </div>
                   <input type="date" name="datenaissance" class="form-control" {% block value-date %}{% endblock value-date %} >
               </div>
