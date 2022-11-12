@@ -1,6 +1,8 @@
 from django.db import models
-from django.utils import timezone
 from datetime import datetime
+from etatcivil.models import *
+from localisation.models import Quartier
+from django.contrib.auth.models import User
 
 # Fonction pour ajouter les détails du temps devant le nom du fichier
 def nomfichier(self, fichier):
@@ -29,10 +31,29 @@ class SecteurActive(models.Model):
         abstract = True
 
 class Membre(models.Model):
-    nom = models.CharField(max_length=250, null=False,blank=False)
+    # Les attribues propres
+    nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
+    prenoms = models.CharField(max_length=250, null=False,blank=False,  default="", verbose_name="Prénoms")
+    actif = models.BooleanField(default=False)
+    numerobadge = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="N°Badge")
+    qrcode = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="QR Code")
+    dateenre = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
+
+    # Les relations
+    secteurs = models.ManyToManyField(Secteur)
+    typepiece = models.ForeignKey(TypePiece, null=True, on_delete=models.SET_NULL)
+    niveauscolaire = models.ForeignKey(NiveauScolaire, null=True, on_delete=models.SET_NULL)
+    sexe = models.ForeignKey(Sexe, null=True, on_delete=models.SET_NULL)
+    nationalite = models.ForeignKey(Nationalite, null=True, on_delete=models.SET_NULL)
+    parents = models.ManyToManyField("Parent")
+    situationmatrimoniale = models.ForeignKey(SituationMatrimoniale, null=True, on_delete=models.SET_NULL)
+    quartier = models.ForeignKey(Quartier, null=True, on_delete=models.SET_NULL)
+
+    # A modifier lorsque l'utilisateur sera customisé
+    utilisateur = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.nom
+        return self.nom + " " + self.prenoms
 
 class SecteurAgricole(SecteurActive):
     speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
@@ -102,7 +123,7 @@ class TypeDocument(models.Model):
         return self.libelle
 
 class Document(models.Model):
-    dateenre = models.DateField(default=timezone.now(), null=True, blank=True, verbose_name="Date d'enregistrement")
+    dateenre = models.DateField(null=True, blank=True, verbose_name="Date d'enregistrement")
     photo = models.ImageField(null=True, blank=True, upload_to=nomfichier)
     typedocument = models.ForeignKey(TypeDocument,default=None, on_delete=models.CASCADE)
     membre = models.ForeignKey(Membre,default=None, on_delete=models.CASCADE)
