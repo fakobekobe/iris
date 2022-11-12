@@ -23,9 +23,11 @@ class Secteur(models.Model):
         return self.secteur
 
 class SecteurActive(models.Model):
-    nom = models.CharField(max_length=250,null=False,blank=False)
+    nom = models.CharField(max_length=250, null=False, blank=False)
+    presidente = models.CharField(max_length=250, null=False, blank=False, default="")
+    contact = models.CharField(max_length=100, null=False, blank=False, default="")
     date_adhesion = models.DateField(auto_now=True, verbose_name="Date d'adhésion")
-    numero_carte = models.CharField(max_length=250,null=True, blank=True)
+    numero_carte = models.CharField(max_length=250, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -38,6 +40,8 @@ class Membre(models.Model):
     numerobadge = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="N°Badge")
     qrcode = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="QR Code")
     dateenre = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
+    contact = models.CharField(max_length=50, null=True, blank=True,default="", verbose_name="Contact")
+    adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
 
     # Les relations
     secteurs = models.ManyToManyField(Secteur)
@@ -92,6 +96,8 @@ class TypeParent(models.Model):
 class Parent(models.Model):
     nomprenoms = models.CharField(max_length=250, verbose_name="Nom et prénoms")
     datenaissance = models.DateField(null=True, blank=True, verbose_name="Date de naissance")
+    contact = models.CharField(max_length=50, null=True, blank=True, default="", verbose_name="Contact")
+    adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
 
     typeparent = models.ForeignKey(TypeParent, on_delete=models.CASCADE)
 
