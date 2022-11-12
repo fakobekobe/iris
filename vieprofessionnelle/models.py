@@ -1,7 +1,8 @@
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 from etatcivil.models import *
-from localisation.models import Quartier
+from localisation.models import Quartier, Commune
 from django.contrib.auth.models import User
 
 # Fonction pour ajouter les détails du temps devant le nom du fichier
@@ -24,10 +25,11 @@ class Secteur(models.Model):
 
 class SecteurActive(models.Model):
     nom = models.CharField(max_length=250, null=False, blank=False)
-    presidente = models.CharField(max_length=250, null=False, blank=False, default="")
-    contact = models.CharField(max_length=100, null=False, blank=False, default="")
-    date_adhesion = models.DateField(auto_now=True, verbose_name="Date d'adhésion")
-    numero_carte = models.CharField(max_length=250, null=True, blank=True)
+    presidente = models.CharField(max_length=250, null=True, blank=True, default="")
+    contact = models.CharField(max_length=100, null=True, blank=True, default="")
+    date_adhesion = models.DateField(verbose_name="Date d'adhésion")
+    numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+    dateenre = models.DateTimeField(default=timezone.now(), verbose_name="Date d'enregistrement")
 
     class Meta:
         abstract = True
@@ -35,10 +37,11 @@ class SecteurActive(models.Model):
 class Membre(models.Model):
     # Les attribues propres
     nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
-    prenoms = models.CharField(max_length=250, null=False,blank=False,  default="", verbose_name="Prénoms")
+    nomjeunefille = models.CharField(max_length=250, null=True,blank=True,default="", verbose_name="Nom de jeune fille")
+    prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
     actif = models.BooleanField(default=False)
-    numerobadge = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="N°Badge")
-    qrcode = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="QR Code")
+    numerobadge = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="N°Badge")
+    qrcode = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="QR Code")
     dateenre = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
     contact = models.CharField(max_length=50, null=True, blank=True,default="", verbose_name="Contact")
     adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
@@ -52,6 +55,7 @@ class Membre(models.Model):
     parents = models.ManyToManyField("Parent")
     situationmatrimoniale = models.ForeignKey(SituationMatrimoniale, null=True, on_delete=models.SET_NULL)
     quartier = models.ForeignKey(Quartier, null=True, on_delete=models.SET_NULL)
+    lieunaissance = models.ForeignKey(Commune, null=True, on_delete=models.SET_NULL)
 
     # A modifier lorsque l'utilisateur sera customisé
     utilisateur = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -98,6 +102,7 @@ class Parent(models.Model):
     datenaissance = models.DateField(null=True, blank=True, verbose_name="Date de naissance")
     contact = models.CharField(max_length=50, null=True, blank=True, default="", verbose_name="Contact")
     adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
+    dateenre = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
 
     typeparent = models.ForeignKey(TypeParent, on_delete=models.CASCADE)
 
