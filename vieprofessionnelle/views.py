@@ -5,7 +5,6 @@ from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 import os
 
-from django.http import JsonResponse
 
 # Les constatntes et les variables globales
 _active_onglet = "" # Variable globale pour l'activation des onglets

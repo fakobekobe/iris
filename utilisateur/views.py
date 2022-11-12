@@ -10,11 +10,8 @@ from django.core.paginator import Paginator
 
 # Les Constantes
 _PAS = 10 # pas de la pagination
-_COOKIES = 0 # La variable permettant la sauvegarde de cookies
-
 
 # Les Views---------------------------------------------------
-
 def inscription(request, ajouter_utilisateur = 0):
 
     # On créé un formulaire vide
@@ -53,15 +50,11 @@ def inscription(request, ajouter_utilisateur = 0):
 
     return render(request,'utilisateur/inscription.html',context)
 
-def motdepasse(request, id):
-    pass
-
 def connexion(request):
 
     default = {} # On créé la variable d'initialisation
     checked = "" # On cré la variable pour la case à cocher se souvenir de moi
     utilisateur = None
-    global _COOKIES
 
     # On récupère d'id utilisateur stocké dans le cookie
     if request.COOKIES.get('id_utilisateur'):
@@ -105,12 +98,12 @@ def connexion(request):
             # On vérifie si la case se souvenir de moi est coché et on ajoute l'id utilisateur
             # dans la variable check pour créé un cookie pour sauvegarder l'id de l'utilisateur
             # sinon on envoie un nombre élevé
-            _COOKIES = 0
+
             if request.POST.get('se_souvenir', ''):
-                _COOKIES = user.id
+                request.session['user_id'] = user.id
 
             # On effectue une redirection vers le tableau de bord
-            return HttpResponseRedirect(reverse('utilisateur:index')) #, args={check}
+            return HttpResponseRedirect(reverse('presentation:index'))
         else:
             context['message'] = "L'identifiant n'est pas valide."
             context['form'] = form
@@ -122,23 +115,25 @@ def deconnexion(request):
     # On le redirige vers la page de connexion
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
 
+#def index
+"""
 @login_required
-@permission_required('auth.view_user', raise_exception=True)
-@permission_required('auth.view_group', raise_exception=True)
 def index(request):
     context = {
         'titre': "Tableau de bord",
     }
+
     # On vérifie si check = 1 ou 0 pour ajouter ou supprimer un cookie
     reponse = render(request, 'utilisateur/index.html', context)
-    if _COOKIES:
+    if request.session.get('user_id'):
         # On ajoute le cookie ou on le met à jour
-        reponse.set_cookie(key='id_utilisateur', value= _COOKIES, expires=63072000)  # 63072000 = 2 ans
+        reponse.set_cookie(key='id_utilisateur', value=request.session.get('user_id'), expires=63072000)  # 63072000 = 2 ans
     else:
         # On supprime le cookie
         reponse.delete_cookie('id_utilisateur')
 
     return reponse
+"""
 
 @login_required
 @permission_required('auth.view_user', raise_exception=True)
@@ -243,7 +238,7 @@ def supprimer_groupe_utilisateur(request, id):
         if not id_groupe:
             # On effectue une redirection
             # On gère le message d'erreur
-            return HttpResponseRedirect(reverse('utilisateur:index'))
+            return HttpResponseRedirect(reverse('presentation:index'))
 
         try:
             user = User.objects.get(id = id)
@@ -574,7 +569,7 @@ def supprimer_utilisateur_groupe(request, id):
         if not id_groupe:
             # On effectue une redirection
             # On gère le message d'erreur
-            return HttpResponseRedirect(reverse('utilisateur:index'))
+            return HttpResponseRedirect(reverse('presentation:index'))
 
         try:
             user = User.objects.get(id = id)

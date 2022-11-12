@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <!-- Brand -->
-  <a class="navbar-brand" href="{% url 'utilisateur:connexion' %}"><i class="fas fa-eye"></i> IRIS</a>
+  <a class="navbar-brand" href="{% url 'presentation:index' %}"><i class="fas fa-eye"></i> IRIS</a>
 
   <!-- Toggler/collapsibe Button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsNavbar">
@@ -25,7 +25,7 @@
         </a>
         <div class="dropdown-menu" style="position: absolute; left:-100px;">
           <a class="dropdown-item" href="{% url 'utilisateur:motdepasse' user.id %}"><i class="fa fa-user-secret"></i> Mot de passe</a>
-          {% if 'auht.add_userd' in perms %}
+          {% if 'auht.add_user' in perms %}
           <a class="dropdown-item" href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a>
           <a class="dropdown-item" href="{% url 'utilisateur:groupe' %}"><i class="fa fa-group"></i> Groupes</a>
           <a class="dropdown-item" href="{% url 'localisation:localisation' %}"><i class="fa fa-wrench"></i> Paramètres</a>

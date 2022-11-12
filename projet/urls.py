@@ -18,4 +18,5 @@ urlpatterns = [
     path('localisation/',include('localisation.urls')),
     path('etatcivil/',include('etatcivil.urls')),
     path('vieprofessionnelle/',include('vieprofessionnelle.urls')),
+    path('presentation/',include('presentation.urls')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

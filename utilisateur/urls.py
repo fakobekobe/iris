@@ -21,6 +21,6 @@ urlpatterns = [
     path('supprimer-groupe/<int:id>', views.supprimer_groupe, name = 'supprimer_groupe'),
     path('supprimer-utilisateur-groupe/<int:id>', views.supprimer_utilisateur_groupe, name = 'supprimer_utilisateur_groupe'),
 
-    path('index/', views.index, name = 'index'),
+    #path('index/', views.index, name = 'index'),
     path('motdepasse/<str:id>', views.motdepasse, name = 'motdepasse'),
 ]

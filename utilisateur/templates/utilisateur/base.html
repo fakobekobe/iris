@@ -9,13 +9,29 @@
 
 </div>
 
-<div class="row" id = "contenu_index m-0">
-    <div class="col-md-2 bg-primary" id = "contenu_index_gauche">
+<div class="row" id="contenu_index m-0">
+    <div class="col-md-2 bg-primary" id="contenu_index_gauche">
         <div>
             <ul class="menu-accordeon">
-                <li><a href="{% url 'utilisateur:index' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="{% url 'presentation:index' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#"><i class="fa fa-plus"></i> Identification &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-sort-down"></i></a>
+
+                    <!-- Sous menu -->
+                    <ul>
+                        <li><a href="{% url 'presentation:index' %}"><i class="fas fa-map-marker-alt"></i> Secteur Agricole</a></li>
+                        <li><a href="{% url 'presentation:index' %}"><i class="fas fa-walking"></i> Femme Active</a></li>
+                        <li><a href="{% url 'presentation:index' %}"><i class="fas fa-id-badge"></i> Secteur Informel</a></li>
+                    </ul>
+                    <!-- Fin Sous menu -->
+
+                </li>
+
+                {% if 'auht.add_user' in perms %}
                 <li><a href="{% url 'utilisateur:utilisateur' %}"><i class="fa fa-user"></i> Utilisateurs</a></li>
                 <li><a href="{% url 'utilisateur:groupe' %}"><i class="fa fa-group"></i> Groupes</a></li>
+                {% endif %}
+
+                {% if 'vieprofessionnelle.add_typesecteur' in perms %}
                 <li>
                     <a href="#"><i class="fa fa-wrench"></i> Paramètres &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-sort-down"></i></a>
 
@@ -24,19 +40,24 @@
                         <li><a href="{% url 'localisation:localisation' %}"><i class="fas fa-map-marker-alt"></i> Localisation</a></li>
                         <li><a href="{% url 'etatcivil:etatcivil' %}"><i class="fas fa-walking"></i> Etat civil</a></li>
                         <li><a href="{% url 'vieprofessionnelle:vieprofessionnelle' %}"><i class="fas fa-id-badge"></i> Vie pro</a></li>
+
+                        {% if 'auht.add_user' in perms %}
                         <li><a href="#"><i class="fas fa-tools"></i> Fonctonalités</a></li>
                         <li><a href="#"><i class="fas fa-file"></i> Etats</a></li>
+                        {% endif %}
+
                     </ul>
                     <!-- Fin Sous menu -->
 
                 </li>
+                {% endif %}
             </ul>
         </div>
         <!-- -->
 
         <!-- -->
     </div>
-    <div class="col-md-10" id = "contenu_index_droit">
+    <div class="col-md-10" id="contenu_index_droit">
         <div class="row">
             <div class="col-md-12">
                 {% block tableau_de_bord %}
