@@ -1114,7 +1114,7 @@ $(document).ready(function() {
 
     } );
 
-// ******************* GESTION DES LISTES DEROULANTES DU DISTRICT *****************************
+// ******************* GESTION DES LISTES DEROULANTES *****************************
 
     var select_district = $('select[name=select_district]');
     var select_region = $('select[name=select_region]');
@@ -1283,6 +1283,6 @@ $(document).ready(function() {
 
         });
 
-// ******************* FIN DE LA GESTION DES LISTES DEROULANTES DU DISTRICT *****************************
+// ******************* FIN DE LA GESTION DES LISTES DEROULANTES *****************************
 
 } );

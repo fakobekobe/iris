@@ -4,7 +4,8 @@ from django.contrib import messages
 from .models import *
 from vieprofessionnelle.models import *
 from django.contrib.auth.decorators import login_required, permission_required
-from etatcivil.models import TypePiece, Nationalite
+from etatcivil.models import TypePiece, Nationalite, Niveau, NiveauScolaire, SituationMatrimoniale
+from django.http import JsonResponse
 import os
 
 
@@ -33,16 +34,35 @@ def ajouter_secteuragricole(request):
 
     typepieces = TypePiece.objects.order_by('id')
     nationalites = Nationalite.objects.order_by('id')
+    niveaux = Niveau.objects.order_by('id')
+    situationmatrimoniales = SituationMatrimoniale.objects.order_by('id')
 
     context = {
         'titre': "Identification - Secteur Agricole",
         'typepieces': typepieces,
         'nationalites': nationalites,
+        'niveaux': niveaux,
+        'situationmatrimoniales': situationmatrimoniales,
     }
 
 
     return render(request,"presentation/secteuragricole.html", context)
 
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def details_niveauscolaire(request):
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_niveauscolaire = NiveauScolaire.objects.filter(niveau=id).order_by('id')
+
+            if ajax_niveauscolaire:
+                data = [{'id': niveauscolaire.id, 'libelle': niveauscolaire.classe} for niveauscolaire in ajax_niveauscolaire]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
 @permission_required('presentation.change_membre', raise_exception=True)
