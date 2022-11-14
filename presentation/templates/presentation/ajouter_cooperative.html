@@ -1,0 +1,116 @@
+<!-- Modal -->
+<div class="modal fade" id="recherche_cooperative_Modal" tabindex="-1" aria-labelledby="recherche_cooperative_ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recherche_cooperative_ModalLabel">
+            <i class="fas fa-warehouse"></i> Ajouter une coopérative
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="" autocomplete="off">
+          {%  csrf_token %}
+          <div class="modal-body">
+
+              <!-- Liste des Champs -->
+
+                <!-- -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                      <input type="text" name="nom_cooperative" id="nom_cooperative" class="form-control" placeholder="Nom de la coopérative">
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                      <input type="text" name="presidente" id="presidente" class="form-control" placeholder="Nom Président(e) coop">
+                    </div>
+                    <div class="col">
+                      <input type="text" name="contact_presidente" id="contact_presidente" class="form-control" placeholder="Contacts Président(e)">
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text label-sans-fond">Spéculation agricole</span>
+                    </div>
+                    <input type="number" name="speculation_agricole" id="speculation_agricole" value="0" class="form-control" >
+                    <div class="input-group-append">
+                        <span class="input-group-text label-sans-fond">Kg</span>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text label-sans-fond">Superficie en culture</span>
+                    </div>
+                    <input type="number" name="superficie_en_culture" id="superficie_en_culture" value="0" class="form-control" >
+                    <div class="input-group-append">
+                        <span class="input-group-text label-sans-fond">m<sup>2</sup></span>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text label-sans-fond">Superficie en production</span>
+                    </div>
+                    <input type="number" name="superficie_en_production" id="superficie_en_production" value="0" class="form-control" >
+                    <div class="input-group-append">
+                        <span class="input-group-text label-sans-fond">m<sup>2</sup></span>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                      <input type="text" name="gps_longitude" id="gps_longitude" class="form-control" placeholder="GPS Longitude">
+                    </div>
+                    <div class="col">
+                      <input type="text" name="gps_latitude" id="gps_latitude" class="form-control" placeholder="GPS Latitude">
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text label-sans-fond">Date d'enregistrement</span>
+                    </div>
+                    <input type="date" name="dateenre" id="dateenre" value="{% now 'Y-m-d' %}" class="form-control" >
+                </div>
+                <!-- -->
+
+              <!-- -->
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width:100%;">
+                  <button type="submit" class="btn btn-outline-success" id="cooperative_a_ajouter">
+                      <i class="fas fa-plus"></i> Ajouter
+                  </button>
+                  <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                      <i class="fas fa-sync-alt"></i> Annuler
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" id="cooperative_a_fermer" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

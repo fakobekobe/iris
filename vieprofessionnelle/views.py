@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib import messages
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
+from django.http import JsonResponse
 import os
 
 
@@ -786,3 +787,13 @@ def supprimer_document(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du document -------------------------------------
+
+# Gestion de la Coopérative -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_secteuragricole', raise_exception=True)
+def ajouter_cooperative(request):
+    print('ok')
+    return JsonResponse({'data': 'ok'}, status=200)
+
+
+# Fin de la Gestion de la Coopérative -------------------------------------

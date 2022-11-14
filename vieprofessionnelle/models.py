@@ -39,6 +39,7 @@ class Membre(models.Model):
     nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
     nomjeunefille = models.CharField(max_length=250, null=True,blank=True,default="", verbose_name="Nom de jeune fille")
     prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
+    nom_prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Nom et prénoms")
     actif = models.BooleanField(default=False)
     numerobadge = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="N°Badge")
     qrcode = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="QR Code")

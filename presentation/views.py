@@ -5,6 +5,7 @@ from .models import *
 from vieprofessionnelle.models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from etatcivil.models import TypePiece, Nationalite, Niveau, NiveauScolaire, SituationMatrimoniale
+from localisation.models import *
 from django.http import JsonResponse
 import os
 
@@ -36,6 +37,11 @@ def ajouter_secteuragricole(request):
     nationalites = Nationalite.objects.order_by('id')
     niveaux = Niveau.objects.order_by('id')
     situationmatrimoniales = SituationMatrimoniale.objects.order_by('id')
+    districts = District.objects.order_by("libelle")
+    regions = Region.objects.order_by("libelle")
+    departements = Departement.objects.order_by("libelle")
+    villes = Ville.objects.order_by("libelle")
+    communes = Commune.objects.order_by("libelle")
 
     context = {
         'titre': "Identification - Secteur Agricole",
@@ -43,7 +49,17 @@ def ajouter_secteuragricole(request):
         'nationalites': nationalites,
         'niveaux': niveaux,
         'situationmatrimoniales': situationmatrimoniales,
+        "districts": districts,
+        "regions": regions,
+        "departements": departements,
+        "villes": villes,
+        "communes": communes,
     }
+
+    if request.method=="POST":
+        parents = request.POST.getlist('parent', None)
+        for p in parents:
+            print(p)
 
 
     return render(request,"presentation/secteuragricole.html", context)
