@@ -44,6 +44,7 @@ def ajouter_secteuragricole(request):
     communes = Commune.objects.order_by("libelle")
     secteuragricoles = SecteurAgricole.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
+    parents = Parent.objects.order_by("nomprenoms")
 
     context = {
         'titre': "Identification - Secteur Agricole",
@@ -58,6 +59,7 @@ def ajouter_secteuragricole(request):
         "communes": communes,
         "secteuragricoles": secteuragricoles,
         "typeparents": typeparents,
+        "parents": parents,
     }
 
     if request.method == "POST":

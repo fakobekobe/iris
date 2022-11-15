@@ -47,7 +47,7 @@
                     <!-- -->
 
                     <!-- -->
-                    <div class="form-row mb-2">
+                    <div class="form-row mb-2" id="nomjeunefille">
                         <div class="col">
                           <input type="text" name="nomjeunefille" class="form-control" placeholder="Nom de jeune fille">
                         </div>
@@ -209,16 +209,15 @@
                         </div>
                         <!-- -->
 
-
                         <!-- -->
-                        <fieldset style="border:1px solid #CCC; padding:5px;">
+                        <fieldset style="border:1px solid #CCC; margin-bottom:10px; padding:5px;">
                             <legend style="font-size:1em;color:gray;border:1px solid #CCC;">
                                 Ajouter un parent
                             </legend>
                             <!-- -->
                             <div class="form-row mb-2">
                                 <div class="col">
-                                  <input type="button" id="parent_ajouter" class="btn btn-outline-primary" value="Ajouter un parent" data-toggle="modal" data-target="#parentModal" data-backdrop="static">
+                                  <input type="button" id="parent_ajouter" class="btn btn-outline-primary" value="Ajouter un parent" data-toggle="modal" data-target="#liste_parent_Modal" data-backdrop="static">
                                 </div>
                                 <div class="col">
                                   <input type="button" id="parent_annuler" class="btn btn-outline-danger" value="Vider la liste">
@@ -234,6 +233,18 @@
                         </fieldset>
                         <!-- -->
 
+                        <!-- -->
+                        <div class="input-group mb-2">
+                            <input type="text" name="label_lieu_habitation" id="label_lieu_habitation" class="form-control" placeholder="Lieu d'habitation" readonly>
+                            <div class="input-group-append">
+                                <span class="input-group-text btn btn-danger" id="lieu_habitation_times" title="Annuler"><i class="fas fa-times"></i></span>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text btn btn-success" id="label_lieu_habitation_plus" title="Ajouter un lieu d'habitation" data-toggle="modal" data-target="#lieu_habitation_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                            </div>
+                            <input type="text" hidden name="lieu_habitation" value="" id="lieu_habitation" class="form-control">
+                        </div>
+                        <!-- -->
 
                     </div>
                 </div>
@@ -258,7 +269,9 @@
 {% include 'presentation/date_de_naissance.html' %}
 {% include 'presentation/liste_cooperative.html' %}
 {% include 'presentation/ajouter_cooperative.html' %}
+{% include 'presentation/liste_parent.html' %}
 {% include 'presentation/ajouter_parent.html' %}
+{% include 'presentation/lieu_habitation.html' %}
 
 {% endblock %}
 
@@ -281,4 +294,5 @@
     </script>
     <script src="{% static 'presentation/js/datatable.js' %}"></script>
     <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
+    <script src="{% static 'presentation/js/table_recherche_parent.js' %}"></script>
 {% endblock javascript %}

@@ -1,5 +1,20 @@
 $(document).ready(function(){
 
+// ******************* GESTION DES SEXES **************
+
+    var sexes = $('input[name=sexe]');
+    var nomjeunefille = $('#nomjeunefille');
+
+    sexes.each(function(){
+        $(this).change(function(){
+            if($(this).val() == 'M'){
+                nomjeunefille.attr('style','display:none;');
+            }else{
+                nomjeunefille.attr('style','display:block;');
+            }
+        });
+    });
+
 // ******************* GESTION DES LISTES DEROULANTES *****************************
 
     var niveau = $('select[name=niveau]');
@@ -7,7 +22,6 @@ $(document).ready(function(){
 
     // Traitement AJAX du niveau
     niveau.change(function(){
-
             // On utilise ajax pour récupérer les niveaux
             $.ajax({
                 url: "/presentation/details-niveauscolaire", // On ajoute l'url absolue en commençant par la racine
@@ -25,17 +39,16 @@ $(document).ready(function(){
                     });
                 },
             });
-
-
         });
 
-
 // ******************* GESTION DES AFFICHAGES DES CHAMPS POUR AJOUTER UN PARENT *****************************
+
     var parent_annuler = $('#parent_annuler');
     var parent_liste = $('#parent_liste');
     var btn_p_ajouter = $('#btn_p_ajouter');
     var btn_p_annuler = $('#btn_p_annuler');
     var btn_p_fermer = $('#btn_p_fermer');
+    var parent_l_fermer = $('#parent_l_fermer');
 
     parent_annuler.click(function(){
         parent_liste.html('');
@@ -70,7 +83,7 @@ $(document).ready(function(){
                     // Gestion des fermetures des boutons
                     btn_p_annuler.trigger('click'); // On initialise les champs du modal en cours
                     btn_p_fermer.trigger('click'); // On ferme le modal en cours
-                    //cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+                    parent_l_fermer.trigger('click'); // On ferme le modal de la recherche
                 },
                 statusCode: {
                     404: function(data){
@@ -82,6 +95,18 @@ $(document).ready(function(){
 
         });
 
+    // Partie : GESTION DU TABLEAU PARENT
+
+    var liens_parent = $("#table_recherche_parent tbody td a");
+        liens_parent.each(function(){
+
+            $(this).click(function(){
+                // On remplit les champs
+                 parent_liste.append("<option value='"+ $(this).attr('value') +"' selected>" + $(this).text() + "</option>")
+                 parent_l_fermer.trigger('click'); // On ferme le modal de la recherche
+            });
+
+        });
 
 // ******************* GESTION DES LISTES DEROULANTES *****************************
 
@@ -184,7 +209,6 @@ $(document).ready(function(){
                 },
             });
 
-
         });
 
         // Traitement AJAX de la commune
@@ -214,7 +238,6 @@ $(document).ready(function(){
 // ******************* GESTION DES AFFICHAGES DU CHAMP DATE DE NAISSANCE *****************************
     var label_naissance = $('#label_naissance');
     var label_naissance_times = $('#label_naissance_times');
-    var label_naissance_plus = $('#label_naissance_plus');
     var naissance_btn_ajouter = $('#naissance_btn_ajouter');
     var lieu_naissance = $('#lieu_naissance');
     var date_de_naissance_Modal = $('#date_de_naissance_Modal');
@@ -227,12 +250,19 @@ $(document).ready(function(){
 
     naissance_btn_ajouter.click(function(e){
         e.preventDefault();
-        if(select_commune.val()){
-            label_naissance.val($('select[name=select_commune] option:selected').text());
-            lieu_naissance.val(select_commune.val());
-            date_de_naissance_Modal.hide('slow');
-            naissance_btn_fermer.trigger('click');
-        }
+        select_commune.each(function(){
+            if($(this).val()){
+                $('select[name=select_commune] option:selected').each(function(n,v){
+                    if(n == 0){
+                        label_naissance.val($(this).text());
+                    }
+                });
+                lieu_naissance.val($(this).val());
+                date_de_naissance_Modal.hide('slow');
+                naissance_btn_fermer.trigger('click');
+            }
+
+        });
     });
 
 
@@ -301,7 +331,7 @@ $(document).ready(function(){
 
         });
 
-    // Partie 2
+    // Partie 2 : GESTION DU TABLEAU COOPERATIVE
 
     var liens = $("#table_recherche_cooperative tbody td a");
         liens.each(function(){
@@ -315,9 +345,36 @@ $(document).ready(function(){
 
         });
 
+// ******************* GESTION DES AFFICHAGES DU CHAMP LIEU D'HABITATION *****************************
+    var label_lieu_habitation = $('#label_lieu_habitation');
+    var lieu_habitation_times = $('#lieu_habitation_times');
+    var lieu_btn_ajouter = $('#lieu_btn_ajouter');
+    var lieu_habitation = $('#lieu_habitation');
+    var lieu_habitation_Modal = $('#lieu_habitation_Modal');
+    var lieu_btn_fermer = $('#lieu_btn_fermer');
 
+    lieu_habitation_times.click(function(){
+        label_lieu_habitation.val('');
+        lieu_habitation.val('');
+    });
 
+    lieu_btn_ajouter.click(function(e){
+        e.preventDefault();
+        select_commune.each(function(){
+            if($(this).val()){
+                $('select[name=select_commune] option:selected').each(function(n,v){
+                    if(n == 1){
+                        label_lieu_habitation.val($(this).text());
+                    }
+                });
+                lieu_habitation.val($(this).val());
+                lieu_habitation_Modal.hide('slow');
+                lieu_btn_fermer.trigger('click');
+            }
 
+        });
+
+    });
 
 // ****************************************************************************
 

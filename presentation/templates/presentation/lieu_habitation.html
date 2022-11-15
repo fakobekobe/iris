@@ -1,0 +1,22 @@
+{% extends 'presentation/date_de_naissance.html' %}
+
+{% block id %}lieu_habitation_Modal{% endblock id %}
+{% block id-2 %}lieu_habitation_ModalLabel{% endblock id-2 %}
+{% block id-3 %}lieu_habitation_ModalLabel{% endblock id-3 %}
+{% block id-titre %}Ajouter un lieu d'habitation {% endblock id-titre %}
+
+{% block id-btn %}
+    <div class="modal-footer text-center">
+        <div style="width:100%;">
+            <button type="submit" class="btn btn-outline-success" id="lieu_btn_ajouter">
+                <i class="fas fa-plus"></i> Ajouter
+            </button>
+            <button type="reset" class="btn btn-outline-warning" title="Annuler">
+                <i class="fas fa-sync-alt"></i> Annuler
+            </button>
+            <button type="button" class="btn btn-outline-danger" id="lieu_btn_fermer" data-dismiss="modal">
+                <i class="fas fa-times"></i> Fermer
+            </button>
+        </div>
+    </div>
+{% endblock id-btn %}

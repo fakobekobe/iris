@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade" id="date_de_naissance_Modal" tabindex="-1" aria-labelledby="date_de_naissance_ModalLabel" aria-hidden="true">
+<div class="modal fade" id="{% block id %}date_de_naissance_Modal{% endblock id %}"  tabindex="-1" aria-labelledby="{% block id-2 %}date_de_naissance_ModalLabel{% endblock id-2 %}" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="date_de_naissance_ModalLabel">
-            <i class="fas fa-warehouse"></i> Ajouter un lieu de naissance
+        <h5 class="modal-title" id="{% block id-3 %}date_de_naissance_ModalLabel{% endblock id-3 %}">
+            <i class="fas fa-warehouse"></i> {% block id-titre %}Ajouter un lieu de naissance {% endblock id-titre %}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -83,6 +83,7 @@
 
           </div>
 
+          {% block id-btn %}
           <div class="modal-footer text-center">
               <div style="width:100%;">
                   <button type="submit" class="btn btn-outline-success" id="naissance_btn_ajouter">
@@ -96,6 +97,7 @@
                   </button>
               </div>
           </div>
+          {% endblock id-btn %}
 
       </form>
 
