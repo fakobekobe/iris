@@ -1,0 +1,19 @@
+{% extends 'vieprofessionnelle/ajouter_parent.html' %}
+
+{% block modifier-id %}
+    <input type="text" hidden name="id_json" id="id_json" class="form-control" value="1">
+{% endblock modifier-id %}
+
+
+{% block btn-ajax %}
+    <button type="submit" class="btn btn-success" id="btn_p_ajouter">
+        <i class="fas fa-plus"></i> Ajouter
+    </button>
+    <button type="reset" class="btn btn-outline-warning" title="Annuler" id="btn_p_annuler">
+        <i class="fas fa-sync-alt"></i> Annuler
+    </button>
+    <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id="btn_p_fermer">
+        <i class="fas fa-times"></i> Fermer
+    </button>
+{% endblock btn-ajax %}
+

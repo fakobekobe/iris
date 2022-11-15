@@ -390,7 +390,7 @@ $(document).ready(function() {
 //******************** SCRIPT DE L'ONGLET PARENT **********************************************
      // Ajout du champ du champ de recherche
     var tableparent = "tableparent";
-    var colonneparent = [0,1,2,3];
+    var colonneparent = [0,1,2,3,4,5];
 
     //$('#' + tableparent + ' thead tr').clone(true).addClass('filters').appendTo( '#' + tableparent + ' thead' );
     var table4 = $('#' + tableparent ).DataTable( {

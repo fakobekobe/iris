@@ -280,6 +280,8 @@
                             <th>N°</th>
                             <th>Nom et prénoms</th>
                             <th>Date de naissance</th>
+                            <th>Adresse</th>
+                            <th>Contact</th>
                             <th>Type de parent</th>
                             <th>Action</th>
                         </tr>
@@ -290,6 +292,8 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{parent.nomprenoms|title}}</td>
                             <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
+                            <td>{{parent.adresse}}</td>
+                            <td>{{parent.contact}}</td>
                             <td>{{parent.typeparent.libelle|capfirst}}</td>
                             <td class="text-center">
                                 <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#parentmodifierModal{{parent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>

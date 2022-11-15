@@ -218,7 +218,7 @@
                             <!-- -->
                             <div class="form-row mb-2">
                                 <div class="col">
-                                  <input type="button" id="parent_ajouter" class="btn btn-outline-primary" value="Ajouter un parent">
+                                  <input type="button" id="parent_ajouter" class="btn btn-outline-primary" value="Ajouter un parent" data-toggle="modal" data-target="#parentModal" data-backdrop="static">
                                 </div>
                                 <div class="col">
                                   <input type="button" id="parent_annuler" class="btn btn-outline-danger" value="Vider la liste">
@@ -229,9 +229,6 @@
 
                             <!-- -->
                             <select name="parent" id="parent_liste" class="custom-select" multiple>
-                              <option value="1">One</option>
-                              <option value="2">Two</option>
-                              <option value="3">Three</option>
                             </select>
                             <!-- -->
                         </fieldset>
@@ -261,6 +258,7 @@
 {% include 'presentation/date_de_naissance.html' %}
 {% include 'presentation/liste_cooperative.html' %}
 {% include 'presentation/ajouter_cooperative.html' %}
+{% include 'presentation/ajouter_parent.html' %}
 
 {% endblock %}
 

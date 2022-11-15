@@ -5,6 +5,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 import os
+from datetime import datetime
 
 
 # Les constatntes et les variables globales
@@ -387,6 +388,9 @@ def ajouter_parent(request):
         # On initialise les variables
         nomprenoms = request.POST.get("nomprenoms", None)
         datenaissance = request.POST.get("datenaissance", None)
+        adresse = request.POST.get("adresse", None)
+        contact = request.POST.get("contact", None)
+
         if not datenaissance : # On teste si la date n'existe pas
             datenaissance = None
 
@@ -401,11 +405,33 @@ def ajouter_parent(request):
             objet_parent = Parent()
             objet_parent.nomprenoms = nomprenoms
             objet_parent.datenaissance = datenaissance
+            objet_parent.adresse = adresse
+            objet_parent.contact = contact
+            objet_parent.dateenre = datetime.now()
             objet_parent.typeparent = TypeParent.objects.get(id=typeparent)
             objet_parent.save()
 
-            messages.success(request, "Enregistrement réussi.")
+            # Traitement JSON ------------------------
+            if request.POST.get('id_json', None):
+                data = {
+                    'id': objet_parent.id,
+                    'nomprenoms': objet_parent.nomprenoms,
+                    'message': "Enregistrement réussi",
+                }
 
+                return JsonResponse({'data': data}, status=200)
+            #------------------------------------------------------
+
+            messages.success(request, "Enregistrement réussi.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+        else:
+
+            # Traitement JSON -----------------------------------
+            if request.POST.get('id_json', None):
+                return JsonResponse({'data': 'non'}, status=404)
+            #------------------------------------------------------
+
+            messages.error(request, "Veuillez remplir les champs.")
             return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
     else:
         return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
@@ -431,12 +457,17 @@ def modifier_parent(request):
             parent_nouveau = parent_nouveau.title()
 
             date_nouveau = request.POST.get("datenaissance", None)
-
+            adresse = request.POST.get("adresse", None)
+            contact = request.POST.get("contact", None)
             typeparent = request.POST.get("select_typeparent", None)
 
             # On effectue la modification
             objet_parent.nomprenoms = parent_nouveau
             objet_parent.datenaissance = date_nouveau
+            objet_parent.adresse = adresse
+            objet_parent.contact = contact
+            if not objet_parent.dateenre:
+                objet_parent.dateenre = datetime.now()
             objet_parent.typeparent = TypeParent.objects.get(id=typeparent)
             objet_parent.save()
 

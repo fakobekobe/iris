@@ -30,13 +30,57 @@ $(document).ready(function(){
         });
 
 
-// ******************* GESTION DES AFFICHAGES DES CHAMPS STATUT MATRIMONIAL *****************************
+// ******************* GESTION DES AFFICHAGES DES CHAMPS POUR AJOUTER UN PARENT *****************************
     var parent_annuler = $('#parent_annuler');
     var parent_liste = $('#parent_liste');
+    var btn_p_ajouter = $('#btn_p_ajouter');
+    var btn_p_annuler = $('#btn_p_annuler');
+    var btn_p_fermer = $('#btn_p_fermer');
 
     parent_annuler.click(function(){
         parent_liste.html('');
     });
+
+    // Traitement AJAX
+    btn_p_ajouter.click(function(e){
+            e.preventDefault(); // On annule l'envoi du formulaire
+
+            // On utilise ajax pour transmetre les données
+            $.ajax({
+                url: "/vieprofessionnelle/ajouter-parent", // On ajoute l'url absolue en commençant par la racine
+                type: 'post',
+                data: {
+                    id_json: $('#id_json').val(),
+                    select_typeparent: $('#select_typeparent').val(),
+                    nomprenoms: $('input[name=nomprenoms]').val(),
+                    select_typeparent: $('#select_typeparent').val(),
+                    datenaissance: $('input[name=datenaissance]').val(),
+                    adresse: $('input[name=adresse]').val(),
+                    contact: $('input[name=contact]').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data){
+
+                    // On remplit les champs
+                    parent_liste.append("<option value='"+ data.data.id +"' selected>" + data.data.nomprenoms + "</option>")
+
+                    // Affichage du message
+                    alert(data.data.message);
+
+                    // Gestion des fermetures des boutons
+                    btn_p_annuler.trigger('click'); // On initialise les champs du modal en cours
+                    btn_p_fermer.trigger('click'); // On ferme le modal en cours
+                    //cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+                },
+                statusCode: {
+                    404: function(data){
+                            alert('Veuillez renseigner les champs SVP.');
+                         },
+                },
+            });
+
+
+        });
 
 
 // ******************* GESTION DES LISTES DEROULANTES *****************************
@@ -270,5 +314,11 @@ $(document).ready(function(){
             });
 
         });
+
+
+
+
+
+// ****************************************************************************
 
 });

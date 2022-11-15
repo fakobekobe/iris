@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="{% block modal-label2 %}parentModalLabel{% endblock modal-label2 %}">
-            <i class="fas fa-igloo"></i>{% block modal-titre %} Ajouter un parent {% endblock modal-titre %}
+            <i class="fas fa-user-check"></i>{% block modal-titre %} Ajouter un parent {% endblock modal-titre %}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -21,7 +21,7 @@
                       <label class="input-group-text" for="select_typeparent"><i class="fas fa-user-friends"></i></label>
                   </div>
 
-                  <select name="select_typeparent" id="select_typeparent" required>
+                  <select name="select_typeparent" id="select_typeparent" class="form-control" required>
                       <option value="" selected>--- Sélectionnez un type de parent ---</option>
                       {% for typeparent in typeparents %}
                       <option value="{{typeparent.id}}" >{{typeparent.libelle|capfirst}}</option>
@@ -44,10 +44,25 @@
                   <input type="date" name="datenaissance" class="form-control" {% block value-date %}{% endblock value-date %} >
               </div>
 
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                  </div>
+                  <input type="text" name="adresse" class="form-control" placeholder="Adresse" {% block value-adresse %}{% endblock value-adresse %} >
+              </div>
+
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                  </div>
+                  <input type="text" name="contact" class="form-control" placeholder="Contacts" {% block value-contact %}{% endblock value-contact %} >
+              </div>
+
           </div>
 
           <div class="modal-footer text-center">
               <div style="width: 100%;">
+                  {% block btn-ajax %}
                   <button type="submit" class="btn btn-success">
                       {% block btn-action %}<i class="fas fa-plus"></i> Enregistrer {% endblock btn-action %}
                   </button>
@@ -57,6 +72,7 @@
                   <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
                       <i class="fas fa-times"></i> Fermer
                   </button>
+                  {% endblock btn-ajax %}
               </div>
           </div>
 
