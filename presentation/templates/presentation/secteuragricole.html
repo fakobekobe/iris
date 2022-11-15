@@ -136,7 +136,7 @@
 
                         <!-- -->
                         <div class="input-group mb-2">
-                              <input type="text" name="cooperative_texte" id="cooperative_texte" class="form-control" placeholder="Nom de la coopérative" readonly>
+                              <input type="text" name="cooperative_texte" id="cooperative_texte" value="" class="form-control" placeholder="Nom de la coopérative" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text btn btn-danger" id="label_cooperative_times" title="Annuler"><i class="fas fa-times"></i></span>
                                 </div>
@@ -282,4 +282,5 @@
         {% endfor %}
     </script>
     <script src="{% static 'presentation/js/datatable.js' %}"></script>
+    <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
 {% endblock javascript %}

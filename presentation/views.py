@@ -42,6 +42,7 @@ def ajouter_secteuragricole(request):
     departements = Departement.objects.order_by("libelle")
     villes = Ville.objects.order_by("libelle")
     communes = Commune.objects.order_by("libelle")
+    secteuragricoles = SecteurAgricole.objects.order_by("nom")
 
     context = {
         'titre': "Identification - Secteur Agricole",
@@ -54,9 +55,10 @@ def ajouter_secteuragricole(request):
         "departements": departements,
         "villes": villes,
         "communes": communes,
+        "secteuragricoles": secteuragricoles,
     }
 
-    if request.method=="POST":
+    if request.method == "POST":
         parents = request.POST.getlist('parent', None)
         for p in parents:
             print(p)

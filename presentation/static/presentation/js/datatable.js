@@ -196,6 +196,18 @@ $(document).ready(function(){
 
     var cooperative_a_ajouter = $('#cooperative_a_ajouter');
     var cooperative_a_fermer = $('#cooperative_a_fermer');
+    var cooperative_a_annuler = $('#cooperative_a_annuler');
+    var cooperative_l_fermer = $('#cooperative_l_fermer');
+
+    var label_cooperative_times = $('#label_cooperative_times');
+    var cooperative = $('#cooperative');
+    var cooperative_texte = $('#cooperative_texte');
+
+        // On vide les champs
+        label_cooperative_times.click(function(){
+            cooperative.val("");
+            cooperative_texte.val("");
+        });
 
         // Traitement AJAX
         cooperative_a_ajouter.click(function(e){
@@ -206,6 +218,7 @@ $(document).ready(function(){
                 url: "/vieprofessionnelle/ajouter-cooperative", // On ajoute l'url absolue en commençant par la racine
                 type: 'post',
                 data: {
+                    id_json: $('#id_json').val(),
                     nom_cooperative: $('#nom_cooperative').val(),
                     presidente: $('#presidente').val(),
                     contact_presidente: $('#contact_presidente').val(),
@@ -218,12 +231,44 @@ $(document).ready(function(){
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function(data){
-                    cooperative_a_fermer.trigger('click');
+
+                    // On remplit les champs
+                    cooperative.val(data.data.id);
+                    cooperative_texte.val(data.data.cooperative);
+
+                    // Affichage du message
+                    alert(data.data.message);
+
+                    // Gestion des fermetures des boutons
+                    cooperative_a_annuler.trigger('click'); // On initialise les champs du modal en cours
+                    cooperative_a_fermer.trigger('click'); // On ferme le modal en cours
+                    cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+                },
+                statusCode: {
+                    404: function(data){
+                            alert('Veuillez renseigner les champs SVP.');
+                         },
+                    400: function(data){
+                            alert('Cette coopérative existe déjà.');
+                         },
                 },
             });
 
 
         });
 
+    // Partie 2
+
+    var liens = $("#table_recherche_cooperative tbody td a");
+        liens.each(function(){
+
+            $(this).click(function(){
+                // On remplit les champs
+                 cooperative.val($(this).attr('value')); // On récupère le id du Secteur Agricole
+                 cooperative_texte.val($(this).text()); // On affiche le nom de la coopérative
+                 cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+            });
+
+        });
 
 });

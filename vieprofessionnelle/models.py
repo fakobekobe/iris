@@ -27,9 +27,9 @@ class SecteurActive(models.Model):
     nom = models.CharField(max_length=250, null=False, blank=False)
     presidente = models.CharField(max_length=250, null=True, blank=True, default="")
     contact = models.CharField(max_length=100, null=True, blank=True, default="")
-    date_adhesion = models.DateField(verbose_name="Date d'adhésion")
+    date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
-    dateenre = models.DateTimeField(default=timezone.now(), verbose_name="Date d'enregistrement")
+    dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
 
     class Meta:
         abstract = True

@@ -792,8 +792,64 @@ def supprimer_document(request, id):
 @login_required
 @permission_required('vieprofessionnelle.add_secteuragricole', raise_exception=True)
 def ajouter_cooperative(request):
-    print('ok')
-    return JsonResponse({'data': 'ok'}, status=200)
+    if request.method == 'POST':
+        if request.POST.get('id_json', None):
+
+            nom_cooperative = request.POST.get('nom_cooperative', None)
+            presidente = request.POST.get('presidente', None)
+            contact_presidente = request.POST.get('contact_presidente', None)
+            speculation_agricole = request.POST.get('speculation_agricole', None)
+            superficie_en_culture = request.POST.get('superficie_en_culture', None)
+            superficie_en_production = request.POST.get('superficie_en_production', None)
+            gps_longitude = request.POST.get('gps_longitude', None)
+            gps_latitude = request.POST.get('gps_latitude', None)
+            dateenre = request.POST.get('dateenre', None)
+
+
+            if nom_cooperative: #On vérifie si la champ a été saisi
+
+                nom_cooperative = nom_cooperative.capitalize() # On formate la variable
+
+                # On vérifie si ce Secteur Agricole existe déjà
+                try:
+                    SecteurAgricole.objects.get(nom=nom_cooperative)
+                    return JsonResponse({'data': 'Cette coopérative existe déjà.'}, status=400)
+                except SecteurAgricole.DoesNotExist:
+                    pass
+
+
+                #On Ajoute un nouveau Secteur Agricole
+                secteur_agricole = SecteurAgricole()
+
+                secteur_agricole.nom = nom_cooperative
+                secteur_agricole.presidente = presidente.title()
+                secteur_agricole.contact = contact_presidente
+                secteur_agricole.speculation_agricole = speculation_agricole
+                secteur_agricole.superficie_en_culture = superficie_en_culture
+                secteur_agricole.superficie_en_production = superficie_en_production
+                secteur_agricole.gps_longitude = gps_longitude
+                secteur_agricole.gps_latitude = gps_latitude
+                secteur_agricole.dateenre = dateenre
+                secteur_agricole.date_adhesion = None
+
+                secteur_agricole.save()
+
+                data = {
+                    'id': secteur_agricole.id,
+                    'cooperative': secteur_agricole.nom,
+                    'message': "Enregistrement réussi",
+                }
+
+                return JsonResponse({'data': data}, status=200)
+            else:
+                return JsonResponse({'data': 'non'}, status=404)
+
+        else:
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
 
 
 # Fin de la Gestion de la Coopérative -------------------------------------
