@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 from etatcivil.models import *
-from localisation.models import Quartier, Commune
+from localisation.models import Quartier, Commune, Marche
 from django.contrib.auth.models import User
 
 # Fonction pour ajouter les détails du temps devant le nom du fichier
@@ -30,6 +30,8 @@ class SecteurActive(models.Model):
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
+    gps_longitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Longitude")
+    gps_latitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Latitude")
 
     class Meta:
         abstract = True
@@ -70,8 +72,6 @@ class SecteurAgricole(SecteurActive):
     speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
     superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
     superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
-    gps_longitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Longitude")
-    gps_latitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Latitude")
 
     membres = models.ManyToManyField(Membre)
 
@@ -79,16 +79,17 @@ class SecteurAgricole(SecteurActive):
         return self.nom
 
 class SecteurInformel(SecteurActive):
-    metier = models.CharField(max_length=250, null=False, blank=False, verbose_name="Métier")
+    metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
 
     membres = models.ManyToManyField(Membre)
 
     def __str__(self):
-        return self.metier
+        return self.metier.secteur
 
 class SecteurFemmeActive(SecteurActive):
     personne_ressource = models.ForeignKey(Membre, related_name='personne_membre_set',null=True,blank=True, on_delete=models.SET_NULL)
 
+    marche = models.ForeignKey(Marche, null=True,blank=True, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre)
 
     def __str__(self):

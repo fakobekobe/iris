@@ -9,6 +9,9 @@ from localisation.models import *
 from django.http import JsonResponse
 import os
 
+# Les constatntes et les variables globales
+_active_onglet = "" # Variable globale pour l'activation des onglets
+
 
 # Gestion du secteur -----------------------------------------------
 @login_required
@@ -46,6 +49,19 @@ def ajouter_secteuragricole(request):
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
 
+    # Initialisation de l'affichage de l'onglet active
+    active_sercteuragricole = ['', 'false', '']
+    active_liste = ['', 'false', '']
+
+    if _active_onglet == "active_sercteuragricole":
+        active_sercteuragricole = ['active', 'true', 'show active']
+    elif _active_onglet == "active_liste":
+        active_liste = ['active', 'true', 'show active']
+    else:
+        # Affichage par défaut
+        active_sercteuragricole = ['active', 'true', 'show active']
+
+
     context = {
         'titre': "Identification - Secteur Agricole",
         'typepieces': typepieces,
@@ -60,6 +76,9 @@ def ajouter_secteuragricole(request):
         "secteuragricoles": secteuragricoles,
         "typeparents": typeparents,
         "parents": parents,
+
+        "active_sercteuragricole": active_sercteuragricole,
+        "active_liste": active_liste,
     }
 
     if request.method == "POST":
