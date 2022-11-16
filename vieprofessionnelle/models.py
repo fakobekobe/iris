@@ -4,6 +4,7 @@ from django.utils import timezone
 from etatcivil.models import *
 from localisation.models import Quartier, Commune, Marche
 from django.contrib.auth.models import User
+from projet.models import *
 
 # Fonction pour ajouter les détails du temps devant le nom du fichier
 def nomfichier(self, fichier):
@@ -38,13 +39,14 @@ class SecteurActive(models.Model):
 
 class Membre(models.Model):
     # Les attribues propres
+    identifiant = models.CharField(max_length=12, null=False,blank=False, default=None, unique=True, verbose_name="Identifiant")
     nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
     nomjeunefille = models.CharField(max_length=250, null=True,blank=True,default="", verbose_name="Nom de jeune fille")
     prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
-    nom_prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Nom et prénoms")
+    nom_prenoms = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="Nom et prénoms")
     actif = models.BooleanField(default=False)
     numerobadge = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="N°Badge")
-    qrcode = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="QR Code")
+    qrcode = models.CharField(max_length=250,null=False,blank=False, default=None,unique=True,verbose_name="QR Code")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
     date_naissance = models.DateField(default=None, null=True, blank=True, verbose_name="Date de naissance")
     contact = models.CharField(max_length=50, null=True, blank=True,default="", verbose_name="Contact")
@@ -65,8 +67,18 @@ class Membre(models.Model):
     # A modifier lorsque l'utilisateur sera customisé
     utilisateur = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
+    # Les methodes
     def __str__(self):
-        return self.nom + " " + self.prenoms
+        return self.nom_prenoms
+
+    def set_nomprenoms(self):
+        self.nom_prenoms = f"{self.nom} {self.prenoms}"
+
+    def set_identifiant(self):
+        self.identifiant = ajoute_zero_a_identifiant(
+            departement=self.quartier.commune.ville.departement.code,
+            ville=self.quartier.commune.ville.code,
+            identifiant=self.id)
 
 class SecteurAgricole(SecteurActive):
     speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
