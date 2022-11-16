@@ -36,6 +36,14 @@ def index(request):
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def ajouter_secteuragricole(request):
 
+    if request.method == "POST":
+        parents = request.POST.getlist('parent', None)
+        for p in parents:
+            print(p)
+
+
+    # PARTIE DU GET -----------------------
+
     typepieces = TypePiece.objects.order_by('id')
     nationalites = Nationalite.objects.order_by('id')
     niveaux = Niveau.objects.order_by('id')
@@ -80,11 +88,6 @@ def ajouter_secteuragricole(request):
         "active_sercteuragricole": active_sercteuragricole,
         "active_liste": active_liste,
     }
-
-    if request.method == "POST":
-        parents = request.POST.getlist('parent', None)
-        for p in parents:
-            print(p)
 
 
     return render(request,"presentation/secteuragricole.html", context)

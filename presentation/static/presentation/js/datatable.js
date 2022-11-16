@@ -115,6 +115,7 @@ $(document).ready(function(){
     var select_departement = $('select[name=select_departement]');
     var select_ville = $('select[name=select_ville]');
     var select_commune = $('select[name=select_commune]');
+    var select_quartier = $('select[name=select_quartier]');
 
         // Traitement AJAX de la region
         $(select_district).change(function(){
@@ -142,6 +143,10 @@ $(document).ready(function(){
                     // On initialise la selection de la commune
                     select_commune.html('');
                     select_commune.append("<option value='' selected>--- Selectionnez une commune ---</option>");
+
+                    // On initialise la selection du quartier
+                    select_quartier.html('');
+                    select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
 
                     $.each(data.data, function(key, value){
                         select_region.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
@@ -175,6 +180,10 @@ $(document).ready(function(){
                     select_commune.html('');
                     select_commune.append("<option value='' selected>--- Selectionnez une commune ---</option>");
 
+                    // On initialise la selection du quartier
+                    select_quartier.html('');
+                    select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_departement.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
@@ -203,6 +212,10 @@ $(document).ready(function(){
                     select_commune.html('');
                     select_commune.append("<option value='' selected>--- Selectionnez une commune ---</option>");
 
+                    // On initialise la selection du quartier
+                    select_quartier.html('');
+                    select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_ville.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
@@ -226,11 +239,39 @@ $(document).ready(function(){
                     select_commune.html('');
                     select_commune.append("<option value='' selected>--- Selectionnez une commune ---</option>");
 
+                    // On initialise la selection du quartier
+                    select_quartier.html('');
+                    select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_commune.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
                 },
             });
+
+        });
+
+        // Traitement AJAX de la quartier
+        select_commune.change(function(){
+
+            // On utilise ajax pour récupérer les villes
+            $.ajax({
+                url: "/localisation/details-quartier", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du quartier
+                    select_quartier.html('');
+                    select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_quartier.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+
 
         });
 
@@ -360,19 +401,13 @@ $(document).ready(function(){
 
     lieu_btn_ajouter.click(function(e){
         e.preventDefault();
-        select_commune.each(function(){
-            if($(this).val()){
-                $('select[name=select_commune] option:selected').each(function(n,v){
-                    if(n == 1){
-                        label_lieu_habitation.val($(this).text());
-                    }
-                });
-                lieu_habitation.val($(this).val());
-                lieu_habitation_Modal.hide('slow');
-                lieu_btn_fermer.trigger('click');
-            }
 
-        });
+        if(select_quartier.val()){
+            label_lieu_habitation.val($('#select_quartier option:selected').text());
+            lieu_habitation.val(select_quartier.val());
+            lieu_habitation_Modal.hide('slow');
+            lieu_btn_fermer.trigger('click');
+        }
 
     });
 

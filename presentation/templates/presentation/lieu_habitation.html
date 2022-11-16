@@ -5,6 +5,18 @@
 {% block id-3 %}lieu_habitation_ModalLabel{% endblock id-3 %}
 {% block id-titre %}Ajouter un lieu d'habitation {% endblock id-titre %}
 
+{% block select-quartier %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
+        </div>
+
+        <select name="select_quartier" id="select_quartier" class="form-control" required>
+            <option value="" selected>--- Sélectionnez un quartier ---</option>
+        </select>
+    </div>
+{% endblock select-quartier %}
+
 {% block id-btn %}
     <div class="modal-footer text-center">
         <div style="width:100%;">

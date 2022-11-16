@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Document)
 admin.site.register(SecteurAgricole)
 admin.site.register(Parent)
+admin.site.register(Membre)
