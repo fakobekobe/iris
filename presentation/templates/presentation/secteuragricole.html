@@ -8,7 +8,7 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_sercteuragricole|first}}" id="typesecteur-tab" data-toggle="tab" data-target="#typesecteur" type="button" role="tab" aria-controls="typesecteur" aria-selected="{{ active_sercteuragricole|slice:'1:2'|first }}">
+      <button class="nav-link {{active_secteuragricole|first}}" id="typesecteur-tab" data-toggle="tab" data-target="#typesecteur" type="button" role="tab" aria-controls="typesecteur" aria-selected="{{ active_secteuragricole|slice:'1:2'|first }}">
         Fiche d'Identification
       </button>
     </li>
@@ -22,7 +22,7 @@
   <div class="tab-content" id="myTabContent">
 
     <!-- CONTENU Fiche d'Identification -->
-    <div class="tab-pane fade {{ active_sercteuragricole|last }}" id="typesecteur" role="tabpanel" aria-labelledby="typesecteur-tab">
+    <div class="tab-pane fade {{ active_secteuragricole|last }}" id="typesecteur" role="tabpanel" aria-labelledby="typesecteur-tab">
       <div>
         <h1 class="text-primary"><i class="fas fa-cannabis"></i> Fiche d'identification : Secteur Agricole</h1>
         <div class="row">
@@ -48,6 +48,7 @@
                                         <div class="card-header text-white bg-warning">Membre</div>
                                         <div class="card-body">
                                             <!-- -->
+                                            {% block sexe %}
                                             <div class="input-group mb-3 justify-content-center">
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text label-sans-fond">Sexe : </label>
@@ -63,15 +64,16 @@
                                                     <label class="form-check-label" for="sexehomme">M</label>
                                                 </div>
                                             </div>
+                                            {% endblock sexe %}
                                             <!-- -->
 
                                             <!-- -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
-                                                  <input type="text" name="nom" class="form-control" placeholder="Nom" required>
+                                                  <input type="text" name="nom" class="form-control" placeholder="Nom" {% block nom-value %}{% endblock nom-value %} required>
                                                 </div>
                                                 <div class="col">
-                                                  <input type="text" name="prenoms" class="form-control" placeholder="Prénoms">
+                                                  <input type="text" name="prenoms" class="form-control" placeholder="Prénoms" {% block prenoms-value %}{% endblock prenoms-value %}>
                                                 </div>
                                             </div>
                                             <!-- -->
@@ -79,7 +81,7 @@
                                             <!-- -->
                                             <div class="form-row mb-2" id="nomjeunefille">
                                                 <div class="col">
-                                                  <input type="text" name="nomjeunefille" class="form-control" placeholder="Nom de jeune fille">
+                                                  <input type="text" name="nomjeunefille" class="form-control" placeholder="Nom de jeune fille" {% block nomjeunefille %}{% endblock nomjeunefille %}>
                                                 </div>
                                             </div>
                                             <!-- -->
@@ -89,20 +91,20 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text label-sans-fond">Date de naissance</span>
                                                 </div>
-                                                <input type="date" name="date_naissance" value="{% now 'Y-m-d' %}" class="form-control" >
+                                                <input type="date" name="date_naissance" value="{% now 'Y-m-d' %}" class="form-control" {% block date_naissance %}{% endblock date_naissance %}>
                                             </div>
                                             <!-- -->
 
                                             <!-- -->
                                             <div class="input-group mb-2">
-                                                  <input type="text" name="lieunaissancetexte" id="label_naissance" class="form-control" placeholder="Lieu de naissance" readonly>
+                                                  <input type="text" name="lieunaissancetexte" id="label_naissance" class="form-control" placeholder="Lieu de naissance" {% block lieunaissancetexte %}{% endblock lieunaissancetexte %} readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text btn btn-danger" id="label_naissance_times" title="Annuler"><i class="fas fa-times"></i></span>
                                                     </div>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text btn btn-success" id="label_naissance_plus" title="Ajouter un lieu de naissance" data-toggle="modal" data-target="#date_de_naissance_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
                                                     </div>
-                                                  <input type="text" hidden name="lieu_naissance" value="" id="lieu_naissance" class="form-control">
+                                                  <input type="text" hidden name="lieu_naissance" value="" id="lieu_naissance" class="form-control" {% block lieu_naissance %}{% endblock lieu_naissance %}>
                                             </div>
                                             <!-- -->
 
@@ -120,7 +122,7 @@
                                                 {% endfor %}
 
                                             </div>
-                                            <!-- -->-
+                                            <!-- -->
 
                                             <!-- -->
                                             <div class="form-row mb-2">
@@ -296,8 +298,8 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- Champ de recherche -->
-                <div class="input-group mb-2">
-                    <input type="text" name="recherche_membre" id="recherche_membre" class="form-control w-20" placeholder="Rechercher">
+                <div class="input-group mb-2 w-25">
+                    <input type="text" name="recherche_membre" id="recherche_membre" class="form-control" placeholder="Rechercher un membre">
                 </div>
                 <!-- -->
                 <hr />
@@ -315,6 +317,7 @@
                             <th>Ville</th>
                             <th>Date de naissance</th>
                             <th>Date d'enregistrement</th>
+                            <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -328,7 +331,8 @@
                             <td class="text-center">{{membre.date_naissance|date:'d/m/Y'}}</td>
                             <td class="text-center">{{membre.dateenre|date:'d/m/Y'}}</td>
                             <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#recherche_membre_modifierModal{{membre.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <a href="{% url 'presentation:detail_secteuragricole' membre.id %}" class="btn btn-outline-primary btn-sm" title="Détails"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'presentation:modifier_secteuragricole' membre.id %}" class="btn btn-outline-warning btn-sm" title="Modifier"><i class="fas fa-pen"></i></a>
                                 <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#recherche_membre_supressionmodal{{membre.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="recherche_membre_supressionmodal{{membre.id}}" role="dialog">
@@ -347,7 +351,7 @@
                                         </div>
                                         <div class="modal-footer justify-content-center">
 
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_membre' membre.id %}">
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_secteuragricole' membre.id %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-success btn-sm">Oui</button>
                                             </form>

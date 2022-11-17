@@ -9,9 +9,10 @@ urlpatterns = [
     path('ajouter-secteuragricole/', views.ajouter_secteuragricole, name='ajouter_secteuragricole'),
     path('modifier-secteuragricole/<str:id>', views.modifier_secteuragricole, name='modifier_secteuragricole'),
     path('supprimer-secteuragricole/<str:id>', views.supprimer_secteuragricole, name='supprimer_secteuragricole'),
+    path('details-secteuragricole/<str:id>', views.detail_secteuragricole, name='detail_secteuragricole'),
     path('details-niveauscolaire/', views.details_niveauscolaire, name='details_niveauscolaire'),
 
     # Url du Type Secteur
-    path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),
+    #path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),
 
 ]

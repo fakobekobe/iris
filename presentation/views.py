@@ -120,19 +120,19 @@ def ajouter_secteuragricole(request):
     secteuragricoles = SecteurAgricole.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
-    membres = Membre.objects.filter(utilisateur_id=request.user.id).order_by('nom_prenoms')
+    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
 
     # Initialisation de l'affichage de l'onglet active
-    active_sercteuragricole = ['', 'false', '']
+    active_secteuragricole = ['', 'false', '']
     active_liste = ['', 'false', '']
 
-    if _active_onglet == "active_sercteuragricole":
-        active_sercteuragricole = ['active', 'true', 'show active']
+    if _active_onglet == "active_secteuragricole":
+        active_secteuragricole = ['active', 'true', 'show active']
     elif _active_onglet == "active_liste":
         active_liste = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
-        active_sercteuragricole = ['active', 'true', 'show active']
+        active_secteuragricole = ['active', 'true', 'show active']
 
 
     context = {
@@ -151,12 +151,22 @@ def ajouter_secteuragricole(request):
         "parents": parents,
         "membres": membres,
 
-        "active_sercteuragricole": active_sercteuragricole,
+        "active_secteuragricole": active_secteuragricole,
         "active_liste": active_liste,
     }
 
+    if request.session.get('id_membre'): # On affiche la page de modification
+        # On récupère le membre
+        context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
+        return render(request, "presentation/modifier_secteuragricole.html", context)
 
     return render(request,"presentation/secteuragricole.html", context)
+
+
+@login_required
+@permission_required('presentation.add_membre', raise_exception=True)
+def detail_secteuragricole(request, id):
+    pass
 
 
 @login_required
@@ -176,19 +186,37 @@ def details_niveauscolaire(request):
 
 @login_required
 @permission_required('presentation.change_membre', raise_exception=True)
-def modifier_secteuragricole(request):
-   pass
+def modifier_secteuragricole(request,id):
+    global _active_onglet
+    _active_onglet = "active_secteuragricole"  # On initialise la variable
+    request.session['id_membre'] = id
 
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
 @permission_required('presentation.delete_membre', raise_exception=True)
 def supprimer_secteuragricole(request, id):
-  pass
+    global _active_onglet
+    _active_onglet = "active_liste"  # On initialise la variable
+
+    try:
+        objet_membre = Membre.objects.get(id=id)
+    except Membre.DoesNotExist:
+        messages.error(request, "Ce membre n'existe pas.")
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+    if objet_membre:
+        objet_membre.actif = False
+        objet_membre.save()
+
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
 @permission_required('presentation.delete_membre', raise_exception=True)
 def supprimer_membre(request, id):
-  pass
+    pass
 
 
 # Fin de la Gestion du secteur -------------------------------------
