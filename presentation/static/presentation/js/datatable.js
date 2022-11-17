@@ -411,6 +411,68 @@ $(document).ready(function(){
 
     });
 
+
+// CONTROL DE L'ENVOI DES DONNEES ****************************************
+    var envoyer_fiche = $('input[name=envoyer_fiche]');
+    var nom = $('input[name=nom]');
+    var date_naissance = $('input[name=date_naissance]');
+    var numeropiece = $('input[name=numeropiece]');
+    var nationalite = $('select[name=nationalite]');
+    var contact = $('input[name=contact]');
+
+    envoyer_fiche.click(function(e){
+        e.preventDefault();
+
+        if(!nom.val()){
+            alert("Veuillez renseigner le nom.");
+            nom.focus();
+        }
+
+        if(!date_naissance.val()){
+            alert("Veuillez renseigner la date de naissance.");
+            date_naissance.focus();
+        }
+
+        if(!numeropiece.val()){
+            alert("Veuillez renseigner le numéro de la pièce.");
+            numeropiece.focus();
+        }
+
+        if(!nationalite.val()){
+            alert("Veuillez selectionner la nationalité.");
+            nationalite.focus();
+        }
+
+        if(!contact.val()){
+            alert("Veuillez renseigner le contact.");
+            contact.focus();
+        }
+
+        if(!cooperative.val()){
+            alert("Veuillez ajouter une coopérative.");
+            cooperative_texte.focus();
+        }
+
+        if(!niveau.val()){
+            alert("Veuillez selectionner le niveau.");
+            niveau.focus();
+        }
+
+        if(!niveauscolaire.val()){
+            alert("Veuillez selectionner le niveau scolaire.");
+            niveauscolaire.focus();
+        }
+
+        if(!lieu_habitation.val()){
+            alert("Veuillez ajouter le lieu d'habitation.");
+            label_lieu_habitation.focus();
+        }
+
+        // On envoi le formulaire
+        $('#form_fiche').submit();
+
+    });
+
 // ****************************************************************************
 
 });

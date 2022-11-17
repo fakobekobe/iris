@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from etatcivil.models import TypePiece, Nationalite, Niveau, NiveauScolaire, SituationMatrimoniale
 from localisation.models import *
 from django.http import JsonResponse
+from django.utils.html import strip_tags
 import os
 
 # Les constatntes et les variables globales
@@ -37,13 +38,74 @@ def index(request):
 def ajouter_secteuragricole(request):
 
     if request.method == "POST":
-        parents = request.POST.getlist('parent', None)
-        for p in parents:
-            print(p)
+        # On récupère les données
+        sexe = strip_tags(request.POST.get('sexe', None))# On rétire les tag (<>)
+        nom = strip_tags(request.POST.get('nom', None)).strip().title() # On rétire les tag (<>) et on enleve les espaces au début et fin
+        prenoms = strip_tags(request.POST.get('prenoms', None)).strip().title()
+        nomjeunefille = strip_tags(request.POST.get('nomjeunefille', None)).strip().title()
+        date_naissance = strip_tags(request.POST.get('date_naissance', None))
+        lieu_naissance = strip_tags(request.POST.get('lieu_naissance', None))
+        typepiece = strip_tags(request.POST.get('typepiece', None))
+        numeropiece = strip_tags(request.POST.get('numeropiece', None)).strip()
+        nationalite = strip_tags(request.POST.get('nationalite', None))
+        contact = strip_tags(request.POST.get('contact', None)).strip()
+        cooperative = strip_tags(request.POST.get('cooperative', None))
+        dateadhesion = strip_tags(request.POST.get('dateadhesion', None))
+        numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        niveauscolaire = strip_tags(request.POST.get('niveauscolaire', None))
+        situationmatrimoniale = strip_tags(request.POST.get('situationmatrimoniale', None))
+        lieu_habitation = strip_tags(request.POST.get('lieu_habitation', None))
+
+        if not date_naissance:
+            date_naissance = None
+
+        if nom and date_naissance and numeropiece and contact and cooperative and lieu_habitation:
+            # On véruifie si ce membre existe déjà car le numeropiece et le contact sont uniques
+            try:
+                Membre.objects.get(numeropiece=numeropiece, contact=contact)
+                messages.error(request, "Ce membre existe déjà.")
+            except Membre.DoesNotExist:
+                objet_membre = Membre()
+
+                objet_membre.nom = nom
+                objet_membre.prenoms = prenoms
+                objet_membre.nom_prenoms = objet_membre.set_nomprenoms()
+                objet_membre.nomjeunefille = nomjeunefille
+                objet_membre.sexe = Sexe.objects.get(id=sexe)
+                objet_membre.lieunaissance = Commune.objects.get(id=lieu_naissance)
+                objet_membre.date_naissance = date_naissance
+                objet_membre.typepiece = TypePiece.objects.get(id=typepiece)
+                objet_membre.numeropiece = numeropiece
+                objet_membre.nationalite = Nationalite.objects.get(id=nationalite)
+                objet_membre.contact = contact
+                objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
+                objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
+                objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
+                objet_membre.dateenre = datetime.date().today()
+                objet_membre.actif = True # On active l'utilisateur
+                objet_membre.utilisateur = User.objects.get(id=request.user.id)
+
+                # On sauvegarde les données
+                objet_membre.save()
+
+                # On ajoute le champ après la sauvegarde pour utiliser l'id
+                objet_membre.identifiant = objet_membre.set_identifiant()
+                objet_membre.save()
+
+                # On ajoute le secteur agricole en relation
+                MembreSecteurAgricole.objects.create(
+                    membre=objet_membre,
+                    secteuragricole=SecteurAgricole.objects.get(id=cooperative),
+                    date_adhesion=dateadhesion,
+                    numero_carte=numero_carte,
+                )
+
+                messages.success(request,"Enregistrement réussi")
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
 
 
     # PARTIE DU GET -----------------------
-
     typepieces = TypePiece.objects.order_by('id')
     nationalites = Nationalite.objects.order_by('id')
     niveaux = Niveau.objects.order_by('id')

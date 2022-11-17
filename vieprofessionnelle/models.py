@@ -28,8 +28,6 @@ class SecteurActive(models.Model):
     nom = models.CharField(max_length=250, null=False, blank=False)
     presidente = models.CharField(max_length=250, null=True, blank=True, default="")
     contact = models.CharField(max_length=100, null=True, blank=True, default="")
-    date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
-    numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
     gps_longitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Longitude")
     gps_latitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Latitude")
@@ -45,13 +43,12 @@ class Membre(models.Model):
     prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
     nom_prenoms = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="Nom et prénoms")
     actif = models.BooleanField(default=False)
-    numerobadge = models.CharField(max_length=250,null=True,blank=True, default="",verbose_name="N°Badge")
+    numerobadge = models.CharField(max_length=250, default=None, unique=True,verbose_name="N°Badge")
     qrcode = models.CharField(max_length=250,null=False,blank=False, default=None,unique=True,verbose_name="QR Code")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
     date_naissance = models.DateField(default=None, null=True, blank=True, verbose_name="Date de naissance")
-    contact = models.CharField(max_length=50, null=True, blank=True,default="", verbose_name="Contact")
-    adresse = models.CharField(max_length=150, null=True, blank=True,default="", verbose_name="Adresse")
-    numeropiece = models.CharField(max_length=100, null=True, blank=True,default="", verbose_name="N°de la pièce")
+    contact = models.CharField(max_length=50, default=None, unique=True, verbose_name="Contact")
+    numeropiece = models.CharField(max_length=100,default=None, unique=True, verbose_name="N°de la pièce")
 
     # Les relations
     secteurs = models.ManyToManyField(Secteur)
@@ -85,27 +82,51 @@ class SecteurAgricole(SecteurActive):
     superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
     superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
 
-    membres = models.ManyToManyField(Membre)
+    membres = models.ManyToManyField(Membre, through='MembreSecteurAgricole', through_fields=('secteuragricole', 'membre'))
 
     def __str__(self):
         return self.nom
 
+
+class MembreSecteurAgricole(models.Model):
+    membre = models.ForeignKey(Membre,on_delete=models.CASCADE)
+    secteuragricole = models.ForeignKey(SecteurAgricole,on_delete=models.CASCADE)
+    date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
+    numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+
+
 class SecteurInformel(SecteurActive):
     metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
 
-    membres = models.ManyToManyField(Membre)
+    membres = models.ManyToManyField(Membre, through="MembreSecteurInformel", through_fields=('secteurinformel','membre'))
 
     def __str__(self):
         return self.metier.secteur
+
+
+class MembreSecteurInformel(models.Model):
+    membre = models.ForeignKey(Membre,on_delete=models.CASCADE)
+    secteurinformel = models.ForeignKey(SecteurInformel,on_delete=models.CASCADE)
+    date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
+    numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+
 
 class SecteurFemmeActive(SecteurActive):
     personne_ressource = models.ForeignKey(Membre, related_name='personne_membre_set',null=True,blank=True, on_delete=models.SET_NULL)
 
     marche = models.ForeignKey(Marche, null=True,blank=True, on_delete=models.SET_NULL)
-    membres = models.ManyToManyField(Membre)
+    membres = models.ManyToManyField(Membre, through="MembreSecteurFemmeActive", through_fields=('secteurfemmeactive','membre'))
 
     def __str__(self):
         return self.nom
+
+
+class MembreSecteurFemmeActive(models.Model):
+    membre = models.ForeignKey(Membre,on_delete=models.CASCADE)
+    secteurfemmeactive = models.ForeignKey(SecteurFemmeActive,on_delete=models.CASCADE)
+    date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
+    numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+
 
 class TypeParent(models.Model):
     libelle = models.CharField(max_length=100, verbose_name="Libellé", unique=True)
