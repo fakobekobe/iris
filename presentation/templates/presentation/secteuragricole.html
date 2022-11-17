@@ -292,11 +292,82 @@
     <div class="tab-pane fade {{ active_liste|last }}" id="secteur" role="tabpanel" aria-labelledby="secteur-tab">
       <div>
         <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
+          <hr />
         <div class="row">
             <div class="col-md-12">
-                <p>
-                    Suite
-                </p>
+                <!-- Champ de recherche -->
+                <div class="input-group mb-2">
+                    <input type="text" name="recherche_membre" id="recherche_membre" class="form-control w-20" placeholder="Rechercher">
+                </div>
+                <!-- -->
+                <hr />
+
+                <!-- Tableau de recherche -->
+                <div class="row mb-3 pl-2 pr-2">
+
+                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_membre">
+                      <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Nom et prénoms</th>
+                            <th>N°de pièce</th>
+                            <th>Contact</th>
+                            <th>Ville</th>
+                            <th>Date de naissance</th>
+                            <th>Date d'enregistrement</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for membre in membres %}
+                        <tr>
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td>{{membre.nom_prenoms}}</td>
+                            <td >{{membre.numeropiece}}</td>
+                            <td class="text-center">{{membre.contact}}</td>
+                            <td class="text-center">{{membre.quartier.commune.ville.libelle}}</td>
+                            <td class="text-center">{{membre.date_naissance|date:'d/m/Y'}}</td>
+                            <td class="text-center">{{membre.dateenre|date:'d/m/Y'}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#recherche_membre_modifierModal{{membre.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#recherche_membre_supressionmodal{{membre.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="recherche_membre_supressionmodal{{membre.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Membre : <strong>{{membre.nom_prenoms}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_membre' membre.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+
+              </div>
+                <!-- -->
+
             </div>
         </div>
 

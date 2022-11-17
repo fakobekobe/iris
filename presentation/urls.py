@@ -11,4 +11,7 @@ urlpatterns = [
     path('supprimer-secteuragricole/<str:id>', views.supprimer_secteuragricole, name='supprimer_secteuragricole'),
     path('details-niveauscolaire/', views.details_niveauscolaire, name='details_niveauscolaire'),
 
+    # Url du Type Secteur
+    path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),
+
 ]

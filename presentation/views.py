@@ -120,6 +120,7 @@ def ajouter_secteuragricole(request):
     secteuragricoles = SecteurAgricole.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
+    membres = Membre.objects.filter(utilisateur_id=request.user.id).order_by('nom_prenoms')
 
     # Initialisation de l'affichage de l'onglet active
     active_sercteuragricole = ['', 'false', '']
@@ -148,6 +149,7 @@ def ajouter_secteuragricole(request):
         "secteuragricoles": secteuragricoles,
         "typeparents": typeparents,
         "parents": parents,
+        "membres": membres,
 
         "active_sercteuragricole": active_sercteuragricole,
         "active_liste": active_liste,
@@ -182,4 +184,11 @@ def modifier_secteuragricole(request):
 @permission_required('presentation.delete_membre', raise_exception=True)
 def supprimer_secteuragricole(request, id):
   pass
+
+@login_required
+@permission_required('presentation.delete_membre', raise_exception=True)
+def supprimer_membre(request, id):
+  pass
+
+
 # Fin de la Gestion du secteur -------------------------------------
