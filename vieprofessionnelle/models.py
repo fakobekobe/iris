@@ -37,14 +37,14 @@ class SecteurActive(models.Model):
 
 class Membre(models.Model):
     # Les attribues propres
-    identifiant = models.CharField(max_length=12, null=False,blank=False, default=None, unique=True, verbose_name="Identifiant")
+    identifiant = models.CharField(max_length=12, null=True,blank=True, default=None, unique=True, verbose_name="Identifiant")
     nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
     nomjeunefille = models.CharField(max_length=250, null=True,blank=True,default="", verbose_name="Nom de jeune fille")
     prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
-    nom_prenoms = models.CharField(max_length=250, null=False,blank=False, default="", verbose_name="Nom et prénoms")
+    nom_prenoms = models.CharField(max_length=250, null=True,blank=True, default="",db_index=True, verbose_name="Nom et prénoms")
     actif = models.BooleanField(default=False)
-    numerobadge = models.CharField(max_length=250, default=None, unique=True,verbose_name="N°Badge")
-    qrcode = models.CharField(max_length=250,null=False,blank=False, default=None,unique=True,verbose_name="QR Code")
+    numerobadge = models.CharField(max_length=250,null=True,blank=True,  default=None, unique=True,verbose_name="N°Badge")
+    qrcode = models.CharField(max_length=250,null=True,blank=True, default=None,unique=True,verbose_name="QR Code")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
     date_naissance = models.DateField(default=None, null=True, blank=True, verbose_name="Date de naissance")
     contact = models.CharField(max_length=50, default=None, unique=True, verbose_name="Contact")
@@ -94,6 +94,8 @@ class MembreSecteurAgricole(models.Model):
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
 
+    def __str__(self):
+        return self.membre.nom + ' ' + self.secteuragricole.nom
 
 class SecteurInformel(SecteurActive):
     metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
@@ -109,6 +111,9 @@ class MembreSecteurInformel(models.Model):
     secteurinformel = models.ForeignKey(SecteurInformel,on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+
+    def __str__(self):
+        return self.membre.nom + ' ' + self.secteurinformel.nom
 
 
 class SecteurFemmeActive(SecteurActive):
@@ -126,6 +131,9 @@ class MembreSecteurFemmeActive(models.Model):
     secteurfemmeactive = models.ForeignKey(SecteurFemmeActive,on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+
+    def __str__(self):
+        return self.membre.nom + ' ' + self.secteurfemmeactive.nom
 
 
 class TypeParent(models.Model):

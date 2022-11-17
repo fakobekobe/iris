@@ -8,6 +8,7 @@ from etatcivil.models import TypePiece, Nationalite, Niveau, NiveauScolaire, Sit
 from localisation.models import *
 from django.http import JsonResponse
 from django.utils.html import strip_tags
+import datetime
 import os
 
 # Les constatntes et les variables globales
@@ -69,19 +70,20 @@ def ajouter_secteuragricole(request):
 
                 objet_membre.nom = nom
                 objet_membre.prenoms = prenoms
-                objet_membre.nom_prenoms = objet_membre.set_nomprenoms()
+                objet_membre.set_nomprenoms()
                 objet_membre.nomjeunefille = nomjeunefille
-                objet_membre.sexe = Sexe.objects.get(id=sexe)
+                objet_membre.sexe = Sexe.objects.get(code=sexe)
                 objet_membre.lieunaissance = Commune.objects.get(id=lieu_naissance)
                 objet_membre.date_naissance = date_naissance
                 objet_membre.typepiece = TypePiece.objects.get(id=typepiece)
                 objet_membre.numeropiece = numeropiece
                 objet_membre.nationalite = Nationalite.objects.get(id=nationalite)
                 objet_membre.contact = contact
+                objet_membre.numerobadge = None
                 objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
                 objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
                 objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
-                objet_membre.dateenre = datetime.date().today()
+                objet_membre.dateenre = datetime.date.today()
                 objet_membre.actif = True # On active l'utilisateur
                 objet_membre.utilisateur = User.objects.get(id=request.user.id)
 
@@ -89,7 +91,7 @@ def ajouter_secteuragricole(request):
                 objet_membre.save()
 
                 # On ajoute le champ après la sauvegarde pour utiliser l'id
-                objet_membre.identifiant = objet_membre.set_identifiant()
+                objet_membre.set_identifiant()
                 objet_membre.save()
 
                 # On ajoute le secteur agricole en relation
