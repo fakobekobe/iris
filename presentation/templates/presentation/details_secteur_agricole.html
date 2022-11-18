@@ -1,0 +1,76 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="text-primary"><i class="fas fa-user"></i> Détails du membre</h1>
+        <hr />
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white bg-primary">Infos</div>
+            <div class="card-body">
+                <!-- -->
+                <div class="form-row mb-3">
+                    <div class="col mr-3">
+                        <label>Identifiant</label>
+                        <p class="contour-info">
+                            {{membre.identifiant}}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <label>N°de Pièce</label>
+                        <p class="contour-info">
+                            {{membre.numeropiece}}
+                        </p>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="form-row mb-3">
+                    <div class="col mr-3">
+                        <label>Nom et prénoms</label>
+                        <p class="contour-info">
+                            {{membre.nom_prenoms}}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <label>Date de naissance</label>
+                        <p class="contour-info">
+                            {{membre.date_naissance|date:'d/m/Y'}}
+                        </p>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="form-row mb-3">
+                    <div class="col mr-3">
+                        <label>Contact</label>
+                        <p class="contour-info">
+                            {{membre.contact}}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <label>Lieu d'habitation</label>
+                        <p class="contour-info">
+                            {{membre.quartier}}
+                        </p>
+                    </div>
+                </div>
+                <!-- -->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock javascript %}

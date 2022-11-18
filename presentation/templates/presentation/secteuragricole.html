@@ -321,18 +321,19 @@
 
                 <!-- Tableau de recherche -->
                 <div class="row mb-3 pl-2 pr-2">
-
-                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_membre">
+                  <div class="col-md-12">
+                    <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_membre">
                       <thead class="text-center">
                         <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Nom et prénoms</th>
-                            <th>N°de pièce</th>
-                            <th>Contact</th>
-                            <th>Ville</th>
-                            <th>Date de naissance</th>
-                            <th>Date d'enregistrement</th>
-                            <th>Action</th>
+                            <th style="width:5%">N°</th>
+                            <th style="width:30%">Nom et prénoms</th>
+                            <th style="width:30%">Identifiant</th>
+                            <th style="width:12%">N°de pièce</th>
+                            <th style="width:10%">Contact</th>
+                            <th style="width:12%">Ville</th>
+                            <th style="width:8%">Date de naissance</th>
+                            <th style="width:8%">Date d'enregistrement</th>
+                            <th style="width:15%;">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -340,6 +341,7 @@
                         <tr>
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>{{membre.nom_prenoms}}</td>
+                            <td>{{membre.identifiant}}</td>
                             <td >{{membre.numeropiece}}</td>
                             <td class="text-center">{{membre.contact}}</td>
                             <td class="text-center">{{membre.quartier.commune.ville.libelle}}</td>
@@ -383,8 +385,8 @@
                         {% endfor %}
                     </tbody>
                   </table>
-
-              </div>
+                  </div>
+                </div>
                 <!-- -->
 
             </div>
@@ -420,4 +422,5 @@
     <script src="{% static 'presentation/js/datatable.js' %}"></script>
     <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
     <script src="{% static 'presentation/js/table_recherche_parent.js' %}"></script>
+    <script src="{% static 'presentation/js/table_r_membre_sa.js' %}"></script>
 {% endblock javascript %}

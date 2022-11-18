@@ -213,7 +213,16 @@ def ajouter_secteuragricole(request):
 @login_required
 @permission_required('presentation.add_membre', raise_exception=True)
 def detail_secteuragricole(request, id):
-    pass
+    try:
+        membre = Membre.objects.get(id=id)
+    except Membre.DoesNotExist:
+        messages.error(request, "Ce membre n'existe pas.")
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+    context = {
+        'membre': membre,
+    }
+    return render(request, 'presentation/details_secteur_agricole.html', context)
 
 
 @login_required

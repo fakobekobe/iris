@@ -56,6 +56,39 @@ nav div ul li a{
     border:none;
 }
 
+.contour-info{
+    display : block;
+    margin:0px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #e9ecef;
+    border-left: solid 5px #5bc0de;
+    border-radius: 5px;
+}
+
+.contour-danger{
+    display : block;
+    margin:0px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #e9ecef;
+    border-left: solid 5px red;
+    border-radius: 5px;
+}
+
+.contour-warning{
+    display : block;
+    margin:0px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #e9ecef;
+    border-left: solid 5px orange;
+    border-radius: 5px;
+}
+
 /*  Fin Menu nav */
 
 /* Le contenu */
