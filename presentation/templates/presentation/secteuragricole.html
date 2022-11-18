@@ -47,6 +47,11 @@
                                     <div class="card">
                                         <div class="card-header text-white bg-warning">Membre</div>
                                         <div class="card-body">
+
+                                            <!-- -->
+                                            {% block id-membre %}{% endblock id-membre %}
+                                            <!-- -->
+
                                             <!-- -->
                                             {% block sexe %}
                                             <div class="input-group mb-3 justify-content-center">
@@ -91,7 +96,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text label-sans-fond">Date de naissance</span>
                                                 </div>
-                                                <input type="date" name="date_naissance" value="{% now 'Y-m-d' %}" class="form-control" {% block date_naissance %}{% endblock date_naissance %}>
+                                                <input type="date" name="date_naissance"  class="form-control" {% block date_naissance %}value="{% now 'Y-m-d' %}"{% endblock date_naissance %}>
                                             </div>
                                             <!-- -->
 
@@ -104,11 +109,12 @@
                                                     <div class="input-group-append">
                                                         <span class="input-group-text btn btn-success" id="label_naissance_plus" title="Ajouter un lieu de naissance" data-toggle="modal" data-target="#date_de_naissance_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
                                                     </div>
-                                                  <input type="text" hidden name="lieu_naissance" value="" id="lieu_naissance" class="form-control" {% block lieu_naissance %}{% endblock lieu_naissance %}>
+                                                  <input type="text" hidden name="lieu_naissance" id="lieu_naissance" class="form-control" {% block lieu_naissance %}value=""{% endblock lieu_naissance %}>
                                             </div>
                                             <!-- -->
 
                                             <!-- -->
+                                            {% block type-piece %}
                                             <div class="input-group mb-3 justify-content-center">
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text label-sans-fond">Type de pièce : </label>
@@ -122,17 +128,19 @@
                                                 {% endfor %}
 
                                             </div>
+                                            {% endblock type-piece %}
                                             <!-- -->
 
                                             <!-- -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
-                                                  <input type="text" name="numeropiece" class="form-control" placeholder="N° de la pièce" required>
+                                                  <input type="text" name="numeropiece" class="form-control" placeholder="N° de la pièce" {% block numeropiece %}{% endblock numeropiece %} required>
                                                 </div>
                                             </div>
                                             <!-- -->
 
                                             <!-- -->
+                                            {% block nationalite %}
                                             <div class="form-row mb-2">
                                               <select name="nationalite" id="select_nationalite" class="form-control" required>
                                                   <option value="" selected>--- Sélectionnez une nationalité ---</option>
@@ -140,13 +148,14 @@
                                                   <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
                                                   {% endfor %}
                                               </select>
-                                          </div>
+                                            </div>
+                                            {% endblock nationalite %}
                                             <!-- -->
 
                                             <!-- -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
-                                                  <input type="text" name="contact" class="form-control" placeholder="Contacts">
+                                                  <input type="text" name="contact" class="form-control" placeholder="Contacts" {% block contact %}{% endblock contact %}>
                                                 </div>
                                             </div>
                                             <!-- -->
@@ -168,14 +177,14 @@
 
                                                 <!-- -->
                                                 <div class="input-group mb-2">
-                                                      <input type="text" name="cooperative_texte" id="cooperative_texte" value="" class="form-control" placeholder="Nom de la coopérative" readonly>
+                                                      <input type="text" name="cooperative_texte" id="cooperative_texte" {% block cooperative_texte %}value=""{% endblock cooperative_texte %} class="form-control" placeholder="Nom de la coopérative" readonly>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text btn btn-danger" id="label_cooperative_times" title="Annuler"><i class="fas fa-times"></i></span>
                                                         </div>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text btn btn-success" id="label_cooperative_plus" title="Ajouter une coopérative" data-toggle="modal" data-target="#cooperative_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
                                                         </div>
-                                                      <input type="text" hidden name="cooperative" value="" id="cooperative" class="form-control">
+                                                      <input type="text" hidden name="cooperative" {% block cooperative %}value=""{% endblock cooperative %} id="cooperative" class="form-control">
                                                 </div>
                                                 <!-- -->
 
@@ -184,19 +193,20 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text label-sans-fond">Date d'adhésion</span>
                                                     </div>
-                                                    <input type="date" name="dateadhesion" value="{% now 'Y-m-d' %}" class="form-control" >
+                                                    <input type="date" name="dateadhesion" {% block dateadhesion %}value="{% now 'Y-m-d' %}"{% endblock dateadhesion %} class="form-control" >
                                                 </div>
                                                 <!-- -->
 
                                                 <!-- -->
                                                 <div class="form-row mb-2">
                                                     <div class="col">
-                                                      <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre">
+                                                      <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre" {% block numero_carte %}{% endblock numero_carte %}>
                                                     </div>
                                                 </div>
                                                 <!-- -->
 
                                                 <!-- -->
+                                                {% block niveau %}
                                                 <div class="form-row mb-2">
                                                     <select name="niveau" id="niveau" class="form-control" required>
                                                         <option value="" selected>--- Sélectionnez un niveau ---</option>
@@ -205,14 +215,17 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
+                                                {% endblock niveau %}
                                                 <!-- -->
 
                                                 <!-- -->
+                                                {% block niveauscolaire %}
                                                 <div class="form-row mb-2">
                                                     <select name="niveauscolaire" id="niveauscolaire" class="form-control" required>
                                                         <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
                                                     </select>
                                                 </div>
+                                                {% endblock niveauscolaire %}
                                                 <!-- -->
 
                                             </div>
@@ -229,6 +242,7 @@
                                             <div class="card-body">
 
                                                 <!-- -->
+                                                {% block situationmatrimoniale %}
                                                 <div class="input-group mb-3 justify-content-center">
 
                                                     {% for situationmatrimoniale in situationmatrimoniales %}
@@ -239,18 +253,19 @@
                                                     {% endfor %}
 
                                                 </div>
+                                                {% endblock situationmatrimoniale %}
                                                 <!-- -->
 
                                                 <!-- -->
                                                 <div class="input-group mb-2">
-                                                    <input type="text" name="label_lieu_habitation" id="label_lieu_habitation" class="form-control" placeholder="Lieu d'habitation" readonly>
+                                                    <input type="text" name="label_lieu_habitation" id="label_lieu_habitation" class="form-control" placeholder="Lieu d'habitation" {% block label_lieu_habitation %}{% endblock label_lieu_habitation %} readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text btn btn-danger" id="lieu_habitation_times" title="Annuler"><i class="fas fa-times"></i></span>
                                                     </div>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text btn btn-success" id="label_lieu_habitation_plus" title="Ajouter un lieu d'habitation" data-toggle="modal" data-target="#lieu_habitation_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
                                                     </div>
-                                                    <input type="text" hidden name="lieu_habitation" value="" id="lieu_habitation" class="form-control">
+                                                    <input type="text" hidden name="lieu_habitation" id="lieu_habitation" class="form-control" {% block lieu_habitation %}value=""{% endblock lieu_habitation %}>
                                                 </div>
                                                 <!-- -->
 
@@ -266,7 +281,7 @@
 
                             <!-- -->
                             <div class="input-group mb-3 justify-content-center">
-                                <input type="submit" value="Enregistrer" name="envoyer_fiche" class="btn btn-primary mr-3">
+                                <input type="submit" id="envoyer_fiche" {% block envoyer_fiche %}value="Enregistrer"{% endblock envoyer_fiche %} name="envoyer_fiche" class="btn btn-primary mr-3">
                                 <input type="reset" value="Annuler" class="btn btn-danger">
                             </div>
                             <!-- -->

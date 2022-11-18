@@ -413,63 +413,61 @@ $(document).ready(function(){
 
 
 // CONTROL DE L'ENVOI DES DONNEES ****************************************
-    var envoyer_fiche = $('input[name=envoyer_fiche]');
+    var envoyer_fiche = $('#envoyer_fiche');
     var nom = $('input[name=nom]');
     var date_naissance = $('input[name=date_naissance]');
     var numeropiece = $('input[name=numeropiece]');
     var nationalite = $('select[name=nationalite]');
     var contact = $('input[name=contact]');
+    var valider = true;
 
     envoyer_fiche.click(function(e){
         e.preventDefault();
 
         if(!nom.val()){
+            valider = false;
             alert("Veuillez renseigner le nom.");
             nom.focus();
-        }
-
-        if(!date_naissance.val()){
+        }else if(!date_naissance.val()){
+            valider = false;
             alert("Veuillez renseigner la date de naissance.");
             date_naissance.focus();
-        }
-
-        if(!numeropiece.val()){
+        }else if(!numeropiece.val()){
+            valider = false;
             alert("Veuillez renseigner le numéro de la pièce.");
             numeropiece.focus();
-        }
-
-        if(!nationalite.val()){
+        }else if(!nationalite.val()){
+            valider = false;
             alert("Veuillez selectionner la nationalité.");
             nationalite.focus();
-        }
-
-        if(!contact.val()){
+        }else if(!contact.val()){
+            valider = false;
             alert("Veuillez renseigner le contact.");
             contact.focus();
-        }
-
-        if(!cooperative.val()){
+        }else if(!cooperative.val()){
+            valider = false;
             alert("Veuillez ajouter une coopérative.");
             cooperative_texte.focus();
-        }
-
-        if(!niveau.val()){
+        }else if(!niveau.val()){
+            valider = false;
             alert("Veuillez selectionner le niveau.");
             niveau.focus();
-        }
-
-        if(!niveauscolaire.val()){
+        }else if(!niveauscolaire.val()){
+            valider = false;
             alert("Veuillez selectionner le niveau scolaire.");
             niveauscolaire.focus();
-        }
-
-        if(!lieu_habitation.val()){
+        }else if(!lieu_habitation.val()){
+            valider = false;
             alert("Veuillez ajouter le lieu d'habitation.");
             label_lieu_habitation.focus();
+        }else{
+            valider = true;
+        }
+        if(valider){
+            // On envoi le formulaire
+            $('#form_fiche').submit();
         }
 
-        // On envoi le formulaire
-        $('#form_fiche').submit();
 
     });
 

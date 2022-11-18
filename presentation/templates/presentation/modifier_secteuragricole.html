@@ -1,5 +1,9 @@
 {% extends 'presentation/secteuragricole.html' %}
 
+{% block id-membre %}
+<input class="form-control" type="text" name="id" value="{{membre_actif.id}}" hidden>
+{% endblock id-membre %}
+
 {% block sexe %}
     <div class="input-group mb-3 justify-content-center">
         <div class="input-group-prepend">
@@ -24,3 +28,117 @@
 {% block date_naissance %}value="{{membre_actif.date_naissance|date:'Y-m-d'}}"{% endblock date_naissance %}
 {% block lieunaissancetexte %}value="{{membre_actif.lieunaissance.libelle}}"{% endblock lieunaissancetexte %}
 {% block lieu_naissance %}value="{{membre_actif.lieunaissance.id}}"{% endblock lieu_naissance %}
+
+<!-- -->
+{% block type-piece %}
+    <div class="input-group mb-3 justify-content-center">
+        <div class="input-group-prepend">
+            <label class="input-group-text label-sans-fond">Type de pièce : </label>
+        </div>
+
+        {% for typepiece in typepieces %}
+        {% if typepiece.id == membre_actif.typepiece.id %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="typepiece" id="typepiece{{typepiece.id}}" value="{{typepiece.id}}" checked >
+            <label class="form-check-label" for="typepiece{{typepiece.id}}">{{typepiece.type}}</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="typepiece" id="typepiece{{typepiece.id}}" value="{{typepiece.id}}" >
+            <label class="form-check-label" for="typepiece{{typepiece.id}}">{{typepiece.type}}</label>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+{% endblock type-piece %}
+<!-- -->
+
+{% block numeropiece %}value="{{membre_actif.numeropiece}}"{% endblock numeropiece %}
+
+{% block nationalite %}
+<div class="form-row mb-2">
+    <select name="nationalite" id="select_nationalite" class="form-control" required>
+        <option value="">--- Sélectionnez une nationalité ---</option>
+        {% for nationalite in nationalites %}
+        {% if nationalite.id == membre_actif.nationalite.id %}
+        <option value="{{nationalite.id}}" selected>{{nationalite.nationalite|capfirst}}</option>
+        {% else %}
+        <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock nationalite %}
+
+{% block contact %}value="{{membre_actif.contact}}"{% endblock contact %}
+
+<!-- -->
+{% block niveau %}
+<div class="form-row mb-2">
+    <select name="niveau" id="niveau" class="form-control" required>
+        <option value="">--- Sélectionnez un niveau ---</option>
+        {% for niveau in niveaux %}
+        {% if niveau.id == membre_actif.niveauscolaire.niveau.id %}
+        <option value="{{niveau.id}}" selected>{{niveau.niveau|upper}}</option>
+        {% else %}
+        <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock niveau %}
+<!-- -->
+
+<!-- -->
+{% block niveauscolaire %}
+<div class="form-row mb-2">
+    <select name="niveauscolaire" id="niveauscolaire" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
+        {% for niveau in niveaux %}
+            {% if niveau.id == membre_actif.niveauscolaire.niveau.id %}
+                {% for niveauscolaire in niveauscolaires %}
+                    {% if niveau.id == niveauscolaire.niveau.id %}
+                        {% if niveauscolaire.id == membre_actif.niveauscolaire.id %}
+                        <option value="{{niveauscolaire.id}}" selected>{{niveauscolaire.classe|upper}}</option>
+                        {% else %}
+                        <option value="{{niveauscolaire.id}}" >{{niveauscolaire.classe|upper}}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock niveauscolaire %}
+<!-- -->
+
+{% block cooperative_texte %}value="{{membre_secteuragricole.secteuragricole.nom}}"{% endblock cooperative_texte %}
+{% block cooperative %}value="{{membre_secteuragricole.secteuragricole.id}}"{% endblock cooperative %}
+{% block dateadhesion %}value="{{membre_secteuragricole.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
+{% block numero_carte %}value="{{membre_secteuragricole.numero_carte}}"{% endblock numero_carte %}
+
+{% block situationmatrimoniale %}
+<div class="input-group mb-3 justify-content-center">
+
+    {% for situationmatrimoniale in situationmatrimoniales %}
+    {% if situationmatrimoniale.id == membre_actif.situationmatrimoniale.id %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="situationmatrimoniale" id="situationmatrimoniale{{situationmatrimoniale.id}}" value="{{situationmatrimoniale.id}}" checked>
+        <label class="form-check-label" for="situationmatrimoniale{{situationmatrimoniale.id}}">{{situationmatrimoniale.situation}}</label>
+    </div>
+    {% else %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="situationmatrimoniale" id="situationmatrimoniale{{situationmatrimoniale.id}}" value="{{situationmatrimoniale.id}}">
+        <label class="form-check-label" for="situationmatrimoniale{{situationmatrimoniale.id}}">{{situationmatrimoniale.situation}}</label>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+{% endblock situationmatrimoniale %}
+
+{% block label_lieu_habitation %}value="{{membre_actif.quartier.libelle}}"{% endblock label_lieu_habitation %}
+{% block lieu_habitation %}value="{{membre_actif.quartier.id}}"{% endblock lieu_habitation %}
+
+{% block envoyer_fiche %}value="Modifier"{% endblock envoyer_fiche %}

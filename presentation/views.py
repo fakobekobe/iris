@@ -13,6 +13,7 @@ import os
 
 # Les constatntes et les variables globales
 _active_onglet = "" # Variable globale pour l'activation des onglets
+_active_session = False # Variable globale pour l'activation des onglets
 
 
 # Gestion du secteur -----------------------------------------------
@@ -38,6 +39,10 @@ def index(request):
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def ajouter_secteuragricole(request):
 
+    # Les variables
+    il_existe = True
+    global _active_session
+
     if request.method == "POST":
         # On récupère les données
         sexe = strip_tags(request.POST.get('sexe', None))# On rétire les tag (<>)
@@ -60,14 +65,27 @@ def ajouter_secteuragricole(request):
         if not date_naissance:
             date_naissance = None
 
-        if nom and date_naissance and numeropiece and contact and cooperative and lieu_habitation:
-            # On véruifie si ce membre existe déjà car le numeropiece et le contact sont uniques
-            try:
-                Membre.objects.get(numeropiece=numeropiece, contact=contact)
-                messages.error(request, "Ce membre existe déjà.")
-            except Membre.DoesNotExist:
-                objet_membre = Membre()
+        if not dateadhesion:
+            dateadhesion = None
 
+        if nom and date_naissance and numeropiece and contact and cooperative and lieu_habitation:
+            if not request.session.get('id_membre'): # On traite la modification
+                # On vérifie si ce membre existe déjà car le numeropiece et le contact sont uniques
+                try:
+                    Membre.objects.get(numeropiece=numeropiece, contact=contact)
+                    messages.error(request, "Ce membre existe déjà.")
+                    il_existe = False
+                except Membre.DoesNotExist:
+                    objet_membre = Membre()
+            else:
+                # On vérifie si le membre à modifier existe
+                try:
+                    objet_membre = Membre.objects.get(id=request.session.get('id_membre'))
+                except Membre.DoesNotExist:
+                    messages.error(request, "Ce membre n'existe pas.")
+                    il_existe = False
+
+            if il_existe: # Si la valeur est True on entre dans la condition
                 objet_membre.nom = nom
                 objet_membre.prenoms = prenoms
                 objet_membre.set_nomprenoms()
@@ -83,34 +101,61 @@ def ajouter_secteuragricole(request):
                 objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
                 objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
                 objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
-                objet_membre.dateenre = datetime.date.today()
+
+                if not request.session.get('id_membre'):
+                    objet_membre.dateenre = datetime.date.today()
+
                 objet_membre.actif = True # On active l'utilisateur
                 objet_membre.utilisateur = User.objects.get(id=request.user.id)
 
                 # On sauvegarde les données
                 objet_membre.save()
 
-                # On ajoute le champ après la sauvegarde pour utiliser l'id
-                objet_membre.set_identifiant()
-                objet_membre.save()
+                if not request.session.get('id_membre'):
+                    # On ajoute le champ après la sauvegarde pour utiliser l'id
+                    objet_membre.set_identifiant()
+                    objet_membre.save()
 
-                # On ajoute le secteur agricole en relation
-                MembreSecteurAgricole.objects.create(
-                    membre=objet_membre,
-                    secteuragricole=SecteurAgricole.objects.get(id=cooperative),
-                    date_adhesion=dateadhesion,
-                    numero_carte=numero_carte,
-                )
+                    # On ajoute le secteur agricole en relation
+                    MembreSecteurAgricole.objects.create(
+                        membre=objet_membre,
+                        secteuragricole=SecteurAgricole.objects.get(id=cooperative),
+                        date_adhesion=dateadhesion,
+                        numero_carte=numero_carte,
+                    )
 
-                messages.success(request,"Enregistrement réussi")
+                    messages.success(request, "Enregistrement réussi")
+
+                else:
+                    try:
+                        membresecteura = MembreSecteurAgricole.objects.get(membre = objet_membre)
+                        membresecteura.secteuragricole = SecteurAgricole.objects.get(id=cooperative)
+                        membresecteura.date_adhesion = dateadhesion
+                        membresecteura.numero_carte = numero_carte
+                        membresecteura.save()
+
+                        messages.success(request, "Modification réussi")
+                    except MembreSecteurAgricole.DoesNotExist:
+                        pass
+
+                    del request.session['id_membre'] # On détruit la variable
+
         else:
             messages.error(request, "Veuillez renseigner les champs.")
 
 
     # PARTIE DU GET -----------------------
+    if not _active_session :
+        if request.session.get('id_membre'):
+            del request.session['id_membre']
+
+    if _active_session and request.session.get('id_membre'):
+        _active_session = False
+
     typepieces = TypePiece.objects.order_by('id')
     nationalites = Nationalite.objects.order_by('id')
     niveaux = Niveau.objects.order_by('id')
+    niveauscolaires = NiveauScolaire.objects.order_by('id')
     situationmatrimoniales = SituationMatrimoniale.objects.order_by('id')
     districts = District.objects.order_by("libelle")
     regions = Region.objects.order_by("libelle")
@@ -140,6 +185,7 @@ def ajouter_secteuragricole(request):
         'typepieces': typepieces,
         'nationalites': nationalites,
         'niveaux': niveaux,
+        'niveauscolaires': niveauscolaires,
         'situationmatrimoniales': situationmatrimoniales,
         "districts": districts,
         "regions": regions,
@@ -158,6 +204,7 @@ def ajouter_secteuragricole(request):
     if request.session.get('id_membre'): # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
+        context["membre_secteuragricole"] = MembreSecteurAgricole.objects.get(membre_id=request.session.get('id_membre'))
         return render(request, "presentation/modifier_secteuragricole.html", context)
 
     return render(request,"presentation/secteuragricole.html", context)
@@ -188,6 +235,9 @@ def details_niveauscolaire(request):
 @permission_required('presentation.change_membre', raise_exception=True)
 def modifier_secteuragricole(request,id):
     global _active_onglet
+    global _active_session
+
+    _active_session = True
     _active_onglet = "active_secteuragricole"  # On initialise la variable
     request.session['id_membre'] = id
 

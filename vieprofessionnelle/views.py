@@ -861,7 +861,7 @@ def ajouter_cooperative(request):
                 secteur_agricole.gps_longitude = gps_longitude
                 secteur_agricole.gps_latitude = gps_latitude
                 secteur_agricole.dateenre = dateenre
-                secteur_agricole.date_adhesion = None
+                #secteur_agricole.date_adhesion = None
 
                 secteur_agricole.save()
 
