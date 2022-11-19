@@ -16,7 +16,7 @@ _active_onglet = "" # Variable globale pour l'activation des onglets
 _active_session = False # Variable globale pour l'activation des onglets
 
 
-# Gestion du secteur -----------------------------------------------
+# Gestion du secteur agricole-----------------------------------------------
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def index(request):
@@ -211,7 +211,7 @@ def ajouter_secteuragricole(request):
 
 
 @login_required
-@permission_required('presentation.add_membre', raise_exception=True)
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def detail_secteuragricole(request, id):
     try:
         membre = Membre.objects.get(id=id)
@@ -219,8 +219,14 @@ def detail_secteuragricole(request, id):
         messages.error(request, "Ce membre n'existe pas.")
         return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+    typesecteurs = TypeSecteur.objects.order_by('id')
+    secteurs = Secteur.objects.filter(membre=membre).order_by('secteur')
+
     context = {
+        'title': "Détials du membre",
         'membre': membre,
+        'typesecteurs': typesecteurs,
+        'secteurs': secteurs,
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
@@ -241,7 +247,7 @@ def details_niveauscolaire(request):
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
-@permission_required('presentation.change_membre', raise_exception=True)
+@permission_required('vieprofessionnelle.change_membre', raise_exception=True)
 def modifier_secteuragricole(request,id):
     global _active_onglet
     global _active_session
@@ -253,7 +259,7 @@ def modifier_secteuragricole(request,id):
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
-@permission_required('presentation.delete_membre', raise_exception=True)
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_secteuragricole(request, id):
     global _active_onglet
     _active_onglet = "active_liste"  # On initialise la variable
@@ -273,9 +279,48 @@ def supprimer_secteuragricole(request, id):
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
-@permission_required('presentation.delete_membre', raise_exception=True)
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_secteur_membre(request):
+    if request.method == "POST":
+        id_membre_secteur = request.POST.get('id_membre_secteur', None)
+        select_secteur = request.POST.get('select_secteur', None)
+
+        if id_membre_secteur and select_secteur:
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_secteur)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                secteur = Secteur.objects.get(id=select_secteur)
+            except Secteur.DoesNotExist:
+                data = {"libelle": "Ce secteur d'activité n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le secteur au membre
+            membre.secteurs.add(secteur)
+
+            # On récupère tous les secteurs du membre
+            secteurs = Secteur.objects.filter(membre=id_membre_secteur).order_by('secteur')
+
+            if secteurs:
+                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type} for secteur in secteurs]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle":"Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_membre(request, id):
     pass
 
 
-# Fin de la Gestion du secteur -------------------------------------
+# Fin de la Gestion du secteur agricole -------------------------------------

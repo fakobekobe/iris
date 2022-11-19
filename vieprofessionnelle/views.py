@@ -276,6 +276,22 @@ def supprimer_secteur(request, id):
         messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+@login_required
+@permission_required('vieprofessionnelle.add_secteur', raise_exception=True)
+def details_secteur(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_secteur = Secteur.objects.filter(typesecteur=id).order_by('secteur')
+
+            if ajax_secteur:
+                data = [{'id': secteur.id, 'libelle': secteur.secteur} for secteur in ajax_secteur]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du secteur -------------------------------------
 
 # Gestion du type de parent -----------------------------------------------

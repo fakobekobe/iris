@@ -14,6 +14,7 @@ urlpatterns = [
     path('ajouter-secteur', views.ajouter_secteur, name='ajouter_secteur'),
     path('modifier-secteur', views.modifier_secteur, name='modifier_secteur'),
     path('supprimer-secteur/<str:id>', views.supprimer_secteur, name='supprimer_secteur'),
+    path('details-secteur', views.details_secteur, name='details_secteur'),
 
     # Url Type de Parent
     path('ajouter-typeparent', views.ajouter_typeparent, name='ajouter_typeparent'),

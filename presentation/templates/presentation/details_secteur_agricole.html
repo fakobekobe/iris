@@ -9,9 +9,10 @@
         <hr />
     </div>
 
+    <!-- Informations -->
     <div class="col-md-12 mb-3">
         <div class="card">
-            <div class="card-header text-white bg-primary">Infos</div>
+            <div class="card-header text-white text-center bg-primary">INFORMATIONS</div>
             <div class="card-body">
                 <!-- -->
                 <div class="form-row mb-3">
@@ -67,10 +68,129 @@
             </div>
         </div>
     </div>
+    <!-- -->
 
+    <!-- Secteur d'activité -->
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white text-center bg-info">SECTEUR D'ACTIVITE</div>
+            <div class="card-body">
+                <form action="post" method="#">
+                    {% csrf_token %}
+                    <input type="text" name="id_membre_secteur" id="id_membre_secteur" value="{{membre.id}}" hidden>
+                    <fieldset style="border:1px solid #CCC; margin-bottom:10px; padding:5px;">
+                    <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                        Ajouter un secteur d'activité au membre
+                    </legend>
+                    <!-- -->
+                    <div class="form-row mb-2">
+                        <div class="col-md-5">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="select_typesecteur"><i class="fas fa-tasks"></i></label>
+                                </div>
+
+                                <select name="select_typesecteur" id="select_typesecteur" class="form-control" required>
+                                    <option value="" selected>--- Sélectionnez un type de secteur ---</option>
+                                    {% for typesecteur in typesecteurs %}
+                                    <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="select_secteur"><i class="fas fa-hospital-user"></i></label>
+                                </div>
+
+                                <select name="select_secteur" id="select_secteur" class="form-control" required>
+                                    <option value="" selected>--- Sélectionnez un secteur d'activité ---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <!-- -->
+                            <div class="input-group mb-3 justify-content-center">
+                                <button type="submit" id="envoyer_secteur" name="envoyer_secteur" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> Ajouter
+                                </button>
+                            </div>
+                            <!-- -->
+                        </div>
+                    </div>
+                    <!-- -->
+                    <hr />
+
+                    <!-- Table -->
+                    <table class="table table-hover table-responsive-md text-center" id="tablesecteur">
+                        <thead>
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Type de secteur</th>
+                            <th>Secteur d'activité</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for secteur in secteurs %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{secteur.typesecteur|upper}}</td>
+                            <td>{{secteur.secteur|capfirst}}</td>
+                            <td class="text-center">
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#secteursupprimermodal{{secteur.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="secteursupprimermodal{{secteur.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>
+                                                    Secteur : <strong>{{secteur.secteur|capfirst}}</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+
+                                                <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_secteur' secteur.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                </form>
+                                                <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="text-center">
+                            <td colspan="4" class="text-center">
+                                La liste est vide
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- -->
+                </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- -->
 </div>
 
 {% endblock %}
 
 {% block javascript %}
+<script src="{% static 'presentation/js/details_secteur_activite.js' %}"></script>
 {% endblock javascript %}
