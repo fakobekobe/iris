@@ -12,6 +12,7 @@ urlpatterns = [
     path('details-secteuragricole/<str:id>', views.detail_secteuragricole, name='detail_secteuragricole'),
     path('details-niveauscolaire/', views.details_niveauscolaire, name='details_niveauscolaire'),
     path('ajouter-secteur-membre', views.ajouter_secteur_membre, name='ajouter_secteur_membre'),
+    path('supprimer-secteur-membre', views.supprimer_secteur_membre, name='supprimer_secteur_membre'),
 
     # Url du Type Secteur
     #path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),

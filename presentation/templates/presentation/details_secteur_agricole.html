@@ -157,11 +157,12 @@
                                             </div>
                                             <div class="modal-footer justify-content-center">
 
-                                                <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_secteur' secteur.id %}">
+                                                <form style="display:inline-block; text-align:center" method="post" action="#">
                                                     {% csrf_token %}
-                                                    <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    <input type="text" name="id_membre_secteur_s" id="id_membre_secteur_s{{secteur.id}}" value="{{membre.id}}" hidden>
+                                                    <button type="submit" name="supprimer_s" value="{{secteur.id}}" class="btn btn-success btn-sm">Oui</button>
                                                 </form>
-                                                <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+                                                <button class="btn btn-danger btn-sm" name="annuler_s" data-dismiss="modal">Non</button>
 
                                             </div>
                                         </div>

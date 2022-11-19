@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 from vieprofessionnelle.models import *
 from django.contrib.auth.decorators import login_required, permission_required
@@ -307,7 +310,7 @@ def ajouter_secteur_membre(request):
             secteurs = Secteur.objects.filter(membre=id_membre_secteur).order_by('secteur')
 
             if secteurs:
-                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type} for secteur in secteurs]
+                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type,} for secteur in secteurs]
 
                 return JsonResponse({'data': data}, status=200)
 
@@ -316,6 +319,47 @@ def ajouter_secteur_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_secteur_membre(request):
+    if request.method == "POST":
+        id_membre_secteur_s = request.POST.get('id_membre_secteur_s', None)
+        supprimer_s = request.POST.get('supprimer_s', None)
+
+        if id_membre_secteur_s and supprimer_s:
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_secteur_s)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                secteur = Secteur.objects.get(id=supprimer_s)
+            except Secteur.DoesNotExist:
+                data = {"libelle": "Ce secteur d'activité n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le secteur au membre
+            membre.secteurs.remove(secteur)
+
+            # On récupère tous les secteurs du membre
+            secteurs = Secteur.objects.filter(membre=id_membre_secteur_s).order_by('secteur')
+
+            if secteurs:
+                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type,} for secteur in secteurs]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
