@@ -284,9 +284,9 @@ def supprimer_secteuragricole(request, id):
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def ajouter_secteur_membre(request):
-    if request.method == "POST":
-        id_membre_secteur = request.POST.get('id_membre_secteur', None)
-        select_secteur = request.POST.get('select_secteur', None)
+    if request.method == "GET":
+        id_membre_secteur = request.GET.get('id_membre_secteur', None)
+        select_secteur = request.GET.get('select_secteur', None)
 
         if id_membre_secteur and select_secteur:
             try:
@@ -310,7 +310,7 @@ def ajouter_secteur_membre(request):
             secteurs = Secteur.objects.filter(membre=id_membre_secteur).order_by('secteur')
 
             if secteurs:
-                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type,} for secteur in secteurs]
+                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type, 'id_membre': id_membre_secteur} for secteur in secteurs]
 
                 return JsonResponse({'data': data}, status=200)
 
@@ -320,13 +320,12 @@ def ajouter_secteur_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
-
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_secteur_membre(request):
-    if request.method == "POST":
-        id_membre_secteur_s = request.POST.get('id_membre_secteur_s', None)
-        supprimer_s = request.POST.get('supprimer_s', None)
+    if request.method == "GET":
+        id_membre_secteur_s = request.GET.get('id_membre_secteur_s', None)
+        supprimer_s = request.GET.get('supprimer_s', None)
 
         if id_membre_secteur_s and supprimer_s:
             try:
@@ -350,7 +349,7 @@ def supprimer_secteur_membre(request):
             secteurs = Secteur.objects.filter(membre=id_membre_secteur_s).order_by('secteur')
 
             if secteurs:
-                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type,} for secteur in secteurs]
+                data = [{'id': secteur.id, 'secteur': secteur.secteur, 'typesecteur': secteur.typesecteur.type, 'id_membre' : id_membre_secteur_s} for secteur in secteurs]
 
                 return JsonResponse({'data': data}, status=200)
 
@@ -359,7 +358,6 @@ def supprimer_secteur_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
-
 
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
