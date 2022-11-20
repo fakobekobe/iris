@@ -245,11 +245,8 @@ $(document).ready(function(){
         }
 
         if(valider_d){
-            // On envoie le formulaire
-            form_document.submit(function(e){
-                 e.preventDefault();
                 // On instancie un objet formulaire pour l'envoi des champs du formulaire
-                var formData = new FormData(this);
+                var formData = new FormData(form_document[0]);
 
                 // On utilise ajax pour transmetre les données
                 $.ajax({
@@ -274,7 +271,7 @@ $(document).ready(function(){
                                     <td class="text-center">
                                         <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="documentupprimermodal` + valeur.id + `" role="dialog">
+                                        <div class="modal fade" id="documentsupprimermodal` + valeur.id + `" role="dialog">
                                             <div class="modal-dialog">
 
                                                 <!-- Modal content-->
@@ -320,8 +317,6 @@ $(document).ready(function(){
                     processData: false,
                 });
 
-            });
-
         }
 
     });
@@ -329,60 +324,61 @@ $(document).ready(function(){
 
 // ******************* GESTION DE LA SUPPRESSION D'UN DOCUMENT *****************************
     function supprimer_ligne_document(){
-        var supprimer_s = $('button[name=supprimer_s]');
-        var annuler_s = $('button[name=annuler_s]');
+        var supprimer_d = $('button[name=supprimer_d]');
+        var annuler_d = $('button[name=annuler_d]');
 
         // Traitement AJAX
-        supprimer_s.each(function(){
+        supprimer_d.each(function(){
             $(this).click(function(e){
                 e.preventDefault();
 
                 // On utilise ajax pour transmetre les données
                 $.ajax({
-                    url: "/presentation/supprimer-secteur-membre", // On ajoute l'url absolue en commençant par la racine
+                    url: "/presentation/supprimer-document-membre", // On ajoute l'url absolue en commençant par la racine
                     type: 'get',
                     data: {
-                        id_membre_secteur_s: $('#id_membre_secteur_s'+$(this).val()).val(),
-                        supprimer_s: $(this).val(),
+                        id_membre_document_s: $('#id_membre_document_s'+$(this).val()).val(),
+                        supprimer_d: $(this).val(),
                     },
                     success: function(data){
 
                         // On vide le contenu
-                        tablesecteur.html('');
+                        tabledocument.html('');
 
                         // On remplit les champs
                         $.each(data.data, function(k, valeur){
                             k++; // On incrémente la variable à chaque fois pour avoir le nombre exacte car la variable débute par 0
-                            tablesecteur.append(`
+                            tabledocument.append(`
 
                                 <tr>
                                     <td>` + k + `</td>
-                                    <td>` + valeur.typesecteur + `</td>
-                                    <td>` + valeur.secteur + `</td>
-                                    <td class='text-center'>
-                                        <button type='button' title='Supprimer' class='btn btn-outline-danger btn-sm' data-toggle='modal' data-target='#secteursupprimermodal` + valeur.id + `' data-backdrop='static'><i class='fas fa-trash-alt'></i></button>
+                                    <td>` + valeur.typedocument.toUpperCase() + `</td>
+                                    <td class="text-center"><img src="` + valeur.photo + `" alt="` + valeur.photo_name + `" title="` + valeur.photo_name + `" class="img-thumbnail image-petite" ></td>
+                                    <td>` + valeur.dateenre + `</td>
+                                    <td class="text-center">
+                                        <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                         <!-- Modal -->
-                                        <div class='modal fade' id='secteursupprimermodal` + valeur.id + `' role='dialog'>
-                                            <div class='modal-dialog'>
+                                        <div class="modal fade" id="documentsupprimermodal` + valeur.id + `" role="dialog">
+                                            <div class="modal-dialog">
 
                                                 <!-- Modal content-->
-                                                <div class='modal-content'>
-                                                    <div class='modal-header'>
-                                                        <h4 class='modal-title'>Confirmez-vous la suppression ?</h4>
-                                                        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
-                                                    <div class='modal-body'>
+                                                    <div class="modal-body">
                                                         <h5>
-                                                            Secteur : <strong>` + valeur.secteur + `</strong>
+                                                            Document : <strong>` + valeur.typedocument + `</strong>
                                                         </h5>
                                                     </div>
-                                                    <div class='modal-footer justify-content-center'>
+                                                    <div class="modal-footer justify-content-center">
 
-                                                        <form style='display:inline-block; text-align:center' method='get' action='#'>
-                                                            <input type='text' name='id_membre_secteur_s' id='id_membre_secteur_s` + valeur.id + `' value='` + valeur.id_membre + `' hidden>
-                                                            <button type='submit' name='supprimer_s' value='` + valeur.id + `' class='btn btn-success btn-sm'>Oui</button>
+                                                        <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                            <input type="text" name="id_membre_document_s" id="id_membre_document_s` + valeur.id + `" value="` + valeur.id_membre + `" hidden>
+                                                            <button type="submit" name="supprimer_d" value="` + valeur.id + `" class="btn btn-success btn-sm">Oui</button>
                                                         </form>
-                                                        <button class='btn btn-danger btn-sm' name='annuler_s' data-dismiss='modal'>Non</button>
+                                                        <button class="btn btn-danger btn-sm" name="annuler_d" data-dismiss="modal">Non</button>
 
                                                     </div>
                                                 </div>
@@ -397,8 +393,8 @@ $(document).ready(function(){
 
                         });
 
-                        annuler_s.trigger('click');
-                        supprimer_ligne_secteur();
+                        annuler_d.trigger('click');
+                        supprimer_ligne_document();
                     },
                     statusCode: {
                         404: function(data){

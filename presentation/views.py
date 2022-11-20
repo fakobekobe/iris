@@ -366,7 +366,7 @@ def ajouter_document_membre(request):
         id_membre_document = request.POST.get('id_membre_document', None)
         typedocument = request.POST.get('select_typedocument', None)
         dateenre = request.POST.get('dateenre_d', None)
-
+        print(dateenre)
         if id_membre_document and typedocument:
             if not dateenre:
                 dateenre = None
@@ -398,11 +398,13 @@ def ajouter_document_membre(request):
             objet_document.photo = photo
             objet_document.save()
 
-            # On récupère tous les document du membre
+            # On récupère tous les documents du membre
             documents = Document.objects.filter(membre=membre).order_by('id')
 
             if documents:
-                data = [{'id': document.id, 'photo': document.photo.url, 'photo_name': document.photo.name, 'typedocument': document.typedocument.libelle, 'id_membre': id_membre_document, 'dateenre': document.dateenre} for document in documents]
+                data = [{'id': document.id, 'photo': document.photo.url, 'photo_name': document.photo.name,
+                         'typedocument': document.typedocument.libelle, 'id_membre': id_membre_document,
+                         'dateenre': document.dateenre.strftime('%d/%m/%Y')} for document in documents]
 
                 return JsonResponse({'data': data}, status=200)
 
@@ -412,6 +414,55 @@ def ajouter_document_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_document_membre(request):
+    if request.method == "GET":
+        id_membre_document_s = request.GET.get('id_membre_document_s', None)
+        supprimer_d = request.GET.get('supprimer_d', None)
 
+        if id_membre_document_s and supprimer_d:
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_document_s)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                document = Document.objects.get(id=supprimer_d)
+            except Document.DoesNotExist:
+                data = {"libelle": "Ce document n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le secteur au membre
+            if document:
+                try:
+                    if document.photo.size > 0:
+                        # On ne supprime pas l'image par défaut
+                        if document.photo != "profil.png":
+                            os.remove(document.photo.path)
+                        document.delete()
+                except FileNotFoundError:
+                    data = {"libelle": "Ce document n'existe pas."}
+                    return JsonResponse({'data': data}, status=404)
+
+            # On récupère tous les documents du membre
+            documents = Document.objects.filter(membre=membre).order_by('id')
+
+            if documents:
+                data = [{'id': document.id, 'photo': document.photo.url, 'photo_name': document.photo.name,
+                        'typedocument': document.typedocument.libelle, 'id_membre': id_membre_document_s,
+                        'dateenre': document.dateenre.strftime('%d/%m/%Y')} for document in documents]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 # Fin de la Gestion du secteur agricole -------------------------------------

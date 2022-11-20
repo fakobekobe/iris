@@ -14,6 +14,7 @@ urlpatterns = [
     path('ajouter-secteur-membre', views.ajouter_secteur_membre, name='ajouter_secteur_membre'),
     path('supprimer-secteur-membre', views.supprimer_secteur_membre, name='supprimer_secteur_membre'),
     path('ajouter-document-membre', views.ajouter_document_membre, name='ajouter_document_membre'),
+    path('supprimer-document-membre', views.supprimer_document_membre, name='supprimer_document_membre'),
 
     # Url du Type Secteur
     #path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),
