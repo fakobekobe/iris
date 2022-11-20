@@ -896,7 +896,4 @@ def ajouter_cooperative(request):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
-
-
-
 # Fin de la Gestion de la Coopérative -------------------------------------

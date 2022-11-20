@@ -186,6 +186,134 @@
         </div>
     </div>
     <!-- -->
+
+    <!-- Document -->
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white text-center bg-info">DOCUMENT</div>
+            <div class="card-body">
+                <form action="post" method="#" enctype="multipart/form-data" id="form_document">
+                    {% csrf_token %}
+                    <input type="text" name="id_membre_document" id="id_membre_document" value="{{membre.id}}" hidden>
+                    <fieldset style="border:1px solid #CCC; margin-bottom:10px; padding:5px;">
+                    <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                        Ajouter un document au membre
+                    </legend>
+                    <!-- -->
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="select_typedocument"><i class="fas fa-paste"></i></label>
+                                </div>
+
+                                <select name="select_typedocument" id="select_typedocument" class="form-control" required>
+                                    <option value="" selected>--- Sélectionnez un type de document ---</option>
+                                    {% for typedocument in typedocuments %}
+                                    <option value="{{typedocument.id}}" >{{typedocument.libelle|upper}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                </div>
+                                <input type="file" name="photo" id="photo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- -->
+
+                    <!-- -->
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" name="dateenre" id="dateenre_d" value="{% now 'Y-m-d' %}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3 justify-content-start">
+                                <button type="submit" id="envoyer_document" name="envoyer_document" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- -->
+                    <hr />
+
+                    <!-- Table -->
+                    <table class="table table-hover table-responsive-md text-center" id="tabledocument">
+                        <thead>
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Type de document</th>
+                            <th>Document</th>
+                            <th>Date d'enregistrement</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for document in documents %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{document.typedocument|upper}}</td>
+                            <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
+                            <td>{{document.dateenre|date:"d/m/Y"}}</td>
+                            <td class="text-center">
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="documentupprimermodal{{document.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>
+                                                    Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+
+                                                <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                    <input type="text" name="id_membre_document_s" id="id_membre_document_s{{document.id}}" value="{{membre.id}}" hidden>
+                                                    <button type="submit" name="supprimer_d" value="{{document.id}}" class="btn btn-success btn-sm">Oui</button>
+                                                </form>
+                                                <button class="btn btn-danger btn-sm" name="annuler_d" data-dismiss="modal">Non</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="text-center">
+                            <td colspan="5" class="text-center">
+                                La liste est vide
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- -->
+                </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- -->
 </div>
 
 {% endblock %}

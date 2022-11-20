@@ -1,9 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-
 from .models import *
 from vieprofessionnelle.models import *
 from django.contrib.auth.decorators import login_required, permission_required
@@ -224,15 +221,18 @@ def detail_secteuragricole(request, id):
 
     typesecteurs = TypeSecteur.objects.order_by('id')
     secteurs = Secteur.objects.filter(membre=membre).order_by('secteur')
+    typedocuments = TypeDocument.objects.order_by('id')
+    documents = Document.objects.filter(membre=membre).order_by('id')
 
     context = {
         'title': "Détials du membre",
         'membre': membre,
         'typesecteurs': typesecteurs,
         'secteurs': secteurs,
+        'typedocuments': typedocuments,
+        'documents': documents,
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
-
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
@@ -360,9 +360,58 @@ def supprimer_secteur_membre(request):
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 @login_required
-@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
-def supprimer_membre(request, id):
-    pass
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_document_membre(request):
+    if request.method == "POST":
+        id_membre_document = request.POST.get('id_membre_document', None)
+        typedocument = request.POST.get('select_typedocument', None)
+        dateenre = request.POST.get('dateenre_d', None)
+
+        if id_membre_document and typedocument:
+            if not dateenre:
+                dateenre = None
+
+            if len(request.FILES) != 0:
+                photo = request.FILES["photo"]
+            else:
+                photo = "profil.png" # image par défaut
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_document)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                typedocument = TypeDocument.objects.get(id=typedocument)
+            except TypeDocument.DoesNotExist:
+                data = {"libelle": "Ce type de document n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le document du membre
+            objet_document = Document()
+            objet_document.membre = membre
+            objet_document.typedocument = typedocument
+            objet_document.dateenre = dateenre
+            objet_document.photo = photo
+            objet_document.save()
+
+            # On récupère tous les document du membre
+            documents = Document.objects.filter(membre=membre).order_by('id')
+
+            if documents:
+                data = [{'id': document.id, 'photo': document.photo.url, 'photo_name': document.photo.name, 'typedocument': document.typedocument.libelle, 'id_membre': id_membre_document, 'dateenre': document.dateenre} for document in documents]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle":"Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 
 # Fin de la Gestion du secteur agricole -------------------------------------

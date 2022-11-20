@@ -21,7 +21,7 @@
                       <label class="input-group-text" for="select_membre"><i class="fas fa-user"></i></label>
                   </div>
 
-                  <select name="select_membre" id="select_membre" required>
+                  <select name="select_membre" id="select_membre" class="form-control" required>
                       <option value="" selected>--- Sélectionnez un propriétaire ---</option>
                       {% for membre in membres %}
                       <option value="{{membre.id}}" >{{membre.nom|title}}</option>
@@ -36,7 +36,7 @@
                       <label class="input-group-text" for="select_typedocument"><i class="fas fa-paste"></i></label>
                   </div>
 
-                  <select name="select_typedocument" id="select_typedocument" required>
+                  <select name="select_typedocument" id="select_typedocument" class="form-control" required>
                       <option value="" selected>--- Sélectionnez un type de document ---</option>
                       {% for typedocument in typedocuments %}
                       <option value="{{typedocument.id}}" >{{typedocument.libelle|capfirst}}</option>
