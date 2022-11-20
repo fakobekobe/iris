@@ -12,7 +12,7 @@
     <!-- Informations -->
     <div class="col-md-12 mb-3">
         <div class="card">
-            <div class="card-header text-white text-center bg-primary">INFORMATIONS</div>
+            <div class="card-header text-white text-center bg-info">INFORMATIONS</div>
             <div class="card-body">
                 <!-- -->
                 <div class="form-row mb-3">
@@ -314,10 +314,207 @@
         </div>
     </div>
     <!-- -->
+
+    <!-- Parent -->
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white text-center bg-info">PARENT</div>
+            <div class="card-body">
+                <!-- -->
+                <form action="post" method="#" id="form_parent">
+                    {% csrf_token %}
+                    <input type="text" name="id_membre_parent" id="id_membre_parent" value="{{membre.id}}" hidden>
+                    <input type="text" hidden name="id_json" id="id_json" class="form-control" value="1">
+
+                    <fieldset style="border:1px solid #CCC; margin-bottom:30px; padding:5px;">
+                        <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                            Ajouter un parent
+                        </legend>
+                        <!-- -->
+                        <div class="form-row mb-2">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="select_typeparent"><i class="fas fa-user-friends"></i></label>
+                                    </div>
+
+                                    <select name="select_typeparent" id="select_typeparent" class="form-control" required>
+                                        <option value="" selected>--- Sélectionnez un type de parent ---</option>
+                                        {% for typeparent in typeparents %}
+                                        <option value="{{typeparent.id}}" >{{typeparent.libelle|capfirst}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user-check"></i></span>
+                                    </div>
+                                    <input type="text" name="nomprenoms" class="form-control" placeholder="Saisir le nom et prénoms" >
+                                </div>
+                            </div>
+                        </div>
+                        <!-- -->
+
+                        <!-- -->
+                        <div class="form-row mb-2">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="date" name="datenaissance" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                    </div>
+                                    <input type="text" name="adresse" class="form-control" placeholder="Adresse">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- -->
+
+                        <!-- -->
+                        <div class="form-row mb-2">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                    <input type="text" name="contact" class="form-control" placeholder="Contacts" >
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3 justify-content-center">
+                                    <button type="submit" id="btn_p_ajouter" name="btn_p_ajouter" class="btn btn-primary mr-3">
+                                        <i class="fa fa-plus"></i> Ajouter
+                                    </button>
+                                    <button type="reset" class="btn btn-warning" title="Annuler" id="btn_p_annuler">
+                                        <i class="fas fa-sync-alt"></i> Annuler
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- -->
+                </fieldset>
+                </form>
+                <!-- -->
+
+                <!-- -->
+                <fieldset style="border:1px solid #CCC; margin-bottom:30px; padding:5px;">
+                        <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                            Rechercher un parent
+                        </legend>
+                        <!-- Champ de recherche -->
+                        <div class="input-group mb-2">
+                            <input type="text" name="recherche_parent" id="recherche_parent" class="form-control" placeholder="Rechercher un parent">
+                        </div>
+                        <!-- -->
+                        <hr />
+                        <!-- Tableau de recherche -->
+                        <table class="table table-hover table-responsive-md text-center" id="table_recherche_parent">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Nom et prénoms</th>
+                                <th>Contacts</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for parent in parents %}
+                            <tr>
+                                <td class="text-center">{{forloop.counter}}</td>
+                                <td><a href="#" style="text-decoration:none;" value="{{parent.id}}">{{parent.nomprenoms}}</a></td>
+                                <td>{{parent.contact}}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!-- -->
+                    </fieldset>
+                <!-- -->
+
+                <!-- -->
+                <fieldset style="border:1px solid #CCC; margin-bottom:30px; padding:5px;">
+                        <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                            Liste des parents du membre
+                        </legend>
+                        <!-- Table -->
+                        <table class="table table-hover table-responsive-md text-center" id="tableparent">
+                            <thead>
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Type de document</th>
+                                <th>Document</th>
+                                <th>Date d'enregistrement</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for document in documents %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{document.typedocument|upper}}</td>
+                                <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
+                                <td>{{document.dateenre|date:"d/m/Y"}}</td>
+                                <td class="text-center">
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="parentsupprimermodal{{document.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                        <input type="text" name="id_membre_parent_s" id="id_membre_parent_s{{document.id}}" value="{{membre.id}}" hidden>
+                                                        <button type="submit" name="supprimer_d" value="{{document.id}}" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <button class="btn btn-danger btn-sm" name="annuler_d" data-dismiss="modal">Non</button>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr class="text-center">
+                                <td colspan="5" class="text-center">
+                                    La liste est vide
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!-- -->
+                    </fieldset>
+                <!-- -->
+            </div>
+        </div>
+    </div>
+    <!-- -->
 </div>
 
 {% endblock %}
 
 {% block javascript %}
 <script src="{% static 'presentation/js/details_secteur_activite.js' %}"></script>
+<script src="{% static 'presentation/js/table_recherche_parent.js' %}"></script>
 {% endblock javascript %}
