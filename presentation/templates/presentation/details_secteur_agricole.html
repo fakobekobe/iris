@@ -5,10 +5,16 @@
 {% block tableau_de_bord %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="text-primary"><i class="fas fa-user"></i> Détails du membre</h1>
-        <hr />
+        <div class="row">
+            <div class="col-md-9">
+                <h1 class="text-primary"><i class="fas fa-user"></i> Détails du membre</h1>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url 'presentation:retour_liste_membre' %}" class="text-danger"><i class="fas fa-undo-alt"></i> Liste des membres</a>
+            </div>
+        </div>
     </div>
-
+    <hr />
     <!-- Informations -->
     <div class="col-md-12 mb-3">
         <div class="card">
@@ -410,7 +416,7 @@
                             Rechercher un parent
                         </legend>
                         <!-- Champ de recherche -->
-                        <div class="input-group mb-2">
+                        <div class="input-group w-25 mb-2">
                             <input type="text" name="recherche_parent" id="recherche_parent" class="form-control" placeholder="Rechercher un parent">
                         </div>
                         <!-- -->
@@ -525,6 +531,10 @@
     </div>
     <!-- -->
 </div>
+
+<!-- Toast -->
+{% include 'toast.html' %}
+<!-- -->
 
 {% endblock %}
 

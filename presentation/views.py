@@ -558,4 +558,11 @@ def ajouter_parent_membre(request):
     else:
         return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
+@login_required
+@permission_required('vieprofessionnelle.add_parent', raise_exception=True)
+def retour_liste_membre(request):
+    global _active_onglet
+    _active_onglet = "active_liste"  # On initialise la variable
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 # Fin de la Gestion du secteur agricole -------------------------------------
