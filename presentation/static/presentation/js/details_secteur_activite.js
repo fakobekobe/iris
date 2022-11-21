@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-// ******************* GESTION AJAX DE L'AJOUT D'UNE COOPERATIVE *****************************
+// ******************* GESTION AJAX DE LA LISTE DEROULANTE DU SECTEUR D'ACTIVITE *****************************
 
     var select_typesecteur = $('#select_typesecteur');
     var select_secteur = $('#select_secteur');
@@ -112,6 +112,19 @@ $(document).ready(function(){
                         `);
                     });
 
+                    // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_success');
+                        var toast = $('#mytoast_success');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
                     supprimer_ligne_secteur(); // On appelle la fonction pour prendre en compte les nouvelles données
                 },
                 statusCode: {
@@ -196,6 +209,20 @@ $(document).ready(function(){
                         });
 
                         annuler_s.trigger('click');
+
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_suppression');
+                        var toast = $('#mytoast_suppression');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
                         supprimer_ligne_secteur();
                     },
                     statusCode: {
@@ -305,6 +332,19 @@ $(document).ready(function(){
                             `);
                         });
 
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_success');
+                        var toast = $('#mytoast_success');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
                         supprimer_ligne_document(); // On appelle la fonction pour prendre en compte les nouvelles données
                     },
                     statusCode: {
@@ -394,6 +434,20 @@ $(document).ready(function(){
                         });
 
                         annuler_d.trigger('click');
+
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_suppression');
+                        var toast = $('#mytoast_suppression');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
                         supprimer_ligne_document();
                     },
                     statusCode: {

@@ -36,6 +36,7 @@ LISTE_MODELS = {
         'Type_état_de_santé': TypeEtatSante,
         'Etat_de_santé': EtatSante,
         'Type_document': TypeDocument,
+        'Document': Document,
     },
 }
 

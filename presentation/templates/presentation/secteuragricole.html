@@ -398,46 +398,23 @@
 
 </div>
 
-<!-- Toast -->
-<div aria-live="polite" aria-atomic="true"
-     style="position: absolute; min-height: 200px; top: 0; right: 0;" >
-  <div class="toast fade show" data-delay="500" data-autohide="true" data-animation="true" id="mytoast">
-    <div class="toast-header text-black" style="background: rgba(0,255,0,0.8);">
-      <span class="mr-auto"><i class="fas fa-info-circle"></i> Information</span>
-      <button id="btn_ferme_toast" type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div class="toast-body">
-      {% for message in messages %}
-            {% if message.tags == 'success' %}
-                {{message}}
-            {% elif message.tags == 'error' %}
-                {{message}}
-            {% elif message.tags == 'info' %}
-                {{message}}
-            {% endif %}
-        {% endfor %}
-    </div>
-  </div>
-</div>
-<!-- -->
-
 {% endblock %}
 
 {% block javascript %}
     <script>// Gestion des notifications
         {% for message in messages %}
-            var btn = $('#btn_ferme_toast');
-            var toast = $('#mytoast');
-                btn.click(function(){
-                    toast.removeClass('show');
-                });
+            {% if message.tags == 'success' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
 
-             var montemps = setInterval(function(){
-                toast.removeClass('show');
-                clearInterval(montemps);
-             }, 2000);
+            {% elif message.tags == 'error' %}
+                var m = "{{ message }}";
+                swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'info' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
+            {% endif %}
         {% endfor %}
     </script>
     <script src="{% static 'presentation/js/datatable.js' %}"></script>

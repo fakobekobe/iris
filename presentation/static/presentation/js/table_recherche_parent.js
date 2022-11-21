@@ -357,6 +357,19 @@ var liste_btn_ajouter = $('#table_recherche_parent tbody button');
                             `);
                         });
 
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_success');
+                        var toast = $('#mytoast_success');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
                         supprimer_ligne_parent(); // On appelle la fonction pour prendre en compte les nouvelles données
 
                     },
