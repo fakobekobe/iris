@@ -166,8 +166,8 @@ class EtatSante(models.Model):
     dateenre = models.DateField(null=True, blank=True, default=None, verbose_name="Date d'enregistrement")
 
     typeetatsante = models.ForeignKey(TypeEtatSante, on_delete=models.CASCADE)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, default=None)
-    membre = models.ForeignKey(Membre, on_delete=models.CASCADE, default=None)
+    parent = models.ForeignKey(Parent, null=True, blank=True, default=None, on_delete=models.CASCADE)
+    membre = models.ForeignKey(Membre, null=True, blank=True, default=None, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.typeetatsante + " le " + self.dateenre

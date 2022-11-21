@@ -18,6 +18,8 @@ urlpatterns = [
     path('supprimer-parent-membre', views.supprimer_parent_membre, name='supprimer_parent_membre'),
     path('ajouter-parent-membre', views.ajouter_parent_membre, name='ajouter_parent_membre'),
     path('retour-liste-membre', views.retour_liste_membre, name='retour_liste_membre'),
+    path('ajouter-etatsante-membre', views.ajouter_etatsante_membre, name='ajouter_etatsante_membre'),
+    path('supprimer-etatsante-membre', views.supprimer_etatsante_membre, name='supprimer_etatsante_membre'),
 
     # Url du Type Secteur
     #path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),

@@ -224,6 +224,8 @@ def detail_secteuragricole(request, id):
     parents_membre = Parent.objects.filter(membre=membre).order_by('id')
     parents = Parent.objects.order_by('id')
     typeparents = TypeParent.objects.order_by('id')
+    typeetatsantes = TypeEtatSante.objects.order_by('id')
+    etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
 
     context = {
         'title': "Détials du membre",
@@ -235,6 +237,8 @@ def detail_secteuragricole(request, id):
         'parents_membre': parents_membre,
         'parents': parents,
         'typeparents': typeparents,
+        'typeetatsantes': typeetatsantes,
+        'etatsantes': etatsantes,
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
@@ -370,7 +374,6 @@ def ajouter_document_membre(request):
         id_membre_document = request.POST.get('id_membre_document', None)
         typedocument = request.POST.get('select_typedocument', None)
         dateenre = request.POST.get('dateenre_d', None)
-        print(dateenre)
         if id_membre_document and typedocument:
             if not dateenre:
                 dateenre = None
@@ -441,7 +444,7 @@ def supprimer_document_membre(request):
                 data = {"libelle": "Ce document n'existe pas."}
                 return JsonResponse({'data': data}, status=404)
 
-            # Les données sont bonnes, on ajoute le secteur au membre
+            # Les données sont bonnes, on supprime le document du membre
             if document:
                 try:
                     if document.photo.size > 0:
@@ -513,7 +516,6 @@ def supprimer_parent_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
-
 @login_required
 @permission_required('vieprofessionnelle.add_parent', raise_exception=True)
 def ajouter_parent_membre(request):
@@ -565,4 +567,94 @@ def retour_liste_membre(request):
     _active_onglet = "active_liste"  # On initialise la variable
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_etatsante_membre(request):
+    if request.method == "POST":
+        id_membre_etatsante = request.POST.get('id_membre_etatsante', None)
+        typeetatsante = request.POST.get('select_typeetatsante', None)
+        dateenre = request.POST.get('dateenre_e', None)
+        if id_membre_etatsante and typeetatsante and dateenre:
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_etatsante)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                typeetatsante = TypeEtatSante.objects.get(id=typeetatsante)
+            except TypeEtatSante.DoesNotExist:
+                data = {"libelle": "Ce type d'état de santé n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute l'état de santé du membre
+            objet_etatsante = EtatSante()
+            objet_etatsante.membre = membre
+            objet_etatsante.parent = None
+            objet_etatsante.typeetatsante = typeetatsante
+            objet_etatsante.dateenre = dateenre
+            objet_etatsante.save()
+
+            # On récupère tous les états de santé du membre
+            etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
+
+            if etatsantes:
+                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
+                         'id_membre': id_membre_etatsante,
+                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_etatsante_membre(request):
+    if request.method == "GET":
+        id_membre_etatsante_s = request.GET.get('id_membre_etatsante_s', None)
+        supprimer_e = request.GET.get('supprimer_e', None)
+
+        if id_membre_etatsante_s and supprimer_e:
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_etatsante_s)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                etatsante = EtatSante.objects.get(id=supprimer_e)
+            except EtatSante.DoesNotExist:
+                data = {"libelle": "Cet état de santé n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on supprime l'état de santé du membre
+            etatsante.delete()
+
+            # On récupère tous les états de santé du membre
+            etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
+
+            if etatsantes:
+                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
+                         'id_membre': id_membre_etatsante_s,
+                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 # Fin de la Gestion du secteur agricole -------------------------------------
