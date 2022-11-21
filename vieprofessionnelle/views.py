@@ -429,13 +429,28 @@ def ajouter_parent(request):
 
             # Traitement JSON ------------------------
             if request.POST.get('id_json', None):
-                data = {
-                    'id': objet_parent.id,
-                    'nomprenoms': objet_parent.nomprenoms,
-                    'message': "Enregistrement réussi",
-                }
+                id_membre_parent = request.POST.get("id_membre_parent", None)
+                # On ajoute le parent au membre
+                try:
+                    # On récupère le membre
+                    membre = Membre.objects.get(id=id_membre_parent)
+                except Membre.DoesNotExist:
+                    data = {"libelle": "Ce membre n'existe pas."}
+                    return JsonResponse({'data': data}, status=404)
 
-                return JsonResponse({'data': data}, status=200)
+                # On ajoute le parent au membre
+                membre.parents.add(objet_parent)
+
+                # On récupère tous les documents du membre
+                parents = Parent.objects.filter(membre=membre).order_by('id')
+
+                if parents:
+                    data = [{'id': parent.id, 'typeparent': parent.typeparent.libelle.upper(),
+                             'id_membre': id_membre_parent, 'nomprenoms': parent.nomprenoms.title(),
+                             'contact': parent.contact, 'adresse': parent.adresse,
+                             'datenaissance': parent.datenaissance.strftime('%d/%m/%Y')} for parent in parents]
+
+                    return JsonResponse({'data': data}, status=200)
             #------------------------------------------------------
 
             messages.success(request, "Enregistrement réussi.")

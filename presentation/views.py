@@ -34,7 +34,6 @@ def index(request):
 
     return reponse
 
-
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def ajouter_secteuragricole(request):
@@ -209,7 +208,6 @@ def ajouter_secteuragricole(request):
 
     return render(request,"presentation/secteuragricole.html", context)
 
-
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def detail_secteuragricole(request, id):
@@ -223,6 +221,9 @@ def detail_secteuragricole(request, id):
     secteurs = Secteur.objects.filter(membre=membre).order_by('secteur')
     typedocuments = TypeDocument.objects.order_by('id')
     documents = Document.objects.filter(membre=membre).order_by('id')
+    parents_membre = Parent.objects.filter(membre=membre).order_by('id')
+    parents = Parent.objects.order_by('id')
+    typeparents = TypeParent.objects.order_by('id')
 
     context = {
         'title': "Détials du membre",
@@ -231,6 +232,9 @@ def detail_secteuragricole(request, id):
         'secteurs': secteurs,
         'typedocuments': typedocuments,
         'documents': documents,
+        'parents_membre': parents_membre,
+        'parents': parents,
+        'typeparents': typeparents,
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
@@ -464,5 +468,94 @@ def supprimer_document_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_parent_membre(request):
+    if request.method == "GET":
+        id_membre_parent_s = request.GET.get('id_membre_parent_s', None)
+        supprimer_p = request.GET.get('supprimer_p', None)
+
+        if id_membre_parent_s and supprimer_p:
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_parent_s)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                parent = Parent.objects.get(id=supprimer_p)
+            except Parent.DoesNotExist:
+                data = {"libelle": "Ce parent n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le secteur au membre
+            if parent:
+                membre.parents.remove(parent)
+
+                # On récupère tous les documents du membre
+                parents = Parent.objects.filter(membre=membre).order_by('id')
+
+                if parents:
+                    data = [{'id': parent.id, 'typeparent': parent.typeparent.libelle.upper(),
+                             'id_membre': id_membre_parent_s, 'nomprenoms': parent.nomprenoms.title(),
+                             'contact': parent.contact, 'adresse': parent.adresse,
+                             'datenaissance': parent.datenaissance.strftime('%d/%m/%Y')} for parent in parents]
+
+                    return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_parent', raise_exception=True)
+def ajouter_parent_membre(request):
+    if request.method == "GET":
+        # On initialise les variables
+        id_membre_parent = request.GET.get("id_membre_parent", None)
+        id_parent = request.GET.get("parent", None)
+
+        if id_membre_parent and id_parent:  # On vérifie si les champs ont été renseignés
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_parent)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le membre
+                parent = Parent.objects.get(id=id_parent)
+            except Parent.DoesNotExist:
+                data = {"libelle": "Ce parent n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # On ajoute le parent au membre
+            membre.parents.add(parent)
+
+            # On récupère tous les documents du membre
+            parents = Parent.objects.filter(membre=membre).order_by('id')
+
+            if parents:
+                data = [{'id': parent.id, 'typeparent': parent.typeparent.libelle.upper(),
+                        'id_membre': id_membre_parent, 'nomprenoms': parent.nomprenoms.title(),
+                        'contact': parent.contact, 'adresse': parent.adresse,
+                        'datenaissance': parent.datenaissance.strftime('%d/%m/%Y')} for parent in parents]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Toutes les données n'ont pas été reçues"}
+            return JsonResponse({'data': data}, status=404)
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
 # Fin de la Gestion du secteur agricole -------------------------------------

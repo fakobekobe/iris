@@ -420,16 +420,26 @@
                             <thead class="text-center">
                             <tr class="thead-light">
                                 <th>N°</th>
+                                <th>Type de parent</th>
                                 <th>Nom et prénoms</th>
-                                <th>Contacts</th>
+                                <th>Date de naissance</th>
+                                <th>Adresse</th>
+                                <th>Contact</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for parent in parents %}
                             <tr>
-                                <td class="text-center">{{forloop.counter}}</td>
-                                <td><a href="#" style="text-decoration:none;" value="{{parent.id}}">{{parent.nomprenoms}}</a></td>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{parent.typeparent|upper}}</td>
+                                <td>{{parent.nomprenoms|title}}</td>
+                                <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
+                                <td>{{parent.adresse}}</td>
                                 <td>{{parent.contact}}</td>
+                                <td>
+                                    <button type="button" value="{{parent.id}}" title="ajouter ce parent" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
+                                </td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -448,23 +458,27 @@
                             <thead>
                             <tr class="thead-light">
                                 <th>N°</th>
-                                <th>Type de document</th>
-                                <th>Document</th>
-                                <th>Date d'enregistrement</th>
+                                <th>Type de parent</th>
+                                <th>Nom et prénoms</th>
+                                <th>Date de naissance</th>
+                                <th>Adresse</th>
+                                <th>Contact</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for document in documents %}
+                            {% for parent in parents_membre %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td>{{document.typedocument|upper}}</td>
-                                <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
-                                <td>{{document.dateenre|date:"d/m/Y"}}</td>
+                                <td>{{parent.typeparent|upper}}</td>
+                                <td>{{parent.nomprenoms|title}}</td>
+                                <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
+                                <td>{{parent.adresse}}</td>
+                                <td>{{parent.contact}}</td>
                                 <td class="text-center">
-                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{parent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="parentsupprimermodal{{document.id}}" role="dialog">
+                                    <div class="modal fade" id="parentsupprimermodal{{parent.id}}" role="dialog">
                                         <div class="modal-dialog">
 
                                             <!-- Modal content-->
@@ -475,16 +489,16 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <h5>
-                                                        Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
+                                                        Parent : <strong>{{parent.nomprenoms|title}}</strong>
                                                     </h5>
                                                 </div>
                                                 <div class="modal-footer justify-content-center">
 
                                                     <form style="display:inline-block; text-align:center" method="get" action="#">
-                                                        <input type="text" name="id_membre_parent_s" id="id_membre_parent_s{{document.id}}" value="{{membre.id}}" hidden>
-                                                        <button type="submit" name="supprimer_d" value="{{document.id}}" class="btn btn-success btn-sm">Oui</button>
+                                                        <input type="text" name="id_membre_parent_s" id="id_membre_parent_s{{parent.id}}" value="{{membre.id}}" hidden>
+                                                        <button type="submit" name="supprimer_p" value="{{parent.id}}" class="btn btn-success btn-sm">Oui</button>
                                                     </form>
-                                                    <button class="btn btn-danger btn-sm" name="annuler_d" data-dismiss="modal">Non</button>
+                                                    <button class="btn btn-danger btn-sm" name="annuler_p" data-dismiss="modal">Non</button>
 
                                                 </div>
                                             </div>
@@ -496,7 +510,7 @@
                             </tr>
                             {% empty %}
                             <tr class="text-center">
-                                <td colspan="5" class="text-center">
+                                <td colspan="7" class="text-center">
                                     La liste est vide
                                 </td>
                             </tr>
