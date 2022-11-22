@@ -681,7 +681,6 @@ $(document).ready(function(){
     supprimer_ligne_etatsante(); // On appelle la fonction
 
 
-
 // ****************************************************************************
 
 });

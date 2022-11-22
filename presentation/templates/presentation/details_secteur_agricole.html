@@ -556,7 +556,8 @@
                                 <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
                                 <td>{{parent.adresse}}</td>
                                 <td>{{parent.contact}}</td>
-                                <td>
+                                <td class="text-center">
+                                    <a href="{% url 'presentation:detail_parent_secteuragricole' parent.id %}" class="btn btn-outline-primary btn-sm" title="Détails"><i class="fas fa-eye"></i></a>
                                     <button type="button" value="{{parent.id}}" title="ajouter ce parent" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
                                 </td>
                             </tr>

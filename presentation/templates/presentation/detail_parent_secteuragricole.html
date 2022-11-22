@@ -1,0 +1,185 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-9">
+                <h1 class="text-primary"><i class="fas fa-user"></i> Détails état de santé du parent</h1>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url 'presentation:retour_liste_membre' %}" class="text-danger"><i class="fas fa-undo-alt"></i> Détails du membre</a>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <!-- Informations -->
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white text-center bg-info">INFORMATIONS</div>
+            <div class="card-body">
+                <!-- -->
+                <div class="form-row mb-3">
+                    <div class="col mr-3">
+                        <label>Nom et prénoms</label>
+                        <p class="contour-info">
+                            {{parent.nomprenoms}}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <label>Type de parent</label>
+                        <p class="contour-info">
+                            {{parent.typeparent}}
+                        </p>
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- -->
+                <div class="form-row mb-3">
+                    <div class="col mr-3">
+                        <label>Date de naissance</label>
+                        <p class="contour-info">
+                            {{parent.datenaissance|date:"d/m/Y"}}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <label>Contact</label>
+                        <p class="contour-info">
+                            {{parent.contact}}
+                        </p>
+                    </div>
+                </div>
+                <!-- -->
+
+            </div>
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Etat de santé -->
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-header text-white text-center bg-info">ETAT DE SANTE</div>
+            <div class="card-body">
+                <form action="post" method="#" id="form_etatsante">
+                    {% csrf_token %}
+                    <input type="text" name="id_parent_etatsante" id="id_parent_etatsante" value="{{parent.id}}" hidden>
+                    <fieldset style="border:1px solid #CCC; margin-bottom:10px; padding:5px;">
+                    <legend style="font-size:1em;color:gray;border:1px solid #CCC; text-align:center;">
+                        Ajouter un état de santé au membre
+                    </legend>
+                    <!-- -->
+                    <div class="form-row mb-2">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="select_typeetatsante"><i class="fas fa-stethoscope"></i></label>
+                                </div>
+
+                                <select name="select_typeetatsante" id="select_typeetatsante" class="form-control" required>
+                                    <option value="" selected>--- Sélectionnez un type d'état de santé ---</option>
+                                    {% for typeetatsante in typeetatsantes %}
+                                    <option value="{{typeetatsante.id}}" >{{typeetatsante.libelle|upper}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" name="dateenre_e" id="dateenre_e" value="{% now 'Y-m-d' %}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group mb-3 justify-content-start">
+                                <button type="submit" id="envoyer_etatsante" name="envoyer_etatsante" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- -->
+                    <hr />
+
+                    <!-- Table -->
+                    <table class="table table-hover table-responsive-md text-center" id="tableetatsante">
+                        <thead>
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Type d'état de santé</th>
+                            <th>Date d'enregistrement</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for etatsante in etatsantes %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{etatsante.typeetatsante|upper}}</td>
+                            <td>{{etatsante.dateenre|date:"d/m/Y"}}</td>
+                            <td class="text-center">
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#etatsantesupprimermodal{{etatsante.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="etatsantesupprimermodal{{etatsante.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>
+                                                    Etat de santé : <strong>{{etatsante.typeetatsante.libelle|capfirst}}</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+
+                                                <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                    <input type="text" name="id_parent_etatsante_s" id="id_parent_etatsante_s{{etatsante.id}}" value="{{parent.id}}" hidden>
+                                                    <button type="submit" name="supprimer_e" value="{{etatsante.id}}" class="btn btn-success btn-sm">Oui</button>
+                                                </form>
+                                                <button class="btn btn-danger btn-sm" name="annuler_e" data-dismiss="modal">Non</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="text-center">
+                            <td colspan="4" class="text-center">
+                                La liste est vide
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- -->
+                </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- -->
+
+</div>
+
+<!-- Toast -->
+{% include 'toast.html' %}
+<!-- -->
+
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'presentation/js/details_parent_sa.js' %}"></script>
+{% endblock javascript %}

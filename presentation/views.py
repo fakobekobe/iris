@@ -657,4 +657,114 @@ def supprimer_etatsante_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def detail_parent_secteuragricole(request, id):
+    try:
+        parent = Parent.objects.get(id=id)
+    except Parent.DoesNotExist:
+        messages.error(request, "Ce parent n'existe pas.")
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+    typeetatsantes = TypeEtatSante.objects.order_by('id')
+    etatsantes = EtatSante.objects.filter(parent=parent).order_by('id')
+
+    context = {
+        'title': "Détials état de santé du parent",
+        'typeetatsantes': typeetatsantes,
+        'etatsantes': etatsantes,
+        'parent': parent,
+    }
+    return render(request, 'presentation/detail_parent_secteuragricole.html', context)
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_etatsante_parent(request):
+    if request.method == "POST":
+        id_parent_etatsante = request.POST.get('id_parent_etatsante', None)
+        typeetatsante = request.POST.get('select_typeetatsante', None)
+        dateenre = request.POST.get('dateenre_e', None)
+        if id_parent_etatsante and typeetatsante and dateenre:
+
+            try:
+                # On récupère le membre
+                parent = Parent.objects.get(id=id_parent_etatsante)
+            except Parent.DoesNotExist:
+                data = {"libelle": "Ce parent n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                typeetatsante = TypeEtatSante.objects.get(id=typeetatsante)
+            except TypeEtatSante.DoesNotExist:
+                data = {"libelle": "Ce type d'état de santé n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute l'état de santé du parent
+            objet_etatsante = EtatSante()
+            objet_etatsante.membre = None
+            objet_etatsante.parent = parent
+            objet_etatsante.typeetatsante = typeetatsante
+            objet_etatsante.dateenre = dateenre
+            objet_etatsante.save()
+
+            # On récupère tous les états de santé du parent
+            etatsantes = EtatSante.objects.filter(parent=parent).order_by('id')
+
+            if etatsantes:
+                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
+                         'id_parent': id_parent_etatsante,
+                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_etatsante_parent(request):
+    if request.method == "GET":
+        id_parent_etatsante_s = request.GET.get('id_parent_etatsante_s', None)
+        supprimer_e = request.GET.get('supprimer_e', None)
+
+        if id_parent_etatsante_s and supprimer_e:
+
+            try:
+                # On récupère le membre
+                parent = Parent.objects.get(id=id_parent_etatsante_s)
+            except Parent.DoesNotExist:
+                data = {"libelle": "Ce parent n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                etatsante = EtatSante.objects.get(id=supprimer_e)
+            except EtatSante.DoesNotExist:
+                data = {"libelle": "Cet état de santé n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on supprime l'état de santé du membre
+            etatsante.delete()
+
+            # On récupère tous les états de santé du membre
+            etatsantes = EtatSante.objects.filter(parent=parent).order_by('id')
+
+            if etatsantes:
+                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
+                         'id_membre': id_parent_etatsante_s,
+                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 # Fin de la Gestion du secteur agricole -------------------------------------
