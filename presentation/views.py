@@ -767,4 +767,11 @@ def supprimer_etatsante_parent(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+@login_required
+@permission_required('vieprofessionnelle.view_membre', raise_exception=True)
+def imprimer_secteuragricole(request, id):
+    if request.method == "GET":
+        pass
+    return render(request,'presentation/imprimer_secteuragricole.html')
+
 # Fin de la Gestion du secteur agricole -------------------------------------

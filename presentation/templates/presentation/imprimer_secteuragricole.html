@@ -1,0 +1,191 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<div id="pageImprimer" style="background:white;">
+    <!-- Entête -->
+    <div class="row">
+        <!-- -->
+        <div class="form-row" style="margin:0px;padding:0px;">
+            <div class="col text-center">
+                <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:200px;" />
+                <h5 style="text-decoration:underline;">
+                    FICHE D'IDENTIFICATION SECTEUR AGRICOLE
+                </h5>
+                <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:200px; border:solid 1px black;" />
+            </div>
+            <div class="col">
+                <p>
+                    Je suis un bloc test ehfb;hefvhlev flhevflhevlfyevfyl  ve lfyevlyfrlyfrlyflriyvf yrvfi ryv fiyryli
+                </p>
+            </div>
+        </div>
+        <!-- -->
+    </div>
+    <!-- -->
+
+    <!-- membre -->
+    <div class="row mb-3">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong style="text-decoration:underline;">
+                    Membre :
+                </strong>
+            </div>
+            <!--hr style="height:1px; background:black; width:80%; position:relative; top:-25px;" /-->
+            <div>
+                Nom : <strong>Tano</strong>
+            </div>
+            <div>
+                Nom de jeune fille : <strong>Kouassi</strong>
+            </div>
+            <div>
+                Prénoms : <strong>Amoin Chantal</strong>
+            </div>
+            <div>
+                Date et lieu de naissance : <strong>15/10/1990 à PORT-BOUËT</strong>
+            </div>
+            <div>
+                Sexe : <strong>Féminin</strong>
+            </div>
+            <div>
+                Type de pièce : <strong>CNI</strong>
+            </div>
+            <div>
+                N°de la pièce : <strong>c0014785236</strong>
+            </div>
+            <div>
+                Nationalité : <strong>Ivoirienne</strong>
+            </div>
+            <div>
+                Contact : <strong>0708997673</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Statut matrimonial-->
+    <div class="row mb-3">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong style="text-decoration:underline;">
+                    Statut matrimonial :
+                </strong>
+            </div>
+            <!--hr style="height:1px; background:black; width:80%; position:relative; top:-25px;" /-->
+            <div>
+                Statut : <strong>Marié(e)</strong>
+            </div>
+            <div>
+                Nombre de femmes : <strong>1</strong>
+            </div>
+            <div>
+                Nombre d'enfants : <strong>3</strong>
+            </div>
+            <div>
+                Lieu d'habitation : <strong>SUD COMOE/ABOISSO/KETESSO/VILLAGE 1</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Vie coopérative-->
+    <div class="row mb-3">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong style="text-decoration:underline;">
+                    Vie coopérative :
+                </strong>
+            </div>
+            <!--hr style="height:1px; background:black; width:80%; position:relative; top:-25px;" /-->
+            <div>
+                Nom de la coopérative : <strong>Les Enfants Adjèton</strong>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Date d'adhésion: <strong>10/11/2022</strong>
+                </div>
+                <div class="col">
+                    N°de carte de membre : <strong>N°124578</strong>
+                </div>
+            </div>
+            <div>
+                Spéculation agricole : <strong>15 000 Kg</strong>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Superficie en culture: <strong>13 000 m<sup>2</sup></strong>
+                </div>
+                <div class="col">
+                    Superficie en production : <strong>10 000 m<sup>2</sup></strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Niveau scolaire -->
+    <div class="row mb-3">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong style="text-decoration:underline;">
+                    Niveau scolaire :
+                </strong>
+            </div>
+            <!--hr style="height:1px; background:black; width:80%; position:relative; top:-25px;" /-->
+            <div class="row mb-3">
+                <div class="col">
+                    Niveau: <strong>Niveau primaire</strong>
+                </div>
+                <div class="col">
+                    Classe : <strong>CM2</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong style="text-decoration:underline;">Signature</strong>
+                </div>
+                <div class="col">
+                    <strong style="text-decoration:underline; display:block">Agent identificateur</strong>
+                    <strong>Koné Mohamed</strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Je soussigné-->
+    <div class="row mb-3">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong>Je soussigné(e),</strong> <strong>Tano Amoin Chantal</strong>
+            </div>
+            <div>
+                <strong>reconnais avoir donné mon accord pour l'utilisation de mes données personnelles dans
+                le cadre de ce projet de l'entreprise CHLOHE SAS.
+                </strong>
+            </div>
+        </div>
+    </div>
+    <!-- -->
+</div>
+
+
+<button id="imprimer" style="position:fixed;top:0px;right:0px;" class="btn btn-primary">
+    Imprimer
+</button>
+{% endblock %}
+
+{% block javascript %}
+<script>
+        var imprimer = $('#imprimer');
+        imprimer.click(function(){
+            $('#pageImprimer').printThis();
+        });
+</script>
+{% endblock javascript %}
