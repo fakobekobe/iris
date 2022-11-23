@@ -771,7 +771,21 @@ def supprimer_etatsante_parent(request):
 @permission_required('vieprofessionnelle.view_membre', raise_exception=True)
 def imprimer_secteuragricole(request, id):
     if request.method == "GET":
-        pass
-    return render(request,'presentation/imprimer_secteuragricole.html')
+
+        try:
+            membre = Membre.objects.get(id=id)
+        except Membre.DoesNotExist:
+            messages.error(request, "Ce membre n'existe pas.")
+            return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+        # On lui ajoute la propriété
+        membre.get_region = membre.get_region()
+        context = {
+            'title': "Fiche d'identification Secteur Agricole",
+            'membre': membre,
+        }
+        return render(request,'presentation/imprimer_secteuragricole.html', context)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 # Fin de la Gestion du secteur agricole -------------------------------------

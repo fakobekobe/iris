@@ -77,6 +77,9 @@ class Membre(models.Model):
             ville=self.quartier.commune.ville.code,
             identifiant=self.id)
 
+    def get_region(self):
+        return self.quartier.commune.ville.departement.region.code
+
 class SecteurAgricole(SecteurActive):
     speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
     superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
