@@ -44,22 +44,22 @@ def ajouter_secteuragricole(request):
 
     if request.method == "POST":
         # On récupère les données
-        sexe = strip_tags(request.POST.get('sexe', None))# On rétire les tag (<>)
+        sexe = request.POST.get('sexe', None)
         nom = strip_tags(request.POST.get('nom', None)).strip().title() # On rétire les tag (<>) et on enleve les espaces au début et fin
         prenoms = strip_tags(request.POST.get('prenoms', None)).strip().title()
         nomjeunefille = strip_tags(request.POST.get('nomjeunefille', None)).strip().title()
-        date_naissance = strip_tags(request.POST.get('date_naissance', None))
-        lieu_naissance = strip_tags(request.POST.get('lieu_naissance', None))
-        typepiece = strip_tags(request.POST.get('typepiece', None))
+        date_naissance = request.POST.get('date_naissance', None)
+        lieu_naissance = request.POST.get('lieu_naissance', None)
+        typepiece = request.POST.get('typepiece', None)
         numeropiece = strip_tags(request.POST.get('numeropiece', None)).strip()
-        nationalite = strip_tags(request.POST.get('nationalite', None))
+        nationalite = request.POST.get('nationalite', None)
         contact = strip_tags(request.POST.get('contact', None)).strip()
-        cooperative = strip_tags(request.POST.get('cooperative', None))
-        dateadhesion = strip_tags(request.POST.get('dateadhesion', None))
+        cooperative = request.POST.get('cooperative', None)
+        dateadhesion = request.POST.get('dateadhesion', None)
         numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
-        niveauscolaire = strip_tags(request.POST.get('niveauscolaire', None))
-        situationmatrimoniale = strip_tags(request.POST.get('situationmatrimoniale', None))
-        lieu_habitation = strip_tags(request.POST.get('lieu_habitation', None))
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
+        lieu_habitation = request.POST.get('lieu_habitation', None)
 
         if not date_naissance:
             date_naissance = None
@@ -67,7 +67,11 @@ def ajouter_secteuragricole(request):
         if not dateadhesion:
             dateadhesion = None
 
-        if nom and date_naissance and numeropiece and contact and cooperative and lieu_habitation:
+        if nom is not None and date_naissance is not None and numeropiece is not None and contact is not None and\
+                typepiece is not None and cooperative is not None and lieu_habitation is not None and sexe is not None and\
+                nationalite is not None and lieu_naissance is not None and niveauscolaire is not None and \
+                situationmatrimoniale is not None and lieu_habitation is not None:
+
             if not request.session.get('id_membre'): # On traite la modification
                 # On vérifie si ce membre existe déjà car le numeropiece et le contact sont uniques
                 try:
@@ -780,6 +784,20 @@ def imprimer_secteuragricole(request, id):
 
         # On lui ajoute la propriété
         membre.get_region = membre.get_region()
+        membre.secteuragricole = membre.secteuragricole_set.first()
+        membre.nombrefemme = membre.get_nombre_parent('Femme')
+        membre.nombreenfant = membre.get_nombre_parent('Enfant')
+        membre.lieu_habitation = membre.get_lieu_habitation()
+        try:
+            document = Document.objects.get(membre=membre)
+            membre.photo = document.get_photo_membre()
+        except Document.DoesNotExist:
+            pass
+        try:
+            membre.cooperative = MembreSecteurAgricole.objects.get(membre=membre, secteuragricole=membre.secteuragricole)
+        except MembreSecteurAgricole.DoesNotExist:
+            pass
+
         context = {
             'title': "Fiche d'identification Secteur Agricole",
             'membre': membre,

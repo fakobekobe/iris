@@ -80,6 +80,25 @@ class Membre(models.Model):
     def get_region(self):
         return self.quartier.commune.ville.departement.region.code
 
+    def get_nombre_parent(self, libelle):
+        return self.parents.filter(typeparent__libelle=libelle).count()
+
+    def get_lieu_habitation(self):
+        return f"{self.quartier.commune.ville.departement.region.district.libelle}/" \
+               f"{self.quartier.commune.ville.departement.region.libelle}/" \
+               f"{self.quartier.commune.ville.departement.libelle}/" \
+               f"{self.quartier.commune.ville.libelle}/" \
+               f"{self.quartier.commune.libelle}/" \
+               f"{self.quartier.libelle}"
+
+    def get_lieu_naissance(self):
+        return f"{self.lieunaissance.commune.ville.departement.region.district.libelle}/" \
+               f"{self.lieunaissance.commune.ville.departement.region.libelle}/" \
+               f"{self.lieunaissance.commune.ville.departement.libelle}/" \
+               f"{self.lieunaissance.commune.ville.libelle}/" \
+               f"{self.lieunaissance.commune.libelle}"
+
+
 class SecteurAgricole(SecteurActive):
     speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
     superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
@@ -188,5 +207,14 @@ class Document(models.Model):
     typedocument = models.ForeignKey(TypeDocument,default=None, on_delete=models.CASCADE)
     membre = models.ForeignKey(Membre,default=None, on_delete=models.CASCADE)
 
+    # Liste des methodes
     def __str__(self):
         return self.membre.nom + " - " + self.typedocument.libelle
+
+    def get_photo_membre(self):
+        if self.typedocument.libelle == "Photo":
+            return self.photo
+
+
+
+

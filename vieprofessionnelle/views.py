@@ -870,7 +870,7 @@ def ajouter_cooperative(request):
 
             if nom_cooperative: #On vérifie si la champ a été saisi
 
-                nom_cooperative = nom_cooperative.capitalize() # On formate la variable
+                nom_cooperative = nom_cooperative.title() # On formate la variable
 
                 # On vérifie si ce Secteur Agricole existe déjà
                 try:

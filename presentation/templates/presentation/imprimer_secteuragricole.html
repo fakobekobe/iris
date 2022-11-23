@@ -4,6 +4,7 @@
 {% block titre %}{{titre}}{% endblock %}
 
 {% block tableau_de_bord %}
+<!-- page a imprimer -->
 <div id="pageImprimer" style="background:white;">
     <!-- Entête -->
     <div class="row mb-3">
@@ -14,7 +15,7 @@
                 <h5 style="text-decoration:underline;">
                     FICHE D'IDENTIFICATION SECTEUR AGRICOLE
                 </h5>
-                <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:200px; border:solid 1px black;" />
+                <img src="{{membre.photo.url}}" alt="{{membre.photo.name}}" style="width:150px;height:200px; border:solid 1px black;" />
             </div>
             <div class="col ml-3" >
                 <div style="border: 1px double black; padding-left:5px;  padding-right:100px;">
@@ -138,7 +139,7 @@
                                     <strong>Chapeau</strong>
                                 </td>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    Les Enfants Adjèton
+                                    {{membre.secteuragricole.nom}}
                                 </td>
                             </tr>
                             <tr>
@@ -146,12 +147,12 @@
                                     <strong>Président(e)</strong>
                                 </td>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    Tano Jean Fabien
+                                    {{membre.secteuragricole.presidente}}
                                 </td>
                             </tr>
                             <tr>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    07 08 99 76 73
+                                    {{membre.secteuragricole.contact}}
                                 </td>
                             </tr>
                         </table>
@@ -175,31 +176,33 @@
             </div>
             <hr style="height:1px; background:black; width:75%; position:relative; top:-20px;" />
             <div class="mb-2">
-                Nom : <strong>{{membre.get_region|liste:5}}</strong>
+                Nom : <strong>{{membre.nom}}</strong>
+            </div>
+            {% if membre.sexe.code == 'F' %}
+            <div class="mb-2">
+                Nom de jeune fille : <strong>{{membre.nomjeunefille}}</strong>
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                Prénoms : <strong>{{membre.prenoms}}</strong>
             </div>
             <div class="mb-2">
-                Nom de jeune fille : <strong>Kouassi</strong>
+                Date et lieu de naissance : Le <strong>{{membre.date_naissance|date:'d/m/Y'}}</strong> à <strong>{{membre.lieunaissance.libelle|upper}}</strong>
             </div>
             <div class="mb-2">
-                Prénoms : <strong>Amoin Chantal</strong>
+                Sexe : <strong>{{membre.sexe.libelle}}</strong>
             </div>
             <div class="mb-2">
-                Date et lieu de naissance : <strong>15/10/1990 à PORT-BOUËT</strong>
+                Type de pièce : <strong>{{membre.typepiece.libelle}} ({{membre.typepiece.type}})</strong>
             </div>
             <div class="mb-2">
-                Sexe : <strong>Féminin</strong>
+                N°de la pièce : <strong>{{membre.numeropiece}}</strong>
             </div>
             <div class="mb-2">
-                Type de pièce : <strong>CNI</strong>
+                Nationalité : <strong>{{membre.nationalite.nationalite}}</strong>
             </div>
             <div class="mb-2">
-                N°de la pièce : <strong>c0014785236</strong>
-            </div>
-            <div class="mb-2">
-                Nationalité : <strong>Ivoirienne</strong>
-            </div>
-            <div class="mb-2">
-                Contact : <strong>0708997673</strong>
+                Contact : <strong>{{membre.contact}}</strong>
             </div>
 
         </div>
@@ -216,16 +219,18 @@
             </div>
             <hr style="height:1px; background:black; width:65%; position:relative; top:-20px; left:60px;" />
             <div class="mb-2">
-                Statut : <strong>Marié(e)</strong>
+                Statut : <strong>{{membre.situationmatrimoniale.situation}}</strong>
+            </div>
+            {% if membre.sexe.code == 'M' %}
+            <div class="mb-2">
+                Nombre de femmes : <strong>{{membre.nombrefemme}}</strong>
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                Nombre d'enfants : <strong>{{membre.nombreenfant}}</strong>
             </div>
             <div class="mb-2">
-                Nombre de femmes : <strong>1</strong>
-            </div>
-            <div class="mb-2">
-                Nombre d'enfants : <strong>3</strong>
-            </div>
-            <div class="mb-2">
-                Lieu d'habitation : <strong>SUD COMOE/ABOISSO/KETESSO/VILLAGE 1</strong>
+                Lieu d'habitation : <strong>{{membre.lieu_habitation}}</strong>
             </div>
 
         </div>
@@ -242,25 +247,25 @@
             </div>
             <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
             <div class="mb-2">
-                Nom de la coopérative : <strong>Les Enfants Adjèton</strong>
+                Nom de la coopérative : <strong>{{membre.secteuragricole.nom}}</strong>
             </div>
             <div class="row mb-2">
                 <div class="col">
-                    Date d'adhésion: <strong>10/11/2022</strong>
+                    Date d'adhésion: <strong>{{membre.cooperative.date_adhesion|date:'d/m/Y'}}</strong>
                 </div>
                 <div class="col">
-                    N°de carte de membre : <strong>N°124578</strong>
+                    N°de carte de membre : <strong>{{membre.cooperative.numero_carte}}</strong>
                 </div>
             </div>
             <div class="mb-2">
-                Spéculation agricole : <strong>15 000 Kg</strong>
+                Spéculation agricole : <strong>{{membre.secteuragricole.speculation_agricole}} Kg</strong>
             </div>
             <div class="row mb-2">
                 <div class="col">
-                    Superficie en culture: <strong>13 000 m<sup>2</sup></strong>
+                    Superficie en culture: <strong>{{membre.secteuragricole.superficie_en_culture}} m<sup>2</sup></strong>
                 </div>
                 <div class="col">
-                    Superficie en production : <strong>10 000 m<sup>2</sup></strong>
+                    Superficie en production : <strong>{{membre.secteuragricole.superficie_en_production}} m<sup>2</sup></strong>
                 </div>
             </div>
 
@@ -279,10 +284,10 @@
             <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
             <div class="row mb-3">
                 <div class="col">
-                    Niveau: <strong>Niveau primaire</strong>
+                    Niveau: <strong>{{membre.niveauscolaire.niveau.niveau}}</strong>
                 </div>
                 <div class="col">
-                    Classe : <strong>CM2</strong>
+                    Classe : <strong>{{membre.niveauscolaire.classe}}</strong>
                 </div>
             </div>
             <div class="row">
@@ -291,7 +296,7 @@
                 </div>
                 <div class="col">
                     <strong style="text-decoration:underline; display:block">Agent identificateur</strong>
-                    <strong>Koné Mohamed</strong>
+                    <strong>{{membre.utilisateur.get_full_name|default:membre.utilisateur}}</strong>
                 </div>
             </div>
 
@@ -303,7 +308,7 @@
     <div class="row" style="font-size:1.1em;">
         <div class="col-md-11 offset-1">
             <div>
-                <strong>Je soussigné(e),</strong> <strong>Tano Amoin Chantal</strong>,
+                <strong>Je soussigné(e),</strong> <strong>{{membre.nom_prenoms}}</strong>,
             </div>
             <div>
                 <strong>reconnais avoir donné mon accord pour l'utilisation de mes données personnelles dans
@@ -312,16 +317,29 @@
             </div>
         </div>
     </div>
-    <!-- -->
-</div>
 
+    <!-- Gestion de l'espace pour l'impression-->
+    {% if membre.sexe.code == 'M' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+    {% if membre.sexe.code == 'F' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+</div>
+<!-- -->
+
+<!-- boutton d'impression et de retour -->
 <div style="position:fixed;top:0px;right:0px;">
     <a href="{% url 'presentation:retour_liste_membre' %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Liste des membres</a>
     <button id="imprimer" class="btn btn-primary">
-        Imprimer
+        <i class="fas fa-print"></i> Imprimer
     </button>
-<div>
-
+</div>
+<!-- -->
 {% endblock %}
 
 {% block javascript %}
