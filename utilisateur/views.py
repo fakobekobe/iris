@@ -4,17 +4,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
-from .forms import InscriptionForm, ConnexionForm , ModifierUtilisateurForm, GroupeForm
+from .forms import InscriptionForm, ConnexionForm, ModifierUtilisateurForm, GroupeForm
 from .models import LISTE_MODELS
 from django.core.paginator import Paginator
+from django.utils.html import strip_tags
 
 # Les Constantes
-_PAS = 10 # pas de la pagination
+_PAS = 10  # pas de la pagination
 
 # Les Views---------------------------------------------------
-def inscription(request, ajouter_utilisateur = 0):
 
-    # On créé un formulaire vide
+
+def inscription(request, ajouter_utilisateur=0):
+
+    # On crée un formulaire vide
     form = InscriptionForm()
 
     context = {
@@ -25,14 +28,14 @@ def inscription(request, ajouter_utilisateur = 0):
 
     if request.method == "POST":
 
-        # On créé un formulaire avec les données de l'utilisateur
+        # On crée un formulaire avec les données de l'utilisateur
         form = InscriptionForm(request.POST)
 
         # On vérifie si le formulaire est valide
         if form.is_valid():
 
-            # On créé un nouvelle utilisateur
-            user = User.objects.create_user(username = form.cleaned_data['username'],password = form.cleaned_data['password1'], email= form.cleaned_data['email'])
+            # On crée un nouvel utilisateur
+            user = User.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password1'], email=form.cleaned_data['email'])
             #user = User.objects.create_superuser(username = form.cleaned_data['username'],password = form.cleaned_data['password1'], email= form.cleaned_data['email'])
 
             # On effectue une redirection en fonction du paramètre.
@@ -43,8 +46,6 @@ def inscription(request, ajouter_utilisateur = 0):
             # On effectue une redirection
             return HttpResponseRedirect(reverse('utilisateur:connexion'))
         else:
-            username = request.POST['username']
-            context['message'] = 'Formulaire invalide Username : {0}'.format(username)
             context['form'] = form
 
 
@@ -52,11 +53,11 @@ def inscription(request, ajouter_utilisateur = 0):
 
 def connexion(request):
 
-    default = {} # On créé la variable d'initialisation
-    checked = "" # On cré la variable pour la case à cocher se souvenir de moi
+    default = {}  # On crée la variable d'initialisation
+    checked = ""  # On crée la variable pour la case à cocher se souvenir de moi
     utilisateur = None
 
-    # On récupère d'id utilisateur stocké dans le cookie
+    # On récupère l'id utilisateur stocké dans le cookie
     if request.COOKIES.get('id_utilisateur'):
         # On récupère les données de l'utilisateur
         try:
@@ -68,26 +69,26 @@ def connexion(request):
             default = {'username': utilisateur.username, 'password1': utilisateur.password}
             checked = "checked"
 
-    # On créé un formulaire et on l'initialise selon l'existence du cookie
+    # On crée un formulaire et on l'initialise selon l'existence du cookie
     form = ConnexionForm(initial=default)
 
     context = {
         'titre': "Se connecter",
         'form': form,
-        'checked':checked
+        'checked': checked
     }
 
     if request.method == "POST":
 
         # On authentifie l'utilisateur
-        user = authenticate(request ,username = request.POST['username'], password = request.POST['password1'])
+        user = authenticate(request, username=strip_tags(request.POST['username']).strip(), password=strip_tags(request.POST['password1']))
 
-        # On créé un formulaire avec les données du formulaire
+        # On crée un formulaire avec les données du formulaire
         form = ConnexionForm(request.POST)
 
         # on initialise user = utilisateur pour connecter directement l'utilisateur au cas ou
         # le cookie id utilisateur existe
-        if utilisateur is not None and user == None:
+        if utilisateur is not None and user is None:
             user = utilisateur
 
         # On vérifie si l'utilisateur existe
@@ -96,8 +97,8 @@ def connexion(request):
             login(request, user)
 
             # On vérifie si la case se souvenir de moi est coché et on ajoute l'id utilisateur
-            # dans la variable check pour créé un cookie pour sauvegarder l'id de l'utilisateur
-            # sinon on envoie un nombre élevé
+            # dans la variable session pour créer un cookie pour sauvegarder l'id de l'utilisateur
+            # sans la vue index de l'application presentation
 
             if request.POST.get('se_souvenir', ''):
                 request.session['user_id'] = user.id
@@ -115,25 +116,6 @@ def deconnexion(request):
     # On le redirige vers la page de connexion
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
 
-#def index
-"""
-@login_required
-def index(request):
-    context = {
-        'titre': "Tableau de bord",
-    }
-
-    # On vérifie si check = 1 ou 0 pour ajouter ou supprimer un cookie
-    reponse = render(request, 'utilisateur/index.html', context)
-    if request.session.get('user_id'):
-        # On ajoute le cookie ou on le met à jour
-        reponse.set_cookie(key='id_utilisateur', value=request.session.get('user_id'), expires=63072000)  # 63072000 = 2 ans
-    else:
-        # On supprime le cookie
-        reponse.delete_cookie('id_utilisateur')
-
-    return reponse
-"""
 
 @login_required
 @permission_required('auth.view_user', raise_exception=True)
