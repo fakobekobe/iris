@@ -15,10 +15,10 @@
             <tr>
                 <td>{{groupe.name}}</td>
                 <td class="text-center">
-                    <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_groupe' groupe.id %}">Detail</a>
-                    <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_groupe' groupe.id %}">Modifier</a>
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'utilisateur:detail_groupe' groupe.id %}" title="Détails"><i class="fas fa-eye"></i></a>
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'utilisateur:modifier_groupe' groupe.id %}" title="Modifier"><i class="fas fa-pen"></i></a>
 
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{groupe.id}}" data-backdrop="static">Supprimer</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{groupe.id}}" data-backdrop="static" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
                     <!-- Modal -->
                     <div class="modal fade" id="modal{{groupe.id}}" role="dialog">
                         <div class="modal-dialog">

@@ -12,8 +12,8 @@ import datetime
 import os
 
 # Les constatntes et les variables globales
-_active_onglet = "" # Variable globale pour l'activation des onglets
-_active_session = False # Variable globale pour l'activation des onglets
+_active_onglet = ""  # Variable globale pour l'activation des onglets
+_active_session = False  # Variable globale pour l'activation des onglets
 
 
 # Gestion du secteur agricole-----------------------------------------------

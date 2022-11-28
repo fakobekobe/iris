@@ -6,17 +6,17 @@ from vieprofessionnelle.models import *
 
 # Liste des variables Globales
 LISTE_MODELS = {
-    'Authentification':{'Utilisateur': User, 'Groupe': Group,},
-    'Localisation':{
+    'Authentification': {'Utilisateur': User, 'Groupe': Group, },
+    'Localisation': {
         'District': District,
         'Région': Region,
         'Département': Departement,
         'Ville': Ville,
-        'Commune' : Commune,
-        'Quartier' : Quartier,
-        'Marché' : Marche,
+        'Commune': Commune,
+        'Quartier': Quartier,
+        'Marché': Marche,
     },
-    'Etat_civil':{
+    'Etat_civil': {
         'Type_de_pièce': TypePiece,
         'Niveau': Niveau,
         'Niveau_scolaire': NiveauScolaire,
@@ -24,7 +24,7 @@ LISTE_MODELS = {
         'Nationalité': Nationalite,
         'Situation_matrimoniale': SituationMatrimoniale,
     },
-    'Vie_professionnelle':{
+    'Vie_professionnelle': {
         'Type_de_secteur': TypeSecteur,
         'Secteur': Secteur,
         'Membre': Membre,

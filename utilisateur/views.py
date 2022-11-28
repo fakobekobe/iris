@@ -122,7 +122,7 @@ def deconnexion(request):
 def utilisateur(request):
     # On récupère la liste des 10 derniers utilisateurs
     Liste_utilisateurs = User.objects.all().order_by('-id')
-    pagination = Paginator(Liste_utilisateurs, _PAS) # On créé l'objet pagination avec la liste des utilisateurs
+    pagination = Paginator(Liste_utilisateurs, _PAS) # On crée l'objet pagination avec la liste des utilisateurs
 
     numero_page = request.GET.get('page', 1) # On récupère le numéro de la page sélectionnée
     page_obj = pagination.get_page(numero_page)
@@ -145,7 +145,7 @@ def detail_utilisateur(request, id):
         utilisateur = User.objects.get(id=id)
     except User.DoesNotExist:
         # On effectue une redirection
-        #On gere le message d'erreur
+        # On gère le message d'erreur
         return HttpResponseRedirect(reverse('utilisateur:utilisateur'))
 
     # On récupère la liste des derniers groupes de l'utilisateur
@@ -159,9 +159,9 @@ def detail_utilisateur(request, id):
 
     # Gestion des permissions
     data = {}
-    for app, donnees in LISTE_MODELS.items():  # On parcours les apps
+    for app, donnees in LISTE_MODELS.items():  # On parcourt les apps
         models = {}
-        for key, model in donnees.items():  # On parcours les models
+        for key, model in donnees.items():  # On parcourt les models
             # On récupère la liste des permissions du modèle
             content_type = ContentType.objects.get_for_model(model)
             mes_permissions = Permission.objects.filter(content_type=content_type)
@@ -171,28 +171,33 @@ def detail_utilisateur(request, id):
                 if request.POST.get('permissions_utilisateur',None) is not None:
                    for permission in mes_permissions:
                        if request.POST.get(permission.codename, None) is not None:
-                           utilisateur.user_permissions.add(permission) # On ajoute la permission
+                           utilisateur.user_permissions.add(permission)  # On ajoute la permission
                        else:
-                            utilisateur.user_permissions.remove(permission) # On supprime la permission
+                            utilisateur.user_permissions.remove(permission)  # On supprime la permission
 
             # On créé un tableau de tableau en ajoutant le name et le codename. on remplace Can, add, change, delete, view
             # par les mots en français
 
-            # On récupère la liste des permission de l'utilisateur
+            # On récupère la liste des permissions de l'utilisateur
             liste_permissions = utilisateur.user_permissions.all()
-            checked = "" # Variable pour l'activation ou la désactivation de la case à cocher de la permission dans le gabarit
+            checked = ""  #  Variable pour l'activation ou la désactivation de la case à cocher de la permission dans le gabarit
 
-            permissions = [] # On initialise la variable
+            permissions = []  # On initialise la variable
 
             for permission in mes_permissions:
-                name = permission.name.replace("Can", "Peut").replace("add", "Ajouter").replace("view","Afficher").replace("change", "Modifier").replace("delete", "Supprimer")
+                name = permission.name.replace("Can", "Peut").\
+                    replace("add", "Ajouter").\
+                    replace("view", "Afficher").\
+                    replace("change", "Modifier").\
+                    replace("delete", "Supprimer")
+
                 code = permission.codename
                 if permission in liste_permissions:
                     checked = "checked"
                 else:
                     checked = ""
 
-                permissions.append([name,checked,code])
+                permissions.append([name, checked, code])
 
             # On ajoute la liste de droit de chaque modèle
             models[key] = permissions
@@ -205,7 +210,7 @@ def detail_utilisateur(request, id):
         'utilisateur': utilisateur,
         'page_obj': page_obj,
         'total_pages': total_pages,
-        'data':data,
+        'data': data,
     }
 
     return render(request, 'utilisateur/detail_utilisateur.html', context)
@@ -223,16 +228,16 @@ def supprimer_groupe_utilisateur(request, id):
             return HttpResponseRedirect(reverse('presentation:index'))
 
         try:
-            user = User.objects.get(id = id)
+            user = User.objects.get(id=id)
         except User.DoesNotExist:
             # On effectue une redirection
             # On gère le message d'erreur
-            return HttpResponseRedirect(reverse('utilisateur:detail_utilisateur', args = {id}))
+            return HttpResponseRedirect(reverse('utilisateur:detail_utilisateur', args={id}))
 
 
         # on vérifie si le groupe existe et on le récupère
         try:
-            groupe = Group.objects.get(id = int(id_groupe))
+            groupe = Group.objects.get(id=int(id_groupe))
         except Group.DoesNotExist:
             # On effectue une redirection
             # On gère le message d'erreur
@@ -241,7 +246,7 @@ def supprimer_groupe_utilisateur(request, id):
         # On supprime l'utilisateur du groupe
         groupe.user_set.remove(user)
         # On effectue une redirection
-        return HttpResponseRedirect(reverse('utilisateur:detail_utilisateur', args = {id}))
+        return HttpResponseRedirect(reverse('utilisateur:detail_utilisateur', args={id}))
 
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
@@ -251,8 +256,9 @@ def supprimer_groupe_utilisateur(request, id):
 def supprimer_utilisateur(request, id):
     # on vérifie si l'utilisateur à supprimer existe et on le supprime
     try:
-        utilisateur = User.objects.get(id = id)
-        utilisateur.delete()
+        utilisateur = User.objects.get(id=id)
+        utilisateur.is_actif = False  # On désactive l'utilisateur au lieu de le supprimer avec utilisateur.delete()
+        utilisateur.save()
 
     except User.DoesNotExist:
         # Gerer le message d'erreur
@@ -283,7 +289,7 @@ def modifier_utilisateur(request, id):
 
     if request.method == 'GET':
 
-        # On créé un formulaire avec les données de l'utilisateur
+        # On crée un formulaire avec les données de l'utilisateur
         form = ModifierUtilisateurForm()
         form.username = utilisateur.username
         form.first_name = utilisateur.first_name
@@ -293,9 +299,9 @@ def modifier_utilisateur(request, id):
 
         context['form'] = form
 
-        return render(request,'utilisateur/modifier_utilisateur.html', context)
+        return render(request, 'utilisateur/modifier_utilisateur.html', context)
     else:
-        # On créé un formulaire avec les données de l'utilisateur
+        # On crée un formulaire avec les données de l'utilisateur
         form = ModifierUtilisateurForm(request.POST)
 
         # On vérifie si le nom d'utilisateur a changer
@@ -318,7 +324,7 @@ def modifier_utilisateur(request, id):
                 # On vérifie si le nom d'utilisateur existe déjà
                 try:
                     # On essaie de voir si l'utilisateur existe
-                    User.objects.get(username = nom_utilisateur)
+                    User.objects.get(username=nom_utilisateur)
 
                     # l'utilisateur existe déjà
                     context['message'] = "Ce nom d'utilisateur : {0} existe déjà.".format(nom_utilisateur)
@@ -329,8 +335,8 @@ def modifier_utilisateur(request, id):
                     # On modifie les données de l'utilisateur
                     utilisateur.username = nom_utilisateur
                     utilisateur.first_name = request.POST.get('first_name', '')
-                    utilisateur.last_name = request.POST.get('last_name','')
-                    utilisateur.email = request.POST.get('email','')
+                    utilisateur.last_name = request.POST.get('last_name', '')
+                    utilisateur.email = request.POST.get('email', '')
 
                     utilisateur.save()
 
@@ -386,13 +392,13 @@ def ajouter_groupe(request):
 
             # on vérifie si le groupe existe déjà
             try:
-                groupe = Group.objects.get(name = groupe_name)
+                groupe = Group.objects.get(name=groupe_name)
             except Group.DoesNotExist:
                 groupe = None
 
             if groupe is None:
                 # On créé un nouveau groupe
-                Group.objects.create(name = groupe_name)
+                Group.objects.create(name=groupe_name)
 
                 # On effectue une redirection
                 return HttpResponseRedirect(reverse('utilisateur:groupe'))
@@ -412,7 +418,7 @@ def ajouter_groupe(request):
 def supprimer_groupe(request, id):
     # on vérifie si le groupe à supprimer existe et on le supprime
     try:
-        groupe = Group.objects.get(id = id)
+        groupe = Group.objects.get(id=id)
         groupe.delete()
 
     except Group.DoesNotExist:
@@ -462,7 +468,7 @@ def detail_groupe(request, id):
         user = None
         for i in range(1, len(page_obj) + 1):
             try:
-                user = User.objects.get(id= request.POST.get(str(i), 0))
+                user = User.objects.get(id=request.POST.get(str(i), 0))
 
                 # On ajoute l'utilisateur dans le groupe
                 groupe.user_set.add(user)
@@ -558,12 +564,12 @@ def supprimer_utilisateur_groupe(request, id):
         except User.DoesNotExist:
             # On effectue une redirection
             # On gère le message d'erreur
-            return HttpResponseRedirect(reverse('utilisateur:detail_groupe', args ={id_groupe}))
+            return HttpResponseRedirect(reverse('utilisateur:detail_groupe', args={id_groupe}))
 
 
         # on vérifie si le groupe existe et on le récupère
         try:
-            groupe = Group.objects.get(id = id_groupe)
+            groupe = Group.objects.get(id=id_groupe)
         except Group.DoesNotExist:
             # On effectue une redirection
             # On gère le message d'erreur
@@ -572,7 +578,7 @@ def supprimer_utilisateur_groupe(request, id):
         # On supprime l'utilisateur du groupe
         groupe.user_set.remove(user)
         # On effectue une redirection
-        return HttpResponseRedirect(reverse('utilisateur:detail_groupe', args ={id_groupe}))
+        return HttpResponseRedirect(reverse('utilisateur:detail_groupe', args={id_groupe}))
 
     # On effectue une redirection
     return HttpResponseRedirect(reverse('utilisateur:connexion'))
@@ -606,7 +612,7 @@ def modifier_groupe(request, id):
 
         return render(request,'utilisateur/modifier_groupe.html', context)
     else:
-        # On créé un formulaire avec les données du groupe
+        # On crée un formulaire avec les données du groupe
         form = GroupeForm(request.POST)
 
         # On vérifie si le nom du groupe a changer
@@ -652,7 +658,6 @@ def motdepasse(request, id):
     # On vérifie si l'utilisateur en cours est le même utilisateur qui veut modifier le mot de passe
     if int(request.user.id) == int(id):
         utilisateur_identique = True
-        print(request.user.id, id)
 
     context = {
         'titre': "Changer de mot de passe",
@@ -675,9 +680,9 @@ def motdepasse(request, id):
         nouveau_motdepasse = ""
         confirmation_motdepasse = ""
 
-        motdepasse_actuel = request.POST.get('passwordactuel','')
-        nouveau_motdepasse = request.POST.get('password1','')
-        confirmation_motdepasse = request.POST.get('password2','')
+        motdepasse_actuel = request.POST.get('passwordactuel', '')
+        nouveau_motdepasse = request.POST.get('password1', '')
+        confirmation_motdepasse = request.POST.get('password2', '')
 
         # On vérifie si le mot de passe actuel existe
         if utilisateur_identique:
@@ -686,7 +691,7 @@ def motdepasse(request, id):
                 return render(request, 'utilisateur/motdepasse.html', context)
             else:
                 # On vérifie si le mot de passe actuel saisie est correcte
-                user = authenticate(request, username=request.POST.get('username',''), password=motdepasse_actuel)
+                user = authenticate(request, username=request.POST.get('username', ''), password=motdepasse_actuel)
 
                 if user is not None:
                     # On vérifie si les deux mots de passes sont correctes
@@ -717,7 +722,7 @@ def motdepasse(request, id):
 
                 request.session['success'] = "Mot de passe modifié avec succès"  # Pour l'affichage du toast dans l'index
                 # On effectue une redirection vers le tableau de bord
-                return HttpResponseRedirect(reverse('utilisateur:index'))
+                return HttpResponseRedirect(reverse('utilisateur:utilisateur'))
             else:
                 context['message'] = "Le mot de passe de confirmation est incorrecte"
                 return render(request, 'utilisateur/motdepasse.html', context)
@@ -726,30 +731,29 @@ def motdepasse(request, id):
 
 
 # ---- Gestion des erreurs --------------------------
-
 def handler404(request, exception):
 
     context = {
-        'titre':'ERREUR 404',
-        'message':"La page que vous désirez n'existe pas",
+        'titre': 'ERREUR 404',
+        'message': "La page que vous désirez n'existe pas",
     }
 
-    return render(request,'erreur/erreur.html', status=404, context=context)
+    return render(request, 'erreur/erreur.html', status=404, context=context)
 
 def handler500(request):
 
     context = {
-        'titre':'ERREUR 500',
-        'message':"Le serveur ne parvient pas à traiter votre requête",
+        'titre': 'ERREUR 500',
+        'message': "Le serveur ne parvient pas à traiter votre requête",
     }
 
-    return render(request,'erreur/erreur.html', status=500, context=context)
+    return render(request, 'erreur/erreur.html', status=500, context=context)
 
 def handler400(request, exception):
 
     context = {
-        'titre':'ERREUR 400',
-        'message':"Votre requête est erronée",
+        'titre': 'ERREUR 400',
+        'message': "Votre requête est erronée",
     }
 
     return render(request,'erreur/erreur.html', status=400, context=context)
@@ -757,10 +761,10 @@ def handler400(request, exception):
 def handler403(request, exception):
 
     context = {
-        'titre':'ERREUR 403',
-        'message':"Vous n'avez pas accès à cette ressource",
+        'titre': 'ERREUR 403',
+        'message': "Vous n'avez pas accès à cette ressource",
     }
 
-    return render(request,'erreur/erreur.html', status=403, context=context)
+    return render(request, 'erreur/erreur.html', status=403, context=context)
 
 # ---- Fin de la Gestion des erreurs ----------------
