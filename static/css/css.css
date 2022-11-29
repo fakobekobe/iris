@@ -150,6 +150,22 @@ nav div ul li a{
 
 
 /* Contenu Index présentation */
+#contenu_index_gauche{
+    background: #025E73;
+}
+
+#contenu_index_gauche a{
+    color: #FFF;
+    transition: 0.5s;
+    transition-property: color;
+}
+
+#contenu_index_gauche a:hover{
+    color: #A5A692;
+}
+
+
+/***********************************/
 
 #contenu_index_droit{
     background: white;

@@ -24,6 +24,15 @@ class Secteur(models.Model):
     def __str__(self):
         return self.secteur
 
+class Chapeau(models.Model):
+    chapeau = models.CharField(max_length=250, unique=True, verbose_name="Chapeau")
+    nom = models.CharField(max_length=250, verbose_name="Nom")
+    contact = models.CharField(max_length=50, null=True, blank=True, default="", verbose_name="Contact")
+
+    # Liste des methodes
+    def __str__(self):
+        return self.chapeau
+
 class SecteurActive(models.Model):
     nom = models.CharField(max_length=250, null=False, blank=False)
     presidente = models.CharField(max_length=250, null=True, blank=True, default="")
@@ -105,6 +114,7 @@ class SecteurAgricole(SecteurActive):
     superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
 
     membres = models.ManyToManyField(Membre, through='MembreSecteurAgricole', through_fields=('secteuragricole', 'membre'))
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nom
@@ -123,6 +133,7 @@ class SecteurInformel(SecteurActive):
     metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
 
     membres = models.ManyToManyField(Membre, through="MembreSecteurInformel", through_fields=('secteurinformel','membre'))
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.metier.secteur
@@ -141,8 +152,9 @@ class MembreSecteurInformel(models.Model):
 class SecteurFemmeActive(SecteurActive):
     personne_ressource = models.ForeignKey(Membre, related_name='personne_membre_set',null=True,blank=True, on_delete=models.SET_NULL)
 
-    marche = models.ForeignKey(Marche, null=True,blank=True, on_delete=models.SET_NULL)
+    marche = models.ForeignKey(Marche, null=True, blank=True, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through="MembreSecteurFemmeActive", through_fields=('secteurfemmeactive','membre'))
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nom
@@ -214,7 +226,6 @@ class Document(models.Model):
     def get_photo_membre(self):
         if self.typedocument.libelle == "Photo":
             return self.photo
-
 
 
 
