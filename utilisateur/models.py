@@ -37,6 +37,7 @@ LISTE_MODELS = {
         'Etat_de_santé': EtatSante,
         'Type_document': TypeDocument,
         'Document': Document,
+        'Chapeau': Chapeau,
     },
 }
 

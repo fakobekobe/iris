@@ -1,0 +1,20 @@
+{% extends 'vieprofessionnelle/ajouter_chapeau.html' %}
+
+{% block modal-id %} id="chapeaumodifierModal{{chapeau.id}}" {% endblock modal-id %}
+{% block modal-label %}chapeaumodifierModalLabel{{chapeau.id}}{% endblock modal-label %}
+{% block modal-label2 %}chapeaumodifierModalLabel{{chapeau.id}}{% endblock modal-label2 %}
+{% block modal-titre %} Modifier un chapeau {% endblock modal-titre %}
+{% block action %} action="{% url 'vieprofessionnelle:modifier_chapeau' %}" {% endblock action %}
+{% block modifier-id %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+        </div>
+        <input type="text" name="id" class="form-control" value="{{chapeau.id}}" readonly >
+    </div>
+{% endblock modifier-id %}
+
+{% block value-chapeau %}value="{{chapeau.chapeau}}"{% endblock value-chapeau %}
+{% block value-nom %}value="{{chapeau.nom}}"{% endblock value-nom %}
+{% block value-contact %}value="{{chapeau.contact}}"{% endblock value-contact %}
+{% block btn-action %}<i class="fas fa-pen"></i> Modifier {% endblock btn-action %}

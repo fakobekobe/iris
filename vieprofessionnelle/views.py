@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 import os
 from datetime import datetime
+from django.utils.html import strip_tags
 
 
 # Les constatntes et les variables globales
@@ -23,6 +24,7 @@ def vieprofessionnelle(request):
     typedocuments = TypeDocument.objects.order_by("libelle")
     documents = Document.objects.order_by("-id")
     membres = Membre.objects.order_by("-id")
+    chapeaux = Chapeau.objects.order_by("-id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -32,6 +34,7 @@ def vieprofessionnelle(request):
     active_typeetatsante = ['', 'false', '']
     active_typedocument = ['', 'false', '']
     active_document = ['', 'false', '']
+    active_chapeau = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -47,6 +50,8 @@ def vieprofessionnelle(request):
         active_typedocument = ['active', 'true', 'show active']
     elif _active_onglet == "document":
         active_document = ['active', 'true', 'show active']
+    elif _active_onglet == "chapeau":
+        active_chapeau = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -61,7 +66,7 @@ def vieprofessionnelle(request):
         "typedocuments": typedocuments,
         "documents": documents,
         "membres": membres,
-
+        "chapeaux": chapeaux,
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
@@ -70,6 +75,7 @@ def vieprofessionnelle(request):
         "active_typeetatsante": active_typeetatsante,
         "active_typedocument": active_typedocument,
         "active_document": active_document,
+        "active_chapeau": active_chapeau,
 
     }
 
@@ -912,3 +918,114 @@ def ajouter_cooperative(request):
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
 # Fin de la Gestion de la Coopérative -------------------------------------
+
+# Gestion du type de document -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_chapeau', raise_exception=True)
+def ajouter_chapeau(request):
+    global _active_onglet
+    _active_onglet = "chapeau"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        chapeau = strip_tags(request.POST.get("chapeau", "")).strip()
+        nom = strip_tags(request.POST.get("nom", "")).strip()
+        contact = strip_tags(request.POST.get("contact", "")).strip()
+
+        if chapeau and nom and contact:  # On vérifie si le champ a été renseigné
+
+            # On format les chaines
+            chapeau = chapeau.title()
+            nom = nom.title()
+
+            try:
+                objet_chapeau = Chapeau.objects.get(chapeau=chapeau)
+                messages.error(request, f"Ce chapeau :[{chapeau}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except Chapeau.DoesNotExist:
+                pass
+
+            # ----
+            objet_chapeau = Chapeau()
+            objet_chapeau.chapeau = chapeau
+            objet_chapeau.nom = nom
+            objet_chapeau.contact = contact
+            objet_chapeau.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_chapeau', raise_exception=True)
+def modifier_chapeau(request):
+    global _active_onglet
+    _active_onglet = "chapeau"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_chapeau = Chapeau.objects.get(id=request.POST.get('id'))
+        except Chapeau.DoesNotExist:
+            messages.error(request, "Ce chapeau n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_chapeau:
+            # On formate les chaines
+            chapeau_nouveau = strip_tags(request.POST.get("chapeau", "")).strip()
+            chapeau_nouveau = chapeau_nouveau.title()
+
+            nom = strip_tags(request.POST.get("nom", "")).strip()
+            nom = nom.title()
+
+            contact = strip_tags(request.POST.get("contact", "")).strip()
+
+            # On récupère l'ancienne valeur
+            chapeau_ancien = objet_chapeau.chapeau
+
+            # On vérifie si la valeur a changé
+            if chapeau_nouveau != chapeau_ancien:
+                # On vérifie si la valeur modifiée existe déjà
+                try:
+                    Chapeau.objects.get(chapeau=chapeau_nouveau)
+                    messages.error(request, f"Ce chapeau [{chapeau_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except Chapeau.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_chapeau.chapeau = chapeau_nouveau
+            objet_chapeau.nom = nom
+            objet_chapeau.contact = contact
+            objet_chapeau.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_chapeau', raise_exception=True)
+def supprimer_chapeau(request, id):
+    global _active_onglet
+    _active_onglet = "chapeau"  # On initialise la variable
+
+    try:
+        objet_chapeau = Chapeau.objects.get(id=id)
+    except Chapeau.DoesNotExist:
+        messages.error(request, "Ce chapeau n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_chapeau:
+        objet_chapeau.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type de document -------------------------------------

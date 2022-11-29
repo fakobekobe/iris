@@ -44,5 +44,10 @@ urlpatterns = [
     # Url Coopérative
     path('ajouter-cooperative', views.ajouter_cooperative, name='ajouter_cooperative'),
 
+    # Url Chapeau
+    path('ajouter-chapeau/', views.ajouter_chapeau, name='ajouter_chapeau'),
+    path('modifier-chapeau/', views.modifier_chapeau, name='modifier_chapeau'),
+    path('supprimer-chapeau/<str:id>', views.supprimer_chapeau, name='supprimer_chapeau'),
+
 
 ]

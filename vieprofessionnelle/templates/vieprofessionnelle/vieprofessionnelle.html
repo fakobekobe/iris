@@ -6,574 +6,656 @@
 
 <div>
 
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_typesecteur|first}}" id="typesecteur-tab" data-toggle="tab" data-target="#typesecteur" type="button" role="tab" aria-controls="typesecteur" aria-selected="{{ active_typesecteur|slice:'1:2'|first }}">
-        Type du secteur d'activité
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_secteur|first}}" id="secteur-tab" data-toggle="tab" data-target="#secteur" type="button" role="tab" aria-controls="secteur" aria-selected="{{ active_secteur|slice:'1:2'|first }}">
-        Secteur
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_typeparent|first}}" id="typeparent-tab" data-toggle="tab" data-target="#typeparent" type="button" role="tab" aria-controls="typeparent" aria-selected="{{ active_typeparent|slice:'1:2'|first }}">
-        Type de parent
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_parent|first}}" id="parent-tab" data-toggle="tab" data-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="{{ active_parent|slice:'1:2'|first }}">
-        Parent
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_typeetatsante|first}}" id="typeetatsante-tab" data-toggle="tab" data-target="#typeetatsante" type="button" role="tab" aria-controls="typeetatsante" aria-selected="{{ active_typeetatsante|slice:'1:2'|first }}">
-        Type état de santé
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_typedocument|first}}" id="typedocument-tab" data-toggle="tab" data-target="#typedocument" type="button" role="tab" aria-controls="typedocument" aria-selected="{{ active_typedocument|slice:'1:2'|first }}">
-        Type de document
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link {{active_document|first}}" id="document-tab" data-toggle="tab" data-target="#document" type="button" role="tab" aria-controls="document" aria-selected="{{ active_document|slice:'1:2'|first }}">
-        Document
-      </button>
-    </li>
-  </ul>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_typesecteur|first}}" id="typesecteur-tab" data-toggle="tab" data-target="#typesecteur" type="button" role="tab" aria-controls="typesecteur" aria-selected="{{ active_typesecteur|slice:'1:2'|first }}">
+                Type du secteur d'activité
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_secteur|first}}" id="secteur-tab" data-toggle="tab" data-target="#secteur" type="button" role="tab" aria-controls="secteur" aria-selected="{{ active_secteur|slice:'1:2'|first }}">
+                Secteur
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_typeparent|first}}" id="typeparent-tab" data-toggle="tab" data-target="#typeparent" type="button" role="tab" aria-controls="typeparent" aria-selected="{{ active_typeparent|slice:'1:2'|first }}">
+                Type de parent
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_parent|first}}" id="parent-tab" data-toggle="tab" data-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="{{ active_parent|slice:'1:2'|first }}">
+                Parent
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_typeetatsante|first}}" id="typeetatsante-tab" data-toggle="tab" data-target="#typeetatsante" type="button" role="tab" aria-controls="typeetatsante" aria-selected="{{ active_typeetatsante|slice:'1:2'|first }}">
+                Type état de santé
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_typedocument|first}}" id="typedocument-tab" data-toggle="tab" data-target="#typedocument" type="button" role="tab" aria-controls="typedocument" aria-selected="{{ active_typedocument|slice:'1:2'|first }}">
+                Type de document
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_document|first}}" id="document-tab" data-toggle="tab" data-target="#document" type="button" role="tab" aria-controls="document" aria-selected="{{ active_document|slice:'1:2'|first }}">
+                Document
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_chapeau|first}}" id="chapeau-tab" data-toggle="tab" data-target="#chapeau" type="button" role="tab" aria-controls="chapeau" aria-selected="{{ active_chapeau|slice:'1:2'|first }}">
+                Chapeau
+            </button>
+        </li>
+    </ul>
 
-  <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="myTabContent">
 
-    <!-- CONTENU Type secteur -->
-    <div class="tab-pane fade {{ active_typesecteur|last }}" id="typesecteur" role="tabpanel" aria-labelledby="typesecteur-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-tasks"></i> Liste des types de secteurs d'activités</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typesecteurModal" data-backdrop="static"><i class="fas fa-tasks"></i> Ajouter un type de secteur</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tabletypesecteur">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Type</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for typesecteur in typesecteurs %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{typesecteur.type|upper}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typesecteurmodifierModal{{typesecteur.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{typesecteur.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="modal{{typesecteur.id}}" role="dialog">
-                                    <div class="modal-dialog">
+        <!-- CONTENU Type secteur -->
+        <div class="tab-pane fade {{ active_typesecteur|last }}" id="typesecteur" role="tabpanel" aria-labelledby="typesecteur-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-tasks"></i> Liste des types de secteurs d'activités</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typesecteurModal" data-backdrop="static"><i class="fas fa-tasks"></i> Ajouter un type de secteur</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabletypesecteur">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for typesecteur in typesecteurs %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{typesecteur.type|upper}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typesecteurmodifierModal{{typesecteur.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal{{typesecteur.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modal{{typesecteur.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Type de secteur : <strong>{{typesecteur.type|upper}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typesecteur' typesecteur.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Type de secteur : <strong>{{typesecteur.type|upper}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typesecteur' typesecteur.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_typesecteur.html' %}
-                        {% include 'vieprofessionnelle/modifier_typesecteur.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_typesecteur.html' %}
+                            {% include 'vieprofessionnelle/modifier_typesecteur.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_typesecteur.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU Type secteur -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU Type secteur -->
+        <!-- CONTENU secteur -->
+        <div class="tab-pane fade {{ active_secteur|last }}" id="secteur" role="tabpanel" aria-labelledby="secteur-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-hospital-user"></i> Liste des secteurs</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#secteurModal" data-backdrop="static"><i class="fas fa-hospital-user"></i> Ajouter un secteur</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tablesecteur">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Secteur</th>
+                                <th>Type de secteur</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for secteur in secteurs %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{secteur.secteur|capfirst}}</td>
+                                <td>{{secteur.typesecteur|upper}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#secteurmodifierModal{{secteur.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#secteursupprimermodal{{secteur.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="secteursupprimermodal{{secteur.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU secteur -->
-    <div class="tab-pane fade {{ active_secteur|last }}" id="secteur" role="tabpanel" aria-labelledby="secteur-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-hospital-user"></i> Liste des secteurs</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#secteurModal" data-backdrop="static"><i class="fas fa-hospital-user"></i> Ajouter un secteur</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tablesecteur">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Secteur</th>
-                            <th>Type de secteur</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for secteur in secteurs %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{secteur.secteur|capfirst}}</td>
-                            <td>{{secteur.typesecteur|upper}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#secteurmodifierModal{{secteur.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#secteursupprimermodal{{secteur.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="secteursupprimermodal{{secteur.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Secteur : <strong>{{secteur.secteur|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_secteur' secteur.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Secteur : <strong>{{secteur.secteur|capfirst}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_secteur' secteur.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_secteur.html' %}
-                        {% include 'vieprofessionnelle/modifier_secteur.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_secteur.html' %}
+                            {% include 'vieprofessionnelle/modifier_secteur.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_secteur.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU secteur -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU secteur -->
+        <!-- CONTENU type de parent -->
+        <div class="tab-pane fade {{ active_typeparent|last }}" id="typeparent" role="tabpanel" aria-labelledby="typeparent-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-user-friends"></i> Liste des types de parents</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeparentModal" data-backdrop="static"><i class="fas fa-user-friends"></i> Ajouter un type de parent</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabletypeparent">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Libellé</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for typeparent in typeparents %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{typeparent.libelle|capfirst}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeparentmodifierModal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeparentsupprimermodal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="typeparentsupprimermodal{{typeparent.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU type de parent -->
-    <div class="tab-pane fade {{ active_typeparent|last }}" id="typeparent" role="tabpanel" aria-labelledby="typeparent-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-user-friends"></i> Liste des types de parents</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeparentModal" data-backdrop="static"><i class="fas fa-user-friends"></i> Ajouter un type de parent</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tabletypeparent">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Libellé</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for typeparent in typeparents %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{typeparent.libelle|capfirst}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeparentmodifierModal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeparentsupprimermodal{{typeparent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="typeparentsupprimermodal{{typeparent.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Type de parent : <strong>{{typeparent.libelle|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeparent' typeparent.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Type de parent : <strong>{{typeparent.libelle|capfirst}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeparent' typeparent.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_typeparent.html' %}
-                        {% include 'vieprofessionnelle/modifier_typeparent.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_typeparent.html' %}
+                            {% include 'vieprofessionnelle/modifier_typeparent.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_typeparent.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU type de parent -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU type de parent -->
+        <!-- CONTENU parent -->
+        <div class="tab-pane fade {{ active_parent|last }}" id="parent" role="tabpanel" aria-labelledby="parent-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-user-check"></i> Liste des parents</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#parentModal" data-backdrop="static"><i class="fas fa-user-check"></i> Ajouter un parent</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tableparent">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Nom et prénoms</th>
+                                <th>Date de naissance</th>
+                                <th>Adresse</th>
+                                <th>Contact</th>
+                                <th>Type de parent</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for parent in parents %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{parent.nomprenoms|title}}</td>
+                                <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
+                                <td>{{parent.adresse}}</td>
+                                <td>{{parent.contact}}</td>
+                                <td>{{parent.typeparent.libelle|capfirst}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#parentmodifierModal{{parent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{parent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="parentsupprimermodal{{parent.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU parent -->
-    <div class="tab-pane fade {{ active_parent|last }}" id="parent" role="tabpanel" aria-labelledby="parent-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-user-check"></i> Liste des parents</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#parentModal" data-backdrop="static"><i class="fas fa-user-check"></i> Ajouter un parent</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tableparent">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Nom et prénoms</th>
-                            <th>Date de naissance</th>
-                            <th>Adresse</th>
-                            <th>Contact</th>
-                            <th>Type de parent</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for parent in parents %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{parent.nomprenoms|title}}</td>
-                            <td>{{parent.datenaissance|date:"d/m/Y"}}</td>
-                            <td>{{parent.adresse}}</td>
-                            <td>{{parent.contact}}</td>
-                            <td>{{parent.typeparent.libelle|capfirst}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#parentmodifierModal{{parent.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#parentsupprimermodal{{parent.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="parentsupprimermodal{{parent.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Parent : <strong>{{parent.nomprenoms|title}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_parent' parent.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Parent : <strong>{{parent.nomprenoms|title}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_parent' parent.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_parent.html' %}
-                        {% include 'vieprofessionnelle/modifier_parent.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_parent.html' %}
+                            {% include 'vieprofessionnelle/modifier_parent.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_parent.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU parent -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU parent -->
+        <!-- CONTENU type état de santé -->
+        <div class="tab-pane fade {{ active_typeetatsante|last }}" id="typeetatsante" role="tabpanel" aria-labelledby="typeetatsante-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-stethoscope"></i> Liste des types d'état de santé</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeetatsanteModal" data-backdrop="static"><i class="fas fa-stethoscope"></i> Ajouter un type d'état de santé</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabletypeetatsante">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Libellé</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for typeetatsante in typeetatsantes %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{typeetatsante.libelle|capfirst}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeetatsantemodifierModal{{typeetatsante.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeetatsantesupprimermodal{{typeetatsante.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="typeetatsantesupprimermodal{{typeetatsante.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU type état de santé -->
-    <div class="tab-pane fade {{ active_typeetatsante|last }}" id="typeetatsante" role="tabpanel" aria-labelledby="typeetatsante-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-stethoscope"></i> Liste des types d'état de santé</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeetatsanteModal" data-backdrop="static"><i class="fas fa-stethoscope"></i> Ajouter un type d'état de santé</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tabletypeetatsante">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Libellé</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for typeetatsante in typeetatsantes %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{typeetatsante.libelle|capfirst}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeetatsantemodifierModal{{typeetatsante.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeetatsantesupprimermodal{{typeetatsante.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="typeetatsantesupprimermodal{{typeetatsante.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Type d'état de santé : <strong>{{typeetatsante.libelle|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeetatsante' typeetatsante.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Type d'état de santé : <strong>{{typeetatsante.libelle|capfirst}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeetatsante' typeetatsante.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_typeetatsante.html' %}
-                        {% include 'vieprofessionnelle/modifier_typeetatsante.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_typeetatsante.html' %}
+                            {% include 'vieprofessionnelle/modifier_typeetatsante.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_typeetatsante.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU type état de santé -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU type état de santé -->
+        <!-- CONTENU type de document -->
+        <div class="tab-pane fade {{ active_typedocument|last }}" id="typedocument" role="tabpanel" aria-labelledby="typedocument-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-paste"></i> Liste des types de documents</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typedocumentModal" data-backdrop="static"><i class="fas fa-paste"></i> Ajouter un type de document</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabletypedocument">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Libellé</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for typedocument in typedocuments %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{typedocument.libelle|capfirst}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typedocumentmodifierModal{{typedocument.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typedocumentsupprimermodal{{typedocument.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="typedocumentsupprimermodal{{typedocument.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU type de document -->
-    <div class="tab-pane fade {{ active_typedocument|last }}" id="typedocument" role="tabpanel" aria-labelledby="typedocument-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-paste"></i> Liste des types de documents</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typedocumentModal" data-backdrop="static"><i class="fas fa-paste"></i> Ajouter un type de document</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tabletypedocument">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Libellé</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for typedocument in typedocuments %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{typedocument.libelle|capfirst}}</td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typedocumentmodifierModal{{typedocument.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typedocumentsupprimermodal{{typedocument.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="typedocumentsupprimermodal{{typedocument.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Type de document : <strong>{{typedocument.libelle|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typedocument' typedocument.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Type de document : <strong>{{typedocument.libelle|capfirst}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typedocument' typedocument.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_typedocument.html' %}
-                        {% include 'vieprofessionnelle/modifier_typedocument.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_typedocument.html' %}
+                            {% include 'vieprofessionnelle/modifier_typedocument.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_typedocument.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU type de document -->
 
-      </div>
-    </div>
-    <!-- FIN DE CONTENU type de document -->
+        <!-- CONTENU du document -->
+        <div class="tab-pane fade {{ active_document|last }}" id="document" role="tabpanel" aria-labelledby="document-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-file-image"></i> Liste des documents</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#documentModal" data-backdrop="static"><i class="fas fa-file-image"></i> Ajouter un document</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabledocument">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Libellé</th>
+                                <th>Date</th>
+                                <th>Propriétaire</th>
+                                <th>Photo</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for document in documents %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{document.typedocument.libelle|capfirst}}</td>
+                                <td>{{document.dateenre|date:"d/m/Y"}}</td>
+                                <td>{{document.membre.nom|title}}</td>
+                                <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#documentmodifierModal{{document.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="documentsupprimermodal{{document.id}}" role="dialog">
+                                        <div class="modal-dialog">
 
-    <!-- CONTENU du document -->
-    <div class="tab-pane fade {{ active_document|last }}" id="document" role="tabpanel" aria-labelledby="document-tab">
-      <div>
-        <h1 class="mb-3 text-primary"><i class="fas fa-file-image"></i> Liste des documents</h1>
-        <h3><a class="btn btn-primary" data-toggle="modal" data-target="#documentModal" data-backdrop="static"><i class="fas fa-file-image"></i> Ajouter un document</a></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table  table-bordered table-hover table-responsive-md" id="tabledocument">
-                    <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Libellé</th>
-                            <th>Date</th>
-                            <th>Propriétaire</th>
-                            <th>Photo</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for document in documents %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{document.typedocument.libelle|capfirst}}</td>
-                            <td>{{document.dateenre|date:"d/m/Y"}}</td>
-                            <td>{{document.membre.nom|title}}</td>
-                            <td class="text-center"><img src="{{document.photo.url}}" alt="{{document.photo.name}}" title="{{document.photo.name}}" class="img-thumbnail image-petite" ></td>
-                            <td class="text-center">
-                                <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#documentmodifierModal{{document.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
-                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#documentsupprimermodal{{document.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="documentsupprimermodal{{document.id}}" role="dialog">
-                                    <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
 
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_document' document.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <div class="modal-body">
-                                            <h5>
-                                                Document : <strong>{{document.typedocument.libelle|capfirst}}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer justify-content-center">
-
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_document' document.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
-                                            </form>
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
-
-                                        </div>
-                                      </div>
-
                                     </div>
-                                </div>
-                                <!-- Modal Fin -->
-                            </td>
-                        </tr>
-                        <!-- LISTE DES INCLUDES -->
-                        {% include 'vieprofessionnelle/ajouter_document.html' %}
-                        {% include 'vieprofessionnelle/modifier_document.html' %}
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_document.html' %}
+                            {% include 'vieprofessionnelle/modifier_document.html' %}
 
-                        {% empty %}
+                            {% empty %}
                             {% include 'vieprofessionnelle/ajouter_document.html' %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+
+                    </div>
+                </div>
 
             </div>
         </div>
+        <!-- FIN DE CONTENU du document -->
 
-      </div>
+        <!-- CONTENU chapeau -->
+        <div class="tab-pane fade {{ active_chapeau|last }}" id="chapeau" role="tabpanel" aria-labelledby="chapeau-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-hat-cowboy"></i> Liste des chapeaux</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#chapeauModal" data-backdrop="static"><i class="fas fa-hat-cowboy"></i> Ajouter un chapeau</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tablechapeau">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Chapeau</th>
+                                <th>Nom et prénoms</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for chapeau in chapeaux %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{chapeau.chapeau}}</td>
+                                <td>{{chapeau.nom}}</td>
+                                <td>{{chapeau.contact}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#chapeaumodifierModal{{chapeau.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#chapeausupprimermodal{{chapeau.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="chapeausupprimermodal{{chapeau.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Chapeau : <strong>{{chapeau.chapeau}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_chapeau' chapeau.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_chapeau.html' %}
+                            {% include 'vieprofessionnelle/modifier_chapeau.html' %}
+
+                            {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_chapeau.html' %}
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN DE CONTENU chapeau -->
+
     </div>
-    <!-- FIN DE CONTENU du document -->
-
-  </div>
 
 </div>
 
