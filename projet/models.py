@@ -1,4 +1,6 @@
-# Liste des methodes Globales di=u projet--------
+from localisation.models import *
+
+# Liste des méthodes Globales du projet--------
 
 def ajoute_zero_a_identifiant(departement, ville, identifiant, taille_fixe=7):
 	"""
@@ -19,5 +21,5 @@ def ajoute_zero_a_identifiant(departement, ville, identifiant, taille_fixe=7):
 	else:
 		texte += fin
 	return texte
-
 #--------------------------------------------------
+

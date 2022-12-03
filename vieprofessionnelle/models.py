@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 from etatcivil.models import *
-from localisation.models import Quartier, Commune, Marche
+from localisation.models import Quartier, Commune, Marche, Ville
 from django.contrib.auth.models import User
 from projet.models import *
 
@@ -46,7 +46,7 @@ class SecteurActive(models.Model):
 
 class Membre(models.Model):
     # Les attribues propres
-    identifiant = models.CharField(max_length=12, null=True,blank=True, default=None, unique=True, verbose_name="Identifiant")
+    identifiant = models.CharField(max_length=13, null=True,blank=True, default=None, unique=True, verbose_name="Identifiant")
     nom = models.CharField(max_length=250, null=False,blank=False, verbose_name="Nom")
     nomjeunefille = models.CharField(max_length=250, null=True,blank=True,default="", verbose_name="Nom de jeune fille")
     prenoms = models.CharField(max_length=250, null=True,blank=True, default="", verbose_name="Prénoms")
@@ -84,7 +84,7 @@ class Membre(models.Model):
         self.identifiant = ajoute_zero_a_identifiant(
             departement=self.quartier.commune.ville.departement.code,
             ville=self.quartier.commune.ville.code,
-            identifiant=self.id)
+            identifiant=self.quartier.get_nombre_membre_par_ville() + 1)  # On fait +1 pour le membre en cours
 
     def get_region(self):
         return self.quartier.commune.ville.departement.region.code
@@ -114,7 +114,6 @@ class SecteurAgricole(SecteurActive):
     superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
 
     membres = models.ManyToManyField(Membre, through='MembreSecteurAgricole', through_fields=('secteuragricole', 'membre'))
-    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nom
@@ -125,6 +124,7 @@ class MembreSecteurAgricole(models.Model):
     secteuragricole = models.ForeignKey(SecteurAgricole,on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteuragricole.nom
@@ -133,7 +133,6 @@ class SecteurInformel(SecteurActive):
     metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
 
     membres = models.ManyToManyField(Membre, through="MembreSecteurInformel", through_fields=('secteurinformel','membre'))
-    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.metier.secteur
@@ -144,17 +143,23 @@ class MembreSecteurInformel(models.Model):
     secteurinformel = models.ForeignKey(SecteurInformel,on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteurinformel.nom
 
 
 class SecteurFemmeActive(SecteurActive):
-    personne_ressource = models.ForeignKey(Membre, related_name='personne_membre_set',null=True,blank=True, on_delete=models.SET_NULL)
+    identifiant = models.CharField(max_length=19, null=True, blank=True, default=None, unique=True, verbose_name="Identifiant")
 
-    marche = models.ForeignKey(Marche, null=True, blank=True, on_delete=models.SET_NULL)
+    quartier = models.ForeignKey(Quartier, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    marche = models.ForeignKey(Marche, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through="MembreSecteurFemmeActive", through_fields=('secteurfemmeactive','membre'))
-    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    quantitegroupement = models.ForeignKey("QuantiteGroupement", default=None, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def set_identifiant(self):
+        self.identifiant = f"0{self.quantitegroupement}{self.ville.departement.region.code}" \
+                           f"{ajoute_zero_a_identifiant(departement=self.ville.departement.code, ville=self.ville.code, identifiant=self.quartier.get_nombre_membre_par_ville() + 1)}"
 
     def __str__(self):
         return self.nom
@@ -165,6 +170,10 @@ class MembreSecteurFemmeActive(models.Model):
     secteurfemmeactive = models.ForeignKey(SecteurFemmeActive,on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
+    personneressource = models.ForeignKey("PersonneRessource", null=True, blank=True, default=True, on_delete=models.SET_NULL)
+    typeresponsabilite = models.ForeignKey("TypeResponsabilite", null=True, blank=True, default=True, on_delete=models.SET_NULL)
+    montantfinancement = models.ForeignKey("MontantFinancement", null=True, blank=True, default=True, on_delete=models.SET_NULL)
+    chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteurfemmeactive.nom
@@ -228,4 +237,35 @@ class Document(models.Model):
             return self.photo
 
 
+class TypePersonneRessource(models.Model):
+    type = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.type
+
+class PersonneRessource(models.Model):
+    membre = models.OneToOneField(Membre, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    chapeau = models.OneToOneField(Chapeau, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    typepersonneressource = models.ForeignKey(TypePersonneRessource, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.typepersonneressource
+
+class QuantiteGroupement(models.Model):
+    quantite = models.IntegerField(unique=True, verbose_name="Quantité")
+
+    def __str__(self):
+        return self.quantite
+
+class TypeResponsabilite(models.Model):
+    type = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.type
+
+class MontantFinancement(models.Model):
+    montant = models.IntegerField(unique=True, verbose_name="Montant")
+
+    def __str__(self):
+        return self.montant
 

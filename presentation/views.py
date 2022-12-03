@@ -104,20 +104,18 @@ def ajouter_secteuragricole(request):
                 objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
                 objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
                 objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
+                objet_membre.set_identifiant()
 
                 if not request.session.get('id_membre'):
                     objet_membre.dateenre = datetime.date.today()
 
-                objet_membre.actif = True # On active l'utilisateur
+                objet_membre.actif = True  # On active l'utilisateur
                 objet_membre.utilisateur = User.objects.get(id=request.user.id)
 
                 # On sauvegarde les données
                 objet_membre.save()
 
                 if not request.session.get('id_membre'):
-                    # On ajoute le champ après la sauvegarde pour utiliser l'id
-                    objet_membre.set_identifiant()
-                    objet_membre.save()
 
                     # On ajoute le secteur agricole en relation
                     MembreSecteurAgricole.objects.create(

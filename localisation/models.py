@@ -1,4 +1,17 @@
 from django.db import models
+from projet.models import *
+
+# Liste des méthodes Globales du projet --------
+def nombre_membre_par_ville(quartier):
+	"""
+		Cette méthode permet d'obtenir le nombre de membres par ville
+		Ex: quartier = objet quartier
+			la valeur de retour = 0 s'il n'y a aucun membre dans cette ville
+			la valeur de retour = 12 s'il y a des membres dans cette ville
+	"""
+	return Quartier.objects.filter(membre__quartier__commune__ville__code=quartier.commune.ville.code).count()
+#--------------------------------------------------
+
 
 class District(models.Model):
     code = models.CharField(max_length=100, unique=True)
@@ -42,10 +55,14 @@ class Commune(models.Model):
 class Quartier(models.Model):
     code = models.CharField(max_length=100, unique=True)
     libelle = models.CharField(max_length=250, verbose_name="Quartier", unique=True)
-    commune = models.ForeignKey(Commune,on_delete=models.SET_NULL, null=True)
+    commune = models.ForeignKey(Commune, on_delete=models.SET_NULL, null=True)
 
+    # Les methodes
     def __str__(self):
         return self.libelle
+
+    def get_nombre_membre_par_ville(self):
+        return nombre_membre_par_ville(self)
 
 class Marche(models.Model):
     code = models.CharField(max_length=100, unique=True)
