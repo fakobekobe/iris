@@ -25,6 +25,7 @@ def vieprofessionnelle(request):
     documents = Document.objects.order_by("-id")
     membres = Membre.objects.order_by("-id")
     chapeaux = Chapeau.objects.order_by("-id")
+    typepersonneressources = TypePersonneRessource.objects.order_by("-id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -35,6 +36,7 @@ def vieprofessionnelle(request):
     active_typedocument = ['', 'false', '']
     active_document = ['', 'false', '']
     active_chapeau = ['', 'false', '']
+    active_typepersonneressource = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -52,6 +54,8 @@ def vieprofessionnelle(request):
         active_document = ['active', 'true', 'show active']
     elif _active_onglet == "chapeau":
         active_chapeau = ['active', 'true', 'show active']
+    elif _active_onglet == "typepersonneressource":
+        active_typepersonneressource = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -67,6 +71,7 @@ def vieprofessionnelle(request):
         "documents": documents,
         "membres": membres,
         "chapeaux": chapeaux,
+        "typepersonneressources": typepersonneressources,
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
@@ -76,6 +81,7 @@ def vieprofessionnelle(request):
         "active_typedocument": active_typedocument,
         "active_document": active_document,
         "active_chapeau": active_chapeau,
+        "active_typepersonneressource": active_typepersonneressource,
 
     }
 
@@ -1029,3 +1035,102 @@ def supprimer_chapeau(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du type de document -------------------------------------
+
+# Gestion du type de personne ressource -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_typepersonneressource', raise_exception=True)
+def ajouter_typepersonneressource(request):
+    global _active_onglet
+    _active_onglet = "typepersonneressource"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        type = strip_tags(request.POST.get("type", "")).strip()
+
+        if type:  # On vérifie si le champ a été renseigné
+
+            # On formate les chaines
+            type = type.capitalize()
+
+            try:
+                TypePersonneRessource.objects.get(type=type)
+                messages.error(request, f"Ce type de presonne ressource :[{type}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except TypePersonneRessource.DoesNotExist:
+                pass
+
+            # ----
+            objet_typepersonneressource = TypePersonneRessource()
+            objet_typepersonneressource.type = type
+            objet_typepersonneressource.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_typepersonneressource', raise_exception=True)
+def modifier_typepersonneressource(request):
+    global _active_onglet
+    _active_onglet = "typepersonneressource"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_typepersonneressource = TypePersonneRessource.objects.get(id=request.POST.get('id'))
+        except TypePersonneRessource.DoesNotExist:
+            messages.error(request, "Ce type de personne ressource n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_typepersonneressource:
+            # On formate les chaines
+            type_nouveau = strip_tags(request.POST.get("type", "")).strip()
+            type_nouveau = type_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            type_ancien = objet_typepersonneressource.type
+
+            # On vérifie si la valeur a changé
+            if type_nouveau != type_ancien:
+                # On vérifie si la valeur modifiée existe déjà
+                try:
+                    TypePersonneRessource.objects.get(type=type_nouveau)
+                    messages.error(request, f"Ce type de personne ressource [{type_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except TypePersonneRessource.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_typepersonneressource.type = type_nouveau
+            objet_typepersonneressource.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_typepersonneressource', raise_exception=True)
+def supprimer_typepersonneressource(request, id):
+    global _active_onglet
+    _active_onglet = "typepersonneressource"  # On initialise la variable
+
+    try:
+        objet_typepersonneressource = TypePersonneRessource.objects.get(id=id)
+    except TypePersonneRessource.DoesNotExist:
+        messages.error(request, "Ce type de personne ressource n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typepersonneressource:
+        objet_typepersonneressource.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type de personne ressource -------------------------------------

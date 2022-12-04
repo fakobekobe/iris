@@ -249,7 +249,7 @@ class PersonneRessource(models.Model):
     typepersonneressource = models.ForeignKey(TypePersonneRessource, null=True, blank=True, default=None, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.typepersonneressource
+        return self.typepersonneressource.type
 
 class QuantiteGroupement(models.Model):
     quantite = models.IntegerField(unique=True, verbose_name="Quantité")
