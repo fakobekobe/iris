@@ -2,14 +2,18 @@ from django.db import models
 from projet.models import *
 
 # Liste des méthodes Globales du projet --------
-def nombre_membre_par_ville(quartier):
-	"""
-		Cette méthode permet d'obtenir le nombre de membres par ville
-		Ex: quartier = objet quartier
-			la valeur de retour = 0 s'il n'y a aucun membre dans cette ville
-			la valeur de retour = 12 s'il y a des membres dans cette ville
-	"""
-	return Quartier.objects.filter(membre__quartier__commune__ville__code=quartier.commune.ville.code).count()
+def nombre_membre_par_ville(quartier, ville=None):
+    """
+        Cette méthode permet d'obtenir le nombre de membres par ville
+        Ex: quartier = objet quartier ou ville = objet ville
+            la valeur de retour = 0 s'il n'y a aucun membre dans cette ville
+            la valeur de retour = 12 s'il y a des membres dans cette ville
+    """
+    if ville:
+        return Quartier.objects.filter(membre__quartier__commune__ville__code=ville.code).count()
+    else:
+        return Quartier.objects.filter(membre__quartier__commune__ville__code=quartier.commune.ville.code).count()
+
 #--------------------------------------------------
 
 

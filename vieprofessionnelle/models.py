@@ -152,14 +152,14 @@ class MembreSecteurInformel(models.Model):
 class SecteurFemmeActive(SecteurActive):
     identifiant = models.CharField(max_length=19, null=True, blank=True, default=None, unique=True, verbose_name="Identifiant")
 
-    quartier = models.ForeignKey(Quartier, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    ville = models.ForeignKey(Ville, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     marche = models.ForeignKey(Marche, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through="MembreSecteurFemmeActive", through_fields=('secteurfemmeactive','membre'))
     quantitegroupement = models.ForeignKey("QuantiteGroupement", default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def set_identifiant(self):
         self.identifiant = f"0{self.quantitegroupement}{self.ville.departement.region.code}" \
-                           f"{ajoute_zero_a_identifiant(departement=self.ville.departement.code, ville=self.ville.code, identifiant=self.quartier.get_nombre_membre_par_ville() + 1)}"
+                           f"{ajoute_zero_a_identifiant(departement=self.ville.departement.code, ville=self.ville.code, identifiant=nombre_membre_par_ville(self.ville) + 1)}"
 
     def __str__(self):
         return self.nom
