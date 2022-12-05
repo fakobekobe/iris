@@ -1,4 +1,5 @@
 from django.db import models
+from abc import ABCMeta, abstractmethod
 
 # Create your models here.
 class Personne(models.Model):
@@ -30,3 +31,24 @@ class PersonneR(models.Model):
 
     def __str__(self):
         return "Personne Ressource avec contact : " + self.contact
+
+
+class IPersonneR(metaclass=ABCMeta):
+    personne = models.OneToOneField(Personne, default=None, blank=True, null=True, on_delete=models.SET_NULL)
+    chapeau = models.OneToOneField(Chapeau, default=None, blank=True, null=True, on_delete=models.SET_NULL)
+
+    @abstractmethod
+    def presentation(self):
+        pass
+
+    def get_parent(self):
+        return self.__class__.__name__
+
+
+class TestPersonneR(IPersonneR):
+
+    def presentation(self):
+        return self.__class__.__name__
+
+    def get_nom(self):
+        return self.__class__.__name__

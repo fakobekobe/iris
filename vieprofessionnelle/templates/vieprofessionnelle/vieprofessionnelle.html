@@ -52,6 +52,11 @@
                 Type de personne ressource
             </button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_personneressource|first}}" id="personneressource-tab" data-toggle="tab" data-target="#personneressource" type="button" role="tab" aria-controls="personneressource" aria-selected="{{ active_personneressource|slice:'1:2'|first }}">
+                Personne ressource
+            </button>
+        </li>
     </ul>
 
     <div class="tab-content" id="myTabContent">
@@ -663,8 +668,8 @@
         <!-- CONTENU typepersonneressource -->
         <div class="tab-pane fade {{ active_typepersonneressource|last }}" id="typepersonneressource" role="tabpanel" aria-labelledby="typepersonneressource-tab">
             <div>
-                <h1 class="mb-3 text-primary"><i class="fas fa-hat-cowboy"></i> Liste des types de personnes ressources</h1>
-                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typepersonneressourceModal" data-backdrop="static"><i class="fas fa-hat-cowboy"></i> Ajouter un type de personne ressource</a></h3>
+                <h1 class="mb-3 text-primary"><i class="fas fa-user-tie"></i> Liste des types de personnes ressources</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typepersonneressourceModal" data-backdrop="static"><i class="fas fa-user-tie"></i> Ajouter un type de personne ressource</a></h3>
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table  table-bordered table-hover table-responsive-md" id="tabletypepersonneressource">
@@ -731,7 +736,79 @@
 
             </div>
         </div>
-        <!-- FIN DE CONTENU chapeau -->
+        <!-- FIN DE CONTENU typepersonneressource -->
+
+        <!-- CONTENU personneressource -->
+        <div class="tab-pane fade {{ active_personneressource|last }}" id="personneressource" role="tabpanel" aria-labelledby="personneressource-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-user-shield"></i> Liste des personnes ressources</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#personneressourceModal" data-backdrop="static"><i class="fas fa-user-shield"></i> Ajouter une personne ressource</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tablepersonneressource">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Type de personne</th>
+                                <th>Nom et prénoms</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for personneressource in personneressources %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{personneressource.typepersonneressource.type}}</td>
+                                <td>{% if personneressource.chapeau.chapeau %} {{personneressource.chapeau.chapeau}} {% else %} {{personneressource.membre.nom_prenoms}} {% endif %}</td>
+                                <td>{% if personneressource.chapeau.chapeau %} {{personneressource.chapeau.contact}} {% else %} {{personneressource.membre.contact}} {% endif %}</td>
+                                <td class="text-center">
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#personneressourcesupprimermodal{{personneressource.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="personneressourcesupprimermodal{{personneressource.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Personne ressource : <strong>{{personneressource.typepersonneressource.type}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                        <input type="text" name="id_personneressource_s" id="id_personneressource_s{{personneressource.id}}" value="{{personneressource.id}}" hidden>
+                                                        <button type="submit" name="supprimer_p" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <button class="btn btn-danger btn-sm" name="annuler_p" data-dismiss="modal">Non</button>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+                <!-- LISTE DES INCLUDES -->
+                {% include 'vieprofessionnelle/ajouter_personneressource.html' %}
+            </div>
+        </div>
+        <!-- FIN DE CONTENU personneressource -->
 
     </div>
 

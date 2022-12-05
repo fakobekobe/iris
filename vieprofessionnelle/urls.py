@@ -54,5 +54,9 @@ urlpatterns = [
     path('modifier-typepersonneressource/', views.modifier_typepersonneressource, name='modifier_typepersonneressource'),
     path('supprimer-typepersonneressource/<str:id>', views.supprimer_typepersonneressource, name='supprimer_typepersonneressource'),
 
+    # Url PersonneRessource
+    path('ajouter-personneressource/', views.ajouter_personneressource, name='ajouter_personneressource'),
+    path('supprimer-personneressource/<str:id>', views.supprimer_personneressource, name='supprimer_personneressource'),
+
 
 ]

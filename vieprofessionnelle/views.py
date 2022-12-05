@@ -26,6 +26,7 @@ def vieprofessionnelle(request):
     membres = Membre.objects.order_by("-id")
     chapeaux = Chapeau.objects.order_by("-id")
     typepersonneressources = TypePersonneRessource.objects.order_by("-id")
+    personneressources = PersonneRessource.objects.order_by("-id")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -37,6 +38,7 @@ def vieprofessionnelle(request):
     active_document = ['', 'false', '']
     active_chapeau = ['', 'false', '']
     active_typepersonneressource = ['', 'false', '']
+    active_personneressource = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -56,6 +58,8 @@ def vieprofessionnelle(request):
         active_chapeau = ['active', 'true', 'show active']
     elif _active_onglet == "typepersonneressource":
         active_typepersonneressource = ['active', 'true', 'show active']
+    elif _active_onglet == "personneressource":
+        active_personneressource = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -72,6 +76,7 @@ def vieprofessionnelle(request):
         "membres": membres,
         "chapeaux": chapeaux,
         "typepersonneressources": typepersonneressources,
+        "personneressources": personneressources,
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
@@ -82,6 +87,7 @@ def vieprofessionnelle(request):
         "active_document": active_document,
         "active_chapeau": active_chapeau,
         "active_typepersonneressource": active_typepersonneressource,
+        "active_personneressource": active_personneressource,
 
     }
 
@@ -1134,3 +1140,75 @@ def supprimer_typepersonneressource(request, id):
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du type de personne ressource -------------------------------------
+
+
+# Gestion de personne ressource -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_personneressource', raise_exception=True)
+def ajouter_personneressource(request):
+    global _active_onglet
+    _active_onglet = "personneressource"  # On initialise la variable
+
+    if request.method == "POST":
+        id_membre_etatsante = request.POST.get('id_membre_etatsante', None)
+        typeetatsante = request.POST.get('select_typeetatsante', None)
+        dateenre = request.POST.get('dateenre_e', None)
+        if id_membre_etatsante and typeetatsante and dateenre:
+
+            try:
+                # On récupère le membre
+                membre = Membre.objects.get(id=id_membre_etatsante)
+            except Membre.DoesNotExist:
+                data = {"libelle": "Ce membre n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            try:
+                # On récupère le secteur
+                typeetatsante = TypeEtatSante.objects.get(id=typeetatsante)
+            except TypeEtatSante.DoesNotExist:
+                data = {"libelle": "Ce type d'état de santé n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute l'état de santé du membre
+            objet_etatsante = EtatSante()
+            objet_etatsante.membre = membre
+            objet_etatsante.parent = None
+            objet_etatsante.typeetatsante = typeetatsante
+            objet_etatsante.dateenre = dateenre
+            objet_etatsante.save()
+
+            # On récupère tous les états de santé du membre
+            etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
+
+            if etatsantes:
+                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
+                         'id_membre': id_membre_etatsante,
+                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+
+                return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_personneressource', raise_exception=True)
+def supprimer_personneressource(request, id):
+    global _active_onglet
+    _active_onglet = "typepersonneressource"  # On initialise la variable
+
+    try:
+        objet_typepersonneressource = TypePersonneRessource.objects.get(id=id)
+    except TypePersonneRessource.DoesNotExist:
+        messages.error(request, "Ce type de personne ressource n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typepersonneressource:
+        objet_typepersonneressource.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion de personne ressource -------------------------------------

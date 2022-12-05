@@ -774,4 +774,630 @@ $(document).ready(function() {
     } );
 
 
+//******************** SCRIPT DE L'ONGLET CHAPEAU **********************************************
+    var tablechapeau = "tablechapeau";
+    var colonnechapeau = [0,1,2,3];
+
+    var table7 = $('#' + tablechapeau ).DataTable( {
+
+    // Pagination du tableau
+    // Paramètres optionnels du DATATABLES
+    paging: true,
+    pageLength: 10,
+    lengthChange: true,
+    autoWidth: true,
+    searching : true,
+    bInfo : true,
+    bSort : true,
+    select : true,
+    order : [],
+
+    // Désactiver le trie d'un ou de plusieurs colonnes
+    /*"columnDefs":[{
+        "targets":4, // [4,5]
+        "orderable":false,
+    }],*/
+
+    // Gestion de l'affichage de la langue des champs
+        language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+
+    // Gestion des Bouttons Copie, export excel, PDF, impression
+    dom:'lBfrtip',
+    buttons: [
+
+    { // Boutton de copie
+        extend:'copy',
+        text: '<i class="fas fa-clone"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Copier',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnechapeau,
+        },
+    },
+
+    { // Boutton de excel
+        extend:'excel',
+        text: '<i class="fas fa-file-excel"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Excel',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnechapeau,
+        },
+    },
+
+    { // Boutton PDF
+        extend:'pdf',
+        text: '<i class="fas fa-file-pdf"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'PDF',
+        exportOptions:{
+            columns: colonnechapeau,
+        },
+
+        tableHeader: {
+            alignment: 'center',
+        },
+
+        customize: function (doc){
+            doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+            doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+            doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+            doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+            doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+            // Centrer le tableau dans le document
+            doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+        },
+
+    },
+
+    { // Boutton Imprimer
+        extend:'print',
+        text: '<i class="fas fa-print"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Imprimer',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnechapeau,
+        },
+
+        // Personnalisation de l'affichage
+        customize: function(win){
+            $(win.document.body).css('font-size', '10pt')
+            $(win.document.body).find('table')
+            .addClass('compact')
+            .css('font-size', 'inherit');
+        },
+    },
+
+    ],
+
+        // Fin de pagination
+
+
+    } );
+
+ //******************** SCRIPT DE L'ONGLET TYPE DE PERSONNE RESSOURCE **********************************************
+    var tabletypepersonneressource = "tabletypepersonneressource";
+    var colonnetypepersonneressource = [0,1];
+
+    var table8 = $('#' + tabletypepersonneressource ).DataTable( {
+
+    // Pagination du tableau
+    // Paramètres optionnels du DATATABLES
+    paging: true,
+    pageLength: 10,
+    lengthChange: true,
+    autoWidth: true,
+    searching : true,
+    bInfo : true,
+    bSort : true,
+    select : true,
+    order : [],
+
+    // Désactiver le trie d'un ou de plusieurs colonnes
+    /*"columnDefs":[{
+        "targets":4, // [4,5]
+        "orderable":false,
+    }],*/
+
+    // Gestion de l'affichage de la langue des champs
+        language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+
+    // Gestion des Bouttons Copie, export excel, PDF, impression
+    dom:'lBfrtip',
+    buttons: [
+
+    { // Boutton de copie
+        extend:'copy',
+        text: '<i class="fas fa-clone"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Copier',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnetypepersonneressource,
+        },
+    },
+
+    { // Boutton de excel
+        extend:'excel',
+        text: '<i class="fas fa-file-excel"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Excel',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnetypepersonneressource,
+        },
+    },
+
+    { // Boutton PDF
+        extend:'pdf',
+        text: '<i class="fas fa-file-pdf"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'PDF',
+        exportOptions:{
+            columns: colonnetypepersonneressource,
+        },
+
+        tableHeader: {
+            alignment: 'center',
+        },
+
+        customize: function (doc){
+            doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+            doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+            doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+            doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+            doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+            // Centrer le tableau dans le document
+            doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+        },
+
+    },
+
+    { // Boutton Imprimer
+        extend:'print',
+        text: '<i class="fas fa-print"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Imprimer',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnetypepersonneressource,
+        },
+
+        // Personnalisation de l'affichage
+        customize: function(win){
+            $(win.document.body).css('font-size', '10pt')
+            $(win.document.body).find('table')
+            .addClass('compact')
+            .css('font-size', 'inherit');
+        },
+    },
+
+    ],
+
+        // Fin de pagination
+
+
+    } );
+
+ //******************** SCRIPT DE L'ONGLET PERSONNE RESSOURCE **********************************************
+    var tablepersonneressource = "tablepersonneressource";
+    var colonnepersonneressource = [0,1,2,3];
+
+    var table9 = $('#' + tablepersonneressource ).DataTable( {
+
+    // Pagination du tableau
+    // Paramètres optionnels du DATATABLES
+    paging: true,
+    pageLength: 10,
+    lengthChange: true,
+    autoWidth: true,
+    searching : true,
+    bInfo : true,
+    bSort : true,
+    select : true,
+    order : [],
+
+    // Désactiver le trie d'un ou de plusieurs colonnes
+    /*"columnDefs":[{
+        "targets":4, // [4,5]
+        "orderable":false,
+    }],*/
+
+    // Gestion de l'affichage de la langue des champs
+        language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+
+    // Gestion des Bouttons Copie, export excel, PDF, impression
+    dom:'lBfrtip',
+    buttons: [
+
+    { // Boutton de copie
+        extend:'copy',
+        text: '<i class="fas fa-clone"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Copier',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnepersonneressource,
+        },
+    },
+
+    { // Boutton de excel
+        extend:'excel',
+        text: '<i class="fas fa-file-excel"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Excel',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnepersonneressource,
+        },
+    },
+
+    { // Boutton PDF
+        extend:'pdf',
+        text: '<i class="fas fa-file-pdf"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'PDF',
+        exportOptions:{
+            columns: colonnepersonneressource,
+        },
+
+        tableHeader: {
+            alignment: 'center',
+        },
+
+        customize: function (doc){
+            doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+            doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+            doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+            doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+            doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+            // Centrer le tableau dans le document
+            doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+        },
+
+    },
+
+    { // Boutton Imprimer
+        extend:'print',
+        text: '<i class="fas fa-print"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Imprimer',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnepersonneressource,
+        },
+
+        // Personnalisation de l'affichage
+        customize: function(win){
+            $(win.document.body).css('font-size', '10pt')
+            $(win.document.body).find('table')
+            .addClass('compact')
+            .css('font-size', 'inherit');
+        },
+    },
+
+    ],
+
+        // Fin de pagination
+
+
+    } );
+
+ //******************** SCRIPT DU MODULE AJOUTER PERSONNE RESSOURCE **********************************************
+    var table_recherche_personneressource = "table_recherche_personneressource";
+    var colonnerecherche_personneressource = [0,1,2];
+
+    var table10 = $('#' + table_recherche_personneressource ).DataTable( {
+
+    // Pagination du tableau
+    // Paramètres optionnels du DATATABLES
+    paging: true,
+    pageLength: 10,
+    lengthChange: true,
+    autoWidth: true,
+    searching : true,
+    bInfo : true,
+    bSort : true,
+    select : true,
+    order : [],
+
+    // Désactiver le trie d'un ou de plusieurs colonnes
+    /*"columnDefs":[{
+        "targets":4, // [4,5]
+        "orderable":false,
+    }],*/
+
+    // Gestion de l'affichage de la langue des champs
+        language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+
+    // Gestion des Bouttons Copie, export excel, PDF, impression
+    dom:'lBfrtip',
+    buttons: [
+
+    { // Boutton de copie
+        extend:'copy',
+        text: '<i class="fas fa-clone"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Copier',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnerecherche_personneressource,
+        },
+    },
+
+    { // Boutton de excel
+        extend:'excel',
+        text: '<i class="fas fa-file-excel"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Excel',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnerecherche_personneressource,
+        },
+    },
+
+    { // Boutton PDF
+        extend:'pdf',
+        text: '<i class="fas fa-file-pdf"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'PDF',
+        exportOptions:{
+            columns: colonnerecherche_personneressource,
+        },
+
+        tableHeader: {
+            alignment: 'center',
+        },
+
+        customize: function (doc){
+            doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+            doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+            doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+            doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+            doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+            // Centrer le tableau dans le document
+            doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+        },
+
+    },
+
+    { // Boutton Imprimer
+        extend:'print',
+        text: '<i class="fas fa-print"></i>',
+        className: 'btn btn-secondary',
+        titleAttr: 'Imprimer',
+        // Option pour le choix des colonnes a afficher
+        exportOptions:{
+            columns: colonnerecherche_personneressource,
+        },
+
+        // Personnalisation de l'affichage
+        customize: function(win){
+            $(win.document.body).css('font-size', '10pt')
+            $(win.document.body).find('table')
+            .addClass('compact')
+            .css('font-size', 'inherit');
+        },
+    },
+
+    ],
+
+        // Fin de pagination
+
+
+    } );
+
+    // Recherche globale du tableau
+    $('#recherche_personneressource').keyup(function(){
+        table10.search($(this).val()).draw();
+    });
+
+// ******************* GESTION DE L'AJOUT D'UNE PERSONNE RESSOURCE *****************************
+
+    var envoyer_etatsante = $('#envoyer_etatsante');
+    var select_typeetatsante = $('#select_typeetatsante');
+    var dateenre_e = $('#dateenre_e');
+    var id_membre_etatsante = $('#id_membre_etatsante');
+    var form_etatsante = $('#form_etatsante');
+    var tableetatsante = $('#tableetatsante tbody');
+    var valider_e = true;
+
+
+    // Traitement AJAX
+    envoyer_etatsante.click(function(e){
+        e.preventDefault(); // On annule l'envoi du formulaire
+        if(!select_typeetatsante.val()){
+            valider_e = false;
+            alert("Veuillez sélectionner le type d'état de santé.");
+            select_typeetatsante.focus();
+        }else if(!dateenre_e.val()){
+            valider_e = false;
+            alert("Veuillez renseigner la date d'enregistrement.");
+            dateenre_e.focus();
+        }else{
+            valider_e = true;
+        }
+
+        if(valider_e){
+                // On instancie un objet formulaire pour l'envoi des champs du formulaire
+                var formData = new FormData(form_etatsante[0]);
+
+                // On utilise ajax pour transmetre les données
+                $.ajax({
+                    url: "/presentation/ajouter-etatsante-membre", // On ajoute l'url absolue en commençant par la racine
+                    type: 'POST',
+                    data: formData,
+                    success: function(data){
+
+                        // On vide le contenu
+                        tableetatsante.html('');
+
+                        // On remplit les champs
+                        $.each(data.data, function(k, valeur){
+                            k++; // On incrémente la variable à chaque fois pour avoir le nombre exacte car la variable débute par 0
+                            tableetatsante.append(`
+
+                                <tr>
+                                    <td>` + k + `</td>
+                                    <td>` + valeur.typeetatsante + `</td>
+                                    <td>` + valeur.dateenre + `</td>
+                                    <td class="text-center">
+                                        <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#etatsantesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="etatsantesupprimermodal` + valeur.id + `" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h5>
+                                                            Etat de santé : <strong>` + valeur.typeetatsante + `</strong>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center">
+
+                                                        <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                            <input type="text" name="id_membre_etatsante_s" id="id_membre_etatsante_s` + valeur.id + `" value="` + valeur.id_membre + `" hidden>
+                                                            <button type="submit" name="supprimer_e" value="` + valeur.id + `" class="btn btn-success btn-sm">Oui</button>
+                                                        </form>
+                                                        <button class="btn btn-danger btn-sm" name="annuler_e" data-dismiss="modal">Non</button>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- Modal Fin -->
+                                    </td>
+                                </tr>
+
+                            `);
+                        });
+
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_success');
+                        var toast = $('#mytoast_success');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
+                        supprimer_ligne_etatsante(); // On appelle la fonction pour prendre en compte les nouvelles données
+                    },
+                    statusCode: {
+                        404: function(data){
+                                alert('Veuillez réessayer car une erreur est survenue.');
+                             },
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                });
+
+        }
+
+    });
+
+
+// FIN -----------------------------
 } );
