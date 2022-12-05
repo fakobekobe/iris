@@ -1,7 +1,6 @@
 from localisation.models import *
 
 # Liste des méthodes Globales du projet--------
-
 def ajoute_zero_a_identifiant(departement, ville, identifiant, taille_fixe=7):
 	"""
 		Cette méthode permet l'ajout d'un certain nombre de 0 avant

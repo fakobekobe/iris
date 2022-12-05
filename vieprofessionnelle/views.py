@@ -7,10 +7,12 @@ from django.http import JsonResponse
 import os
 from datetime import datetime
 from django.utils.html import strip_tags
+from utilisateur.models import Parametre
 
 
 # Les constatntes et les variables globales
 _active_onglet = "" # Variable globale pour l'activation des onglets
+_parametre = Parametre.objects.first()
 
 @login_required
 @permission_required('auth.view_user', raise_exception=True)
@@ -1146,69 +1148,93 @@ def supprimer_typepersonneressource(request, id):
 @login_required
 @permission_required('vieprofessionnelle.add_personneressource', raise_exception=True)
 def ajouter_personneressource(request):
-    global _active_onglet
-    _active_onglet = "personneressource"  # On initialise la variable
+    if request.method == "GET":
+        # On initialise les variables
+        typepersonneressource = request.GET.get("typepersonneressource", None)
+        id = request.GET.get("id", None)
 
-    if request.method == "POST":
-        id_membre_etatsante = request.POST.get('id_membre_etatsante', None)
-        typeetatsante = request.POST.get('select_typeetatsante', None)
-        dateenre = request.POST.get('dateenre_e', None)
-        if id_membre_etatsante and typeetatsante and dateenre:
+        if typepersonneressource and id:  # On vérifie si les champs ont été renseignés
 
             try:
-                # On récupère le membre
-                membre = Membre.objects.get(id=id_membre_etatsante)
-            except Membre.DoesNotExist:
-                data = {"libelle": "Ce membre n'existe pas."}
+                # On récupère le type de personne ressource
+                object_typepersonneressource = TypePersonneRessource.objects.get(id=typepersonneressource)
+            except TypePersonneRessource.DoesNotExist:
+                data = {"libelle": "Ce type de personne ressource n'existe pas."}
                 return JsonResponse({'data': data}, status=404)
 
-            try:
-                # On récupère le secteur
-                typeetatsante = TypeEtatSante.objects.get(id=typeetatsante)
-            except TypeEtatSante.DoesNotExist:
-                data = {"libelle": "Ce type d'état de santé n'existe pas."}
-                return JsonResponse({'data': data}, status=404)
+            if _parametre.id_chapeau == typepersonneressource:
 
-            # Les données sont bonnes, on ajoute l'état de santé du membre
-            objet_etatsante = EtatSante()
-            objet_etatsante.membre = membre
-            objet_etatsante.parent = None
-            objet_etatsante.typeetatsante = typeetatsante
-            objet_etatsante.dateenre = dateenre
-            objet_etatsante.save()
+                try:
+                    # On récupère le membre
+                    objet_chapeau = Chapeau.objects.get(id=id)
+                    objet_membre = None
+                except Chapeau.DoesNotExist:
+                    data = {"libelle": "Ce Chapeau n'existe pas."}
+                    return JsonResponse({'data': data}, status=404)
+            else:
+                try:
+                    # On récupère le membre
+                    objet_membre = Membre.objects.get(id=id)
+                    objet_chapeau = None
+                except Membre.DoesNotExist:
+                    data = {"libelle": "Ce Membre n'existe pas."}
+                    return JsonResponse({'data': data}, status=404)
 
-            # On récupère tous les états de santé du membre
-            etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
+            # On ajoute les données
+            objet_personneressource = PersonneRessource()
+            objet_personneressource.typepersonneressource = object_typepersonneressource
+            objet_personneressource.membre = objet_membre
+            objet_personneressource.chapeau = objet_chapeau
 
-            if etatsantes:
-                data = [{'id': etatsante.id, 'typeetatsante': etatsante.typeetatsante.libelle.upper(),
-                         'id_membre': id_membre_etatsante,
-                         'dateenre': etatsante.dateenre.strftime('%d/%m/%Y')} for etatsante in etatsantes]
+            # On récupère toutes les personnes ressources
+            personneressources = PersonneRessource.objects.order_by('-id')
+
+            if personneressources:
+                data = [{'id': personne.id, 'type': personne.typepersonneressource,
+                         'chapeau': personne.chapeau, 'membre': personne.membre,
+                         } for personne in personneressources]
 
                 return JsonResponse({'data': data}, status=200)
 
         else:
-            data = {"libelle": "Veuillez renseigner les champs"}
+            data = {"libelle": "Toutes les données n'ont pas été reçues"}
             return JsonResponse({'data': data}, status=404)
-
-    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
 
 @login_required
 @permission_required('vieprofessionnelle.delete_personneressource', raise_exception=True)
-def supprimer_personneressource(request, id):
-    global _active_onglet
-    _active_onglet = "typepersonneressource"  # On initialise la variable
+def supprimer_personneressource(request):
+    if request.method == "GET":
+        supprimer_p = request.GET.get('supprimer_p', None)
 
-    try:
-        objet_typepersonneressource = TypePersonneRessource.objects.get(id=id)
-    except TypePersonneRessource.DoesNotExist:
-        messages.error(request, "Ce type de personne ressource n'existe pas.")
-        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+        if supprimer_p:
 
-    if objet_typepersonneressource:
-        objet_typepersonneressource.delete()
-        messages.info(request, "Suppression réussie.")
+            try:
+                # On récupère la personne ressource
+                personneressource = PersonneRessource.objects.get(id=supprimer_p)
+            except PersonneRessource.DoesNotExist:
+                data = {"libelle": "Cette personne ressource n'existe pas."}
+                return JsonResponse({'data': data}, status=404)
+
+            # Les données sont bonnes, on ajoute le secteur au membre
+            if personneressource:
+                personneressource.delete()
+
+                # On récupère toutes les personnes ressources
+                personneressources = PersonneRessource.objects.order_by('-id')
+
+                if personneressources:
+                    data = [{'id': personne.id, 'type': personne.typepersonneressource,
+                             'chapeau': personne.chapeau, 'membre': personne.membre,
+                             } for personne in personneressources]
+
+                    return JsonResponse({'data': data}, status=200)
+
+        else:
+            data = {"libelle": "Veuillez renseigner les champs"}
+            return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion de personne ressource -------------------------------------

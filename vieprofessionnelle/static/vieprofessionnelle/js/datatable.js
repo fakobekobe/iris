@@ -1283,59 +1283,44 @@ $(document).ready(function() {
         table10.search($(this).val()).draw();
     });
 
-// ******************* GESTION DE L'AJOUT D'UNE PERSONNE RESSOURCE *****************************
+// ******************* GESTION DE LA SUPPRESSION D'UNE PERSONNE RESSOURCE *****************************
+    tablepersonneressource = $('#tablepersonneressource');
 
-    var envoyer_etatsante = $('#envoyer_etatsante');
-    var select_typeetatsante = $('#select_typeetatsante');
-    var dateenre_e = $('#dateenre_e');
-    var id_membre_etatsante = $('#id_membre_etatsante');
-    var form_etatsante = $('#form_etatsante');
-    var tableetatsante = $('#tableetatsante tbody');
-    var valider_e = true;
+    function supprimer_ligne_personneressouce(){
+        var supprimer_p = $('button[name=supprimer_p]');
+        var annuler_p = $('button[name=annuler_p]');
 
+        // Traitement AJAX
+        supprimer_p.each(function(){
+            $(this).click(function(e){
+                e.preventDefault();
 
-    // Traitement AJAX
-    envoyer_etatsante.click(function(e){
-        e.preventDefault(); // On annule l'envoi du formulaire
-        if(!select_typeetatsante.val()){
-            valider_e = false;
-            alert("Veuillez sélectionner le type d'état de santé.");
-            select_typeetatsante.focus();
-        }else if(!dateenre_e.val()){
-            valider_e = false;
-            alert("Veuillez renseigner la date d'enregistrement.");
-            dateenre_e.focus();
-        }else{
-            valider_e = true;
-        }
-
-        if(valider_e){
-                // On instancie un objet formulaire pour l'envoi des champs du formulaire
-                var formData = new FormData(form_etatsante[0]);
-
-                // On utilise ajax pour transmetre les données
+                // On utilise ajax pour transmettre les données
                 $.ajax({
-                    url: "/presentation/ajouter-etatsante-membre", // On ajoute l'url absolue en commençant par la racine
-                    type: 'POST',
-                    data: formData,
+                    url: "vieprofessionnelle/supprimer-personneressource/", // On ajoute l'url absolue en commençant par la racine
+                    type: 'get',
+                    data: {
+                        supprimer_p: $(this).val(),
+                    },
                     success: function(data){
 
                         // On vide le contenu
-                        tableetatsante.html('');
+                        tablepersonneressource.html('');
 
                         // On remplit les champs
                         $.each(data.data, function(k, valeur){
                             k++; // On incrémente la variable à chaque fois pour avoir le nombre exacte car la variable débute par 0
-                            tableetatsante.append(`
+                            tablepersonneressource.append(`
 
                                 <tr>
                                     <td>` + k + `</td>
-                                    <td>` + valeur.typeetatsante + `</td>
-                                    <td>` + valeur.dateenre + `</td>
+                                    <td>` + valeur.type.type + `</td>
+                                    <td>` + valeur.chapeau ? valeur.chapeau.chapeau : valeur.membre.nom_prenoms + `</td>
+                                    <td>` + valeur.chapeau ? valeur.chapeau.contact : valeur.membre.contact + `</td>
                                     <td class="text-center">
-                                        <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#etatsantesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#personneressourcesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="etatsantesupprimermodal` + valeur.id + `" role="dialog">
+                                        <div class="modal fade" id="personneressourcesupprimermodal` + valeur.id + `" role="dialog">
                                             <div class="modal-dialog">
 
                                                 <!-- Modal content-->
@@ -1346,16 +1331,116 @@ $(document).ready(function() {
                                                     </div>
                                                     <div class="modal-body">
                                                         <h5>
-                                                            Etat de santé : <strong>` + valeur.typeetatsante + `</strong>
+                                                            Personne ressource : <strong>` + valeur.type.type + `</strong>
                                                         </h5>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
 
                                                         <form style="display:inline-block; text-align:center" method="get" action="#">
-                                                            <input type="text" name="id_membre_etatsante_s" id="id_membre_etatsante_s` + valeur.id + `" value="` + valeur.id_membre + `" hidden>
-                                                            <button type="submit" name="supprimer_e" value="` + valeur.id + `" class="btn btn-success btn-sm">Oui</button>
+                                                            <button type="submit" name="supprimer_p" value="` + valeur.id + `" class="btn btn-success btn-sm">Oui</button>
                                                         </form>
-                                                        <button class="btn btn-danger btn-sm" name="annuler_e" data-dismiss="modal">Non</button>
+                                                        <button class="btn btn-danger btn-sm" name="annuler_p" data-dismiss="modal">Non</button>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- Modal Fin -->
+                                    </td>
+                                </tr>
+
+                            `);
+
+                        });
+
+                        annuler_p.trigger('click');
+
+                        // Affichage du toast ---------
+                        var btn = $('#btn_ferme_toast_suppression');
+                        var toast = $('#mytoast_suppression');
+                            toast.addClass('show');
+                            btn.click(function(){
+                                toast.removeClass('show');
+                            });
+                         var montemps = setInterval(function(){
+                            toast.removeClass('show');
+                            clearInterval(montemps);
+                         }, 3000);
+                         // Fin toast -----------
+
+                        // On appelle la fonction pour prendre en compte tous les changement des lignes supprimées
+                        supprimer_ligne_personneressouce();
+                    },
+                    statusCode: {
+                        404: function(data){
+                                alert('Veuillez réessayer car une erreur est survenue.');
+                             },
+                    },
+                });
+
+            });
+        });
+    }
+
+    supprimer_ligne_personneressouce(); // On appelle la fonction
+
+// ******************* GESTION DE L'AJOUT D'UNE PERSONNE RESSOURCE A PARTIR DU TABLEAU DE RECHERCHE ***
+
+var liste_btn_ajouter = $('#tablepersonneressource tbody button');
+var typepersonneressource = $('#select_typepersonneressource')
+
+    liste_btn_ajouter.each(function(){
+
+        $(this).click(function(e){
+            e.preventDefault();
+
+            // On utilise ajax pour transmettre les données
+            $.ajax({
+                    url: "vieprofessionnelle/ajouter-personneressource", // On ajoute l'url absolue en commençant par la racine
+                    type: 'GET',
+                    data: {
+                        typepersonneressource: typepersonneressource.val(),
+                        id: $(this).val(),
+                    },
+                    success: function(data){
+
+                        // On vide le contenu
+                        tablepersonneressource.html("");
+
+                        // On remplit les champs
+                        $.each(data.data, function(k, valeur){
+                            k++; // On incrémente la variable à chaque fois pour avoir le nombre exacte car la variable débute par 0
+                            tablepersonneressource.append(`
+
+                                <tr>
+                                    <td>` + k + `</td>
+                                    <td>` + valeur.type.type + `</td>
+                                    <td>` + valeur.chapeau ? valeur.chapeau.chapeau : valeur.membre.nom_prenoms + `</td>
+                                    <td>` + valeur.chapeau ? valeur.chapeau.contact : valeur.membre.contact + `</td>
+                                    <td class="text-center">
+                                        <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#personneressourcesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="personneressourcesupprimermodal` + valeur.id + `" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h5>
+                                                            Personne ressource : <strong>` + valeur.type.type + `</strong>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center">
+
+                                                        <form style="display:inline-block; text-align:center" method="get" action="#">
+                                                            <button type="submit" name="supprimer_p" value="` + valeur.id + `" class="btn btn-success btn-sm">Oui</button>
+                                                        </form>
+                                                        <button class="btn btn-danger btn-sm" name="annuler_p" data-dismiss="modal">Non</button>
 
                                                     </div>
                                                 </div>
@@ -1382,19 +1467,16 @@ $(document).ready(function() {
                          }, 3000);
                          // Fin toast -----------
 
-                        supprimer_ligne_etatsante(); // On appelle la fonction pour prendre en compte les nouvelles données
+                        supprimer_ligne_personneressouce(); // On appelle la fonction pour prendre en compte les nouvelles données
+
                     },
                     statusCode: {
                         404: function(data){
-                                alert('Veuillez réessayer car une erreur est survenue.');
+                                alert('Veuillez renseigner les champs SVP.');
                              },
                     },
-                    cache: false,
-                    contentType: false,
-                    processData: false,
                 });
-
-        }
+        });
 
     });
 

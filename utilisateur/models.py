@@ -4,6 +4,10 @@ from localisation.models import *
 from etatcivil.models import *
 from vieprofessionnelle.models import *
 
+class Parametre(models.Model):
+    monnaie = models.CharField(max_length=10, null=True, blank=True, default="")
+    id_chapeau = models.CharField(max_length=10, null=True, blank=True, default="")
+
 # Liste des variables Globales
 LISTE_MODELS = {
     'Authentification': {'Utilisateur': User, 'Groupe': Group, },
@@ -38,6 +42,14 @@ LISTE_MODELS = {
         'Type_document': TypeDocument,
         'Document': Document,
         'Chapeau': Chapeau,
+        'Type_de_personne_ressource': TypePersonneRessource,
+        'Personne_ressource': PersonneRessource,
+        'Quantité_du_groupement': QuantiteGroupement,
+        'Type_de_responsabilité': TypeResponsabilite,
+        'Montant_du_financement': MontantFinancement,
+    },
+    'Paramètres': {
+        'Paramètre': Parametre,
     },
 }
 

@@ -295,7 +295,7 @@ var liste_btn_ajouter = $('#table_recherche_parent tbody button');
         $(this).click(function(e){
             e.preventDefault();
 
-            // On utilise ajax pour transmetre les données
+            // On utilise ajax pour transmettre les données
             $.ajax({
                     url: "/presentation/ajouter-parent-membre", // On ajoute l'url absolue en commençant par la racine
                     type: 'GET',
