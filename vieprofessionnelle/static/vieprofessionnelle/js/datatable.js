@@ -1153,142 +1153,181 @@ $(document).ready(function() {
     } );
 
  //******************** SCRIPT DU MODULE AJOUTER PERSONNE RESSOURCE **********************************************
-    var table_recherche_personneressource = "table_recherche_personneressource";
-    var colonnerecherche_personneressource = [0,1,2];
+    function f_table_r_pr(){
+        var table_recherche_pr = $('#table_recherche_personneressource' );
+        var colonnerecherche_personneressource = [0,1,2];
 
-    var table10 = $('#' + table_recherche_personneressource ).DataTable( {
+        var table10 = table_recherche_pr.DataTable( {
 
-    // Pagination du tableau
-    // Paramètres optionnels du DATATABLES
-    paging: true,
-    pageLength: 10,
-    lengthChange: true,
-    autoWidth: true,
-    searching : true,
-    bInfo : true,
-    bSort : true,
-    select : true,
-    order : [],
+        // Pagination du tableau
+        // Paramètres optionnels du DATATABLES
+        paging: true,
+        pageLength: 10,
+        lengthChange: true,
+        autoWidth: true,
+        searching : true,
+        bInfo : true,
+        bSort : true,
+        select : true,
+        order : [],
 
-    // Désactiver le trie d'un ou de plusieurs colonnes
-    /*"columnDefs":[{
-        "targets":4, // [4,5]
-        "orderable":false,
-    }],*/
+        // Désactiver le trie d'un ou de plusieurs colonnes
+        /*"columnDefs":[{
+            "targets":4, // [4,5]
+            "orderable":false,
+        }],*/
 
-    // Gestion de l'affichage de la langue des champs
-        language: {
-        processing:     "Traitement en cours...",
-        search:         "Rechercher&nbsp;:",
-        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-        infoPostFix:    "",
-        loadingRecords: "Chargement en cours...",
-        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-        emptyTable:     "Aucune donnée disponible dans le tableau",
-        paginate: {
-            first:      "Premier",
-            previous:   "Pr&eacute;c&eacute;dent",
-            next:       "Suivant",
-            last:       "Dernier"
-        },
-        aria: {
-            sortAscending:  ": activer pour trier la colonne par ordre croissant",
-            sortDescending: ": activer pour trier la colonne par ordre décroissant"
-        }
-    },
-
-    // Gestion des Bouttons Copie, export excel, PDF, impression
-    dom:'lBfrtip',
-    buttons: [
-
-    { // Boutton de copie
-        extend:'copy',
-        text: '<i class="fas fa-clone"></i>',
-        className: 'btn btn-secondary',
-        titleAttr: 'Copier',
-        // Option pour le choix des colonnes a afficher
-        exportOptions:{
-            columns: colonnerecherche_personneressource,
-        },
-    },
-
-    { // Boutton de excel
-        extend:'excel',
-        text: '<i class="fas fa-file-excel"></i>',
-        className: 'btn btn-secondary',
-        titleAttr: 'Excel',
-        // Option pour le choix des colonnes a afficher
-        exportOptions:{
-            columns: colonnerecherche_personneressource,
-        },
-    },
-
-    { // Boutton PDF
-        extend:'pdf',
-        text: '<i class="fas fa-file-pdf"></i>',
-        className: 'btn btn-secondary',
-        titleAttr: 'PDF',
-        exportOptions:{
-            columns: colonnerecherche_personneressource,
+        // Gestion de l'affichage de la langue des champs
+            language: {
+            processing:     "Traitement en cours...",
+            search:         "Rechercher&nbsp;:",
+            lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+            info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            infoPostFix:    "",
+            loadingRecords: "Chargement en cours...",
+            zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            emptyTable:     "Aucune donnée disponible dans le tableau",
+            paginate: {
+                first:      "Premier",
+                previous:   "Pr&eacute;c&eacute;dent",
+                next:       "Suivant",
+                last:       "Dernier"
+            },
+            aria: {
+                sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                sortDescending: ": activer pour trier la colonne par ordre décroissant"
+            }
         },
 
-        tableHeader: {
-            alignment: 'center',
+        // Gestion des Bouttons Copie, export excel, PDF, impression
+        dom:'lBfrtip',
+        buttons: [
+
+        { // Boutton de copie
+            extend:'copy',
+            text: '<i class="fas fa-clone"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Copier',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche_personneressource,
+            },
         },
 
-        customize: function (doc){
-            doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
-            doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
-            doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
-            doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
-            doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
-
-            // Centrer le tableau dans le document
-            doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+        { // Boutton de excel
+            extend:'excel',
+            text: '<i class="fas fa-file-excel"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Excel',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche_personneressource,
+            },
         },
 
-    },
+        { // Boutton PDF
+            extend:'pdf',
+            text: '<i class="fas fa-file-pdf"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'PDF',
+            exportOptions:{
+                columns: colonnerecherche_personneressource,
+            },
 
-    { // Boutton Imprimer
-        extend:'print',
-        text: '<i class="fas fa-print"></i>',
-        className: 'btn btn-secondary',
-        titleAttr: 'Imprimer',
-        // Option pour le choix des colonnes a afficher
-        exportOptions:{
-            columns: colonnerecherche_personneressource,
+            tableHeader: {
+                alignment: 'center',
+            },
+
+            customize: function (doc){
+                doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+                doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+                doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+                doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+                doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+                // Centrer le tableau dans le document
+                doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+            },
+
         },
 
-        // Personnalisation de l'affichage
-        customize: function(win){
-            $(win.document.body).css('font-size', '10pt')
-            $(win.document.body).find('table')
-            .addClass('compact')
-            .css('font-size', 'inherit');
+        { // Boutton Imprimer
+            extend:'print',
+            text: '<i class="fas fa-print"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Imprimer',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche_personneressource,
+            },
+
+            // Personnalisation de l'affichage
+            customize: function(win){
+                $(win.document.body).css('font-size', '10pt')
+                $(win.document.body).find('table')
+                .addClass('compact')
+                .css('font-size', 'inherit');
+            },
         },
-    },
 
-    ],
+        ],
 
-        // Fin de pagination
+            // Fin de pagination
 
 
-    } );
+        } );
 
-    // Recherche globale du tableau
-    $('#recherche_personneressource').keyup(function(){
-        table10.search($(this).val()).draw();
-    });
+        // Recherche globale du tableau
+        $('#recherche_personneressource').keyup(function(){
+            table10.search($(this).val()).draw();
+        });
+    }
+
+    f_table_r_pr(); // On appelle la fonction
+
+
+// ******************* GESTION DU MENU DEROULANT DU TYPE DE PERSONNE RESSOURCE *****************************
+    var type_pr = $('#select_typepersonneressource');
+    var table_recherche_personneressource = $('#table_recherche_personneressource tbody');
+    type_pr.change(function(){
+
+            // On utilise ajax pour récupérer les membres ou les chapeaux
+            $.ajax({
+                url: "/vieprofessionnelle/details-personneressource", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise le contenu du tableau
+                    table_recherche_personneressource.html('');
+
+                    $.each(data.data, function(k, valeur){
+                        k++;
+                        table_recherche_personneressource.append(`
+                            <tr>
+                                <td class="text-center">` + k + `</td>
+                                <td>` + valeur.nom + `</td>
+                                <td>` + valeur.contact + `</td>
+                                <td class="text-center">
+                                    <button type="button" value="` + valeur.id + `" title="ajouter cette personne ressource" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                },
+            });
+
+        });
 
 // ******************* GESTION DE LA SUPPRESSION D'UNE PERSONNE RESSOURCE *****************************
-    tablepersonneressource = $('#tablepersonneressource');
 
     function supprimer_ligne_personneressouce(){
         var supprimer_p = $('button[name=supprimer_p]');
         var annuler_p = $('button[name=annuler_p]');
+        var tablepersonneressource = $('#tablepersonneressource tbody');
 
         // Traitement AJAX
         supprimer_p.each(function(){
@@ -1297,7 +1336,7 @@ $(document).ready(function() {
 
                 // On utilise ajax pour transmettre les données
                 $.ajax({
-                    url: "vieprofessionnelle/supprimer-personneressource/", // On ajoute l'url absolue en commençant par la racine
+                    url: "/vieprofessionnelle/supprimer-personneressource", // On ajoute l'url absolue en commençant par la racine
                     type: 'get',
                     data: {
                         supprimer_p: $(this).val(),
@@ -1314,9 +1353,9 @@ $(document).ready(function() {
 
                                 <tr>
                                     <td>` + k + `</td>
-                                    <td>` + valeur.type.type + `</td>
-                                    <td>` + valeur.chapeau ? valeur.chapeau.chapeau : valeur.membre.nom_prenoms + `</td>
-                                    <td>` + valeur.chapeau ? valeur.chapeau.contact : valeur.membre.contact + `</td>
+                                    <td>` + valeur.type + `</td>
+                                    <td>` + valeur.nom + `</td>
+                                    <td>` + valeur.contact + `</td>
                                     <td class="text-center">
                                         <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#personneressourcesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                         <!-- Modal -->
@@ -1331,7 +1370,7 @@ $(document).ready(function() {
                                                     </div>
                                                     <div class="modal-body">
                                                         <h5>
-                                                            Personne ressource : <strong>` + valeur.type.type + `</strong>
+                                                            Personne ressource : <strong>` + valeur.nom + `</strong>
                                                         </h5>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
@@ -1386,18 +1425,17 @@ $(document).ready(function() {
     supprimer_ligne_personneressouce(); // On appelle la fonction
 
 // ******************* GESTION DE L'AJOUT D'UNE PERSONNE RESSOURCE A PARTIR DU TABLEAU DE RECHERCHE ***
-
-var liste_btn_ajouter = $('#tablepersonneressource tbody button');
-var typepersonneressource = $('#select_typepersonneressource')
+var liste_btn_ajouter = $('#table_recherche_personneressource tbody button');
+var typepersonneressource = $('#select_typepersonneressource');
+var tablepersonneressource = $('#tablepersonneressource tbody');
 
     liste_btn_ajouter.each(function(){
 
         $(this).click(function(e){
             e.preventDefault();
-
             // On utilise ajax pour transmettre les données
             $.ajax({
-                    url: "vieprofessionnelle/ajouter-personneressource", // On ajoute l'url absolue en commençant par la racine
+                    url: "/vieprofessionnelle/ajouter-personneressource", // On ajoute l'url absolue en commençant par la racine
                     type: 'GET',
                     data: {
                         typepersonneressource: typepersonneressource.val(),
@@ -1415,9 +1453,9 @@ var typepersonneressource = $('#select_typepersonneressource')
 
                                 <tr>
                                     <td>` + k + `</td>
-                                    <td>` + valeur.type.type + `</td>
-                                    <td>` + valeur.chapeau ? valeur.chapeau.chapeau : valeur.membre.nom_prenoms + `</td>
-                                    <td>` + valeur.chapeau ? valeur.chapeau.contact : valeur.membre.contact + `</td>
+                                    <td>` + valeur.type + `</td>
+                                    <td>` + valeur.nom + `</td>
+                                    <td>` + valeur.contact + `</td>
                                     <td class="text-center">
                                         <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#personneressourcesupprimermodal` + valeur.id + `" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                         <!-- Modal -->
@@ -1432,7 +1470,7 @@ var typepersonneressource = $('#select_typepersonneressource')
                                                     </div>
                                                     <div class="modal-body">
                                                         <h5>
-                                                            Personne ressource : <strong>` + valeur.type.type + `</strong>
+                                                            Personne ressource : <strong>` + valeur.nom + `</strong>
                                                         </h5>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
@@ -1473,6 +1511,9 @@ var typepersonneressource = $('#select_typepersonneressource')
                     statusCode: {
                         404: function(data){
                                 alert('Veuillez renseigner les champs SVP.');
+                             },
+                        403: function(data){
+                                alert('Cette personne ressource existe déjà.');
                              },
                     },
                 });

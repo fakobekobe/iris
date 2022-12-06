@@ -22,7 +22,7 @@
             <label class="input-group-text" for="select_district{{commune.id}}"><i class="fas fa-igloo"></i></label>
         </div>
 
-        <select name="select_district" id="select_district{{commune.id}}" required>
+        <select name="select_district" id="select_district{{commune.id}}" class="form-control" required>
             <option value="">--- Sélectionnez un district ---</option>
             {% for district in districts %}
 
@@ -44,7 +44,7 @@
             <label class="input-group-text" for="select_region{{commune.id}}"><i class="fas fa-home"></i></label>
         </div>
 
-        <select name="select_region" id="select_region{{commune.id}}">
+        <select name="select_region" id="select_region{{commune.id}}" class="form-control">
             <option value="">--- Sélectionnez une région ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -79,7 +79,7 @@
             <label class="input-group-text" for="select_departement{{commune.id}}"><i class="fas fa-building"></i></label>
         </div>
 
-        <select name="select_departement" id="select_departement{{commune.id}}">
+        <select name="select_departement" id="select_departement{{commune.id}}" class="form-control">
             <option value="">--- Sélectionnez un département ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -126,7 +126,7 @@
             <label class="input-group-text" for="select_ville{{commune.id}}"><i class="fas fa-city"></i></label>
         </div>
 
-        <select name="select_ville" id="select_ville{{commune.id}}">
+        <select name="select_ville" id="select_ville{{commune.id}}" class="form-control">
             <option value="">--- Sélectionnez une ville ---</option>
 
             {% for district in districts %} # On parcours la liste des districts

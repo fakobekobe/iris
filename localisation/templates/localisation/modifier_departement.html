@@ -22,7 +22,7 @@
             <label class="input-group-text" for="select_district{{departement.id}}"><i class="fas fa-igloo"></i></label>
         </div>
 
-        <select name="select_district" id="select_district{{departement.id}}" required>
+        <select name="select_district" id="select_district{{departement.id}}" class="form-control" required>
             <option value="" selected>---Sélectionnez un district---</option>
             {% for district in districts %}
 
@@ -44,7 +44,7 @@
             <label class="input-group-text" for="select_region{{departement.id}}"><i class="fas fa-home"></i></label>
         </div>
 
-        <select name="select_region" id="select_region{{departement.id}}">
+        <select name="select_region" id="select_region{{departement.id}}" class="form-control">
             <option value="" selected>---Sélectionnez une région---</option>
 
             {% for district in districts %} # On parcours la liste des districts

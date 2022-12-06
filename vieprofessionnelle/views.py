@@ -11,8 +11,7 @@ from utilisateur.models import Parametre
 
 
 # Les constatntes et les variables globales
-_active_onglet = "" # Variable globale pour l'activation des onglets
-_parametre = Parametre.objects.first()
+_active_onglet = ""  # Variable globale pour l'activation des onglets
 
 @login_required
 @permission_required('auth.view_user', raise_exception=True)
@@ -79,6 +78,7 @@ def vieprofessionnelle(request):
         "chapeaux": chapeaux,
         "typepersonneressources": typepersonneressources,
         "personneressources": personneressources,
+        "id_chapeau": int(Parametre.objects.first().id_chapeau),
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
@@ -1152,6 +1152,7 @@ def ajouter_personneressource(request):
         # On initialise les variables
         typepersonneressource = request.GET.get("typepersonneressource", None)
         id = request.GET.get("id", None)
+        _parametre = Parametre.objects.first()
 
         if typepersonneressource and id:  # On vérifie si les champs ont été renseignés
 
@@ -1162,11 +1163,18 @@ def ajouter_personneressource(request):
                 data = {"libelle": "Ce type de personne ressource n'existe pas."}
                 return JsonResponse({'data': data}, status=404)
 
-            if _parametre.id_chapeau == typepersonneressource:
+            if int(_parametre.id_chapeau) == int(typepersonneressource):
 
                 try:
                     # On récupère le membre
                     objet_chapeau = Chapeau.objects.get(id=id)
+                    # On vérifie si ce chapeau existe déjà en tant que personne ressource
+                    try:
+                        PersonneRessource.objects.get(chapeau=objet_chapeau.id)
+                        data = {"libelle": "Ce Chapeau existe déjà."}
+                        return JsonResponse({'data': data}, status=403)
+                    except PersonneRessource.DoesNotExist:
+                        pass
                     objet_membre = None
                 except Chapeau.DoesNotExist:
                     data = {"libelle": "Ce Chapeau n'existe pas."}
@@ -1175,24 +1183,49 @@ def ajouter_personneressource(request):
                 try:
                     # On récupère le membre
                     objet_membre = Membre.objects.get(id=id)
+                    try:
+                        PersonneRessource.objects.get(membre=objet_membre.id)
+                        data = {"libelle": "Ce Membre existe déjà."}
+                        return JsonResponse({'data': data}, status=403)
+                    except PersonneRessource.DoesNotExist:
+                        pass
                     objet_chapeau = None
                 except Membre.DoesNotExist:
                     data = {"libelle": "Ce Membre n'existe pas."}
                     return JsonResponse({'data': data}, status=404)
-
             # On ajoute les données
             objet_personneressource = PersonneRessource()
             objet_personneressource.typepersonneressource = object_typepersonneressource
             objet_personneressource.membre = objet_membre
             objet_personneressource.chapeau = objet_chapeau
+            objet_personneressource.save()
 
             # On récupère toutes les personnes ressources
             personneressources = PersonneRessource.objects.order_by('-id')
 
             if personneressources:
-                data = [{'id': personne.id, 'type': personne.typepersonneressource,
-                         'chapeau': personne.chapeau, 'membre': personne.membre,
-                         } for personne in personneressources]
+                data = []
+                for personne in personneressources:
+                    if personne.chapeau:
+                        data.append(
+                            {
+                                'id': personne.id,
+                                'type': personne.typepersonneressource.type,
+                                'nom': personne.chapeau.chapeau,
+                                'contact': personne.chapeau.contact,
+                            }
+
+                        )
+                    else:
+                        data.append(
+                            {
+                                'id': personne.id,
+                                'type': personne.typepersonneressource.type,
+                                'nom': personne.membre.nom_prenoms,
+                                'contact': personne.membre.contact,
+                            }
+
+                        )
 
                 return JsonResponse({'data': data}, status=200)
 
@@ -1226,9 +1259,28 @@ def supprimer_personneressource(request):
                 personneressources = PersonneRessource.objects.order_by('-id')
 
                 if personneressources:
-                    data = [{'id': personne.id, 'type': personne.typepersonneressource,
-                             'chapeau': personne.chapeau, 'membre': personne.membre,
-                             } for personne in personneressources]
+                    data = []
+                    for personne in personneressources:
+                        if personne.chapeau:
+                            data.append(
+                                {
+                                    'id': personne.id,
+                                    'type': personne.typepersonneressource.type,
+                                    'nom': personne.chapeau.chapeau,
+                                    'contact': personne.chapeau.contact,
+                                }
+
+                            )
+                        else:
+                            data.append(
+                                {
+                                    'id': personne.id,
+                                    'type': personne.typepersonneressource.type,
+                                    'nom': personne.membre.nom_prenoms,
+                                    'contact': personne.membre.contact,
+                                }
+
+                            )
 
                     return JsonResponse({'data': data}, status=200)
 
@@ -1237,4 +1289,31 @@ def supprimer_personneressource(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_personneressource', raise_exception=True)
+def details_personneressource(request):
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        _parametre = Parametre.objects.first()
+
+        if id:
+            if id == _parametre.id_chapeau:
+                ajax_chapeau = Chapeau.objects.order_by('-id')
+                if ajax_chapeau:
+                    data = [{'id': chapeau.id, 'nom': chapeau.chapeau, 'contact': chapeau.contact} for chapeau in
+                            ajax_chapeau]
+
+                    return JsonResponse({'data': data}, status=200)
+            else:
+                ajax_membre = Membre.objects.order_by('-id')
+                if ajax_membre:
+                    data = [{'id': membre.id, 'nom': membre.nom_prenoms, 'contact': membre.contact} for membre in
+                            ajax_membre]
+
+                    return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
 # Fin de la Gestion de personne ressource -------------------------------------

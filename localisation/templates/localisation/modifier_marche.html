@@ -22,7 +22,7 @@
             <label class="input-group-text" for="select_district{{marche.id}}"><i class="fas fa-igloo"></i></label>
         </div>
 
-        <select name="select_district" id="select_district{{marche.id}}" required>
+        <select name="select_district" id="select_district{{marche.id}}" class="form-control" required>
             <option value="">--- Sélectionnez un district ---</option>
             {% for district in districts %}
 
@@ -44,7 +44,7 @@
             <label class="input-group-text" for="select_region{{marche.id}}"><i class="fas fa-home"></i></label>
         </div>
 
-        <select name="select_region" id="select_region{{marche.id}}">
+        <select name="select_region" id="select_region{{marche.id}}" class="form-control">
             <option value="">--- Sélectionnez une région ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -79,7 +79,7 @@
             <label class="input-group-text" for="select_departement{{marche.id}}"><i class="fas fa-building"></i></label>
         </div>
 
-        <select name="select_departement" id="select_departement{{marche.id}}">
+        <select name="select_departement" id="select_departement{{marche.id}}" class="form-control">
             <option value="">--- Sélectionnez un département ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -126,7 +126,7 @@
             <label class="input-group-text" for="select_ville{{marche.id}}"><i class="fas fa-city"></i></label>
         </div>
 
-        <select name="select_ville" id="select_ville{{marche.id}}">
+        <select name="select_ville" id="select_ville{{marche.id}}" class="form-control">
             <option value="">--- Sélectionnez une ville ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -185,7 +185,7 @@
             <label class="input-group-text" for="select_commune{{marche.id}}"><i class="fas fa-warehouse"></i></label>
         </div>
 
-        <select name="select_commune" id="select_commune{{marche.id}}">
+        <select name="select_commune" id="select_commune{{marche.id}}" class="form-control">
             <option value="">--- Sélectionnez une commune ---</option>
 
             {% for district in districts %} # On parcours la liste des districts
@@ -256,7 +256,7 @@
             <label class="input-group-text" for="select_quartier{{marche.id}}"><i class="fas fa-hotel"></i></label>
         </div>
 
-        <select name="select_quartier" id="select_quartier{{marche.id}}">
+        <select name="select_quartier" id="select_quartier{{marche.id}}" class="form-control">
             <option value="">--- Sélectionnez un quartier ---</option>
 
             {% for district in districts %} # On parcours la liste des districts

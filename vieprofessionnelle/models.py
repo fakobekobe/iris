@@ -244,8 +244,8 @@ class TypePersonneRessource(models.Model):
         return self.type
 
 class PersonneRessource(models.Model):
-    membre = models.OneToOneField(Membre, null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    chapeau = models.OneToOneField(Chapeau, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    membre = models.ForeignKey(Membre, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    chapeau = models.ForeignKey(Chapeau, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     typepersonneressource = models.ForeignKey(TypePersonneRessource, null=True, blank=True, default=None, on_delete=models.SET_NULL)
 
     def __str__(self):
