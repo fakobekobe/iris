@@ -57,6 +57,21 @@
                 Personne ressource
             </button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_typeresponsabilite|first}}" id="typeresponsabilite-tab" data-toggle="tab" data-target="#typeresponsabilite" type="button" role="tab" aria-controls="typeresponsabilite" aria-selected="{{ active_typeresponsabilite|slice:'1:2'|first }}">
+                Type de responsabilité
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_montantfinancement|first}}" id="montantfinancement-tab" data-toggle="tab" data-target="#montantfinancement" type="button" role="tab" aria-controls="montantfinancement" aria-selected="{{ active_montantfinancement|slice:'1:2'|first }}">
+                Montant du financement
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{active_quantitegroupement|first}}" id="quantitegroupement-tab" data-toggle="tab" data-target="#quantitegroupement" type="button" role="tab" aria-controls="quantitegroupement" aria-selected="{{ active_quantitegroupement|slice:'1:2'|first }}">
+                Quantité du groupement
+            </button>
+        </li>
     </ul>
 
     <div class="tab-content" id="myTabContent">
@@ -808,6 +823,225 @@
             </div>
         </div>
         <!-- FIN DE CONTENU personneressource -->
+
+        <!-- CONTENU typeresponsabilité -->
+        <div class="tab-pane fade {{ active_typeresponsabilite|last }}" id="typeresponsabilite" role="tabpanel" aria-labelledby="typeresponsabilite-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-user-tag"></i> Liste des types de responsabilités</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#typeresponsabiliteModal" data-backdrop="static"><i class="fas fa-user-tag"></i> Ajouter un type de responsabilité</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tabletyperesponsabilite">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for typeresponsabilite in typeresponsabilites %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{typeresponsabilite.type}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#typeresponsabilitemodifierModal{{typeresponsabilite.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#typeresponsabilitesupprimermodal{{typeresponsabilite.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="typeresponsabilitesupprimermodal{{typeresponsabilite.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Type de responsabilité : <strong>{{typeresponsabilite.type}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_typeresponsabilite' typeresponsabilite.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_typeresponsabilite.html' %}
+                            {% include 'vieprofessionnelle/modifier_typeresponsabilite.html' %}
+
+                            {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_typeresponsabilite.html' %}
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN DE CONTENU typeresponsabilité -->
+
+        <!-- CONTENU montantfinancement -->
+        <div class="tab-pane fade {{ active_montantfinancement|last }}" id="montantfinancement" role="tabpanel" aria-labelledby="montantfinancement-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-money-bill-alt"></i> Liste des montants de financement</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#montantfinancementModal" data-backdrop="static"><i class="fas fa-money-bill-alt"></i> Ajouter un montant de financement</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tablemontantfinancement">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Montant</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for montantfinancement in montantfinancements %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{montantfinancement.montant}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#montantfinancementmodifierModal{{montantfinancement.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#montantfinancementsupprimermodal{{montantfinancement.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="montantfinancementsupprimermodal{{montantfinancement.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Montant du financement : <strong>{{montantfinancement.montant}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_montantfinancement' montantfinancement.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_montantfinancement.html' %}
+                            {% include 'vieprofessionnelle/modifier_montantfinancement.html' %}
+
+                            {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_montantfinancement.html' %}
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN DE CONTENU montantfinancement -->
+
+        <!-- CONTENU quantitegroupement -->
+        <div class="tab-pane fade {{ active_quantitegroupement|last }}" id="quantitegroupement" role="tabpanel" aria-labelledby="quantitegroupement-tab">
+            <div>
+                <h1 class="mb-3 text-primary"><i class="fas fa-sort-numeric-up-alt"></i> Liste des quantités du groupement</h1>
+                <h3><a class="btn btn-primary" data-toggle="modal" data-target="#quantitegroupementModal" data-backdrop="static"><i class="fas fa-sort-numeric-up-alt"></i> Ajouter une quantité du groupement</a></h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-responsive-md" id="tablequantitegroupement">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Quantité</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for quantitegroupement in quantitegroupements %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{quantitegroupement.quantite}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#quantitegroupementmodifierModal{{quantitegroupement.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
+                                    <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#quantitegroupementsupprimermodal{{quantitegroupement.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="quantitegroupementsupprimermodal{{quantitegroupement.id}}" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Quantité du groupement : <strong>{{quantitegroupement.quantite}}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+
+                                                    <form style="display:inline-block; text-align:center" method="post" action="{% url 'vieprofessionnelle:supprimer_quantitegroupement' quantitegroupement.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                                    </form>
+                                                    <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Modal Fin -->
+                                </td>
+                            </tr>
+                            <!-- LISTE DES INCLUDES -->
+                            {% include 'vieprofessionnelle/ajouter_quantitegroupement.html' %}
+                            {% include 'vieprofessionnelle/modifier_quantitegroupement.html' %}
+
+                            {% empty %}
+                            {% include 'vieprofessionnelle/ajouter_quantitegroupement.html' %}
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN DE CONTENU quantitegroupement -->
 
     </div>
 

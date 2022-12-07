@@ -37,44 +37,85 @@
 
                     <hr />
 
-                    <!-- Champ de recherche -->
-                    <div class="row mb-3 pl-2 pr-2">
+                    <!-- Tableau de recherche Chapeau-->
+                    <div id="trc" value="{{id_chapeau}}" style="height:500px; overflow-y:scroll;">
+                        <!-- Champ de recherche -->
+                        <div class="row mb-3 pl-2 pr-2">
 
-                        <div class="input-group mb-2">
-                            <input type="text" name="recherche_personneressource" id="recherche_personneressource" class="form-control" placeholder="Rechercher">
-                            <div class="input-group-append">
-                                <span class="input-group-text btn btn-success"><i class="fas fa-search"></i></span>
+                            <div class="input-group mb-2">
+                                <input type="text" name="recherche_personneressource" id="recherche_personneressource" class="form-control" placeholder="Rechercher">
+                                <div class="input-group-append">
+                                    <span class="input-group-text btn btn-success"><i class="fas fa-search"></i></span>
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
+                        <!-- -->
+
+                        <hr />
+                        <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_personneressource">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Nom et prénoms</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for chapeau in chapeaux %}
+                            <tr>
+                                <td class="text-center">{{forloop.counter}}</td>
+                                <td>{{chapeau.chapeau}}</td>
+                                <td>{{chapeau.contact}}</td>
+                                <td class="text-center">
+                                    <button type="button" value="{{chapeau.id}}" title="ajouter cette personne ressource" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     <!-- -->
 
-                    <hr />
+                    <!-- Tableau de recherche Membre-->
+                    <div id="trm" class="dn" style="height:500px; overflow-y:scroll;">
+                        <!-- Champ de recherche -->
+                        <div class="row mb-3 pl-2 pr-2">
 
-                    <!-- Tableau de recherche -->
-                    <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_personneressource">
-                        <thead class="text-center">
-                        <tr class="thead-light">
-                            <th>N°</th>
-                            <th>Nom et prénoms</th>
-                            <th>Contact</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for chapeau in chapeaux %}
-                        <tr>
-                            <td class="text-center">{{forloop.counter}}</td>
-                            <td>{{chapeau.chapeau}}</td>
-                            <td>{{chapeau.contact}}</td>
-                            <td class="text-center">
-                                <button type="button" value="{{chapeau.id}}" title="ajouter cette personne ressource" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            <div class="input-group mb-2">
+                                <input type="text" name="recherche_personneressource_m" id="recherche_personneressource_m" class="form-control" placeholder="Rechercher">
+                                <div class="input-group-append">
+                                    <span class="input-group-text btn btn-success"><i class="fas fa-search"></i></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- -->
+                        <hr />
+                        <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_personneressource_m">
+                            <thead class="text-center">
+                            <tr class="thead-light">
+                                <th>N°</th>
+                                <th>Nom et prénoms</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for membre in membres %}
+                            <tr>
+                                <td class="text-center">{{forloop.counter}}</td>
+                                <td>{{membre.nom_prenoms}}</td>
+                                <td>{{membre.contact}}</td>
+                                <td class="text-center">
+                                    <button type="button" value="{{membre.id}}" title="ajouter cette personne ressource" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- -->
 
                 </div>

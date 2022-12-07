@@ -24,10 +24,13 @@ def vieprofessionnelle(request):
     typeetatsantes = TypeEtatSante.objects.order_by("libelle")
     typedocuments = TypeDocument.objects.order_by("libelle")
     documents = Document.objects.order_by("-id")
-    membres = Membre.objects.order_by("-id")
     chapeaux = Chapeau.objects.order_by("-id")
     typepersonneressources = TypePersonneRessource.objects.order_by("-id")
     personneressources = PersonneRessource.objects.order_by("-id")
+    membres = Membre.objects.filter(actif=True).order_by("nom_prenoms")
+    typeresponsabilites = TypeResponsabilite.objects.order_by("-id")
+    montantfinancements = MontantFinancement.objects.order_by("montant")
+    quantitegroupements = QuantiteGroupement.objects.order_by("quantite")
 
     # Initialisation de l'affichage de l'onglet active
     active_typesecteur = ['', 'false', '']
@@ -40,6 +43,9 @@ def vieprofessionnelle(request):
     active_chapeau = ['', 'false', '']
     active_typepersonneressource = ['', 'false', '']
     active_personneressource = ['', 'false', '']
+    active_typeresponsabilite = ['', 'false', '']
+    active_montantfinancement = ['', 'false', '']
+    active_quantitegroupement = ['', 'false', '']
 
     if _active_onglet == "typesecteur":
         active_typesecteur = ['active', 'true', 'show active']
@@ -61,6 +67,12 @@ def vieprofessionnelle(request):
         active_typepersonneressource = ['active', 'true', 'show active']
     elif _active_onglet == "personneressource":
         active_personneressource = ['active', 'true', 'show active']
+    elif _active_onglet == "typeresponsabilite":
+        active_typeresponsabilite = ['active', 'true', 'show active']
+    elif _active_onglet == "montantfinancement":
+        active_montantfinancement = ['active', 'true', 'show active']
+    elif _active_onglet == "quantitegroupement":
+        active_quantitegroupement = ['active', 'true', 'show active']
     else:
         # Affichage par défaut
         active_typesecteur = ['active', 'true', 'show active']
@@ -79,6 +91,10 @@ def vieprofessionnelle(request):
         "typepersonneressources": typepersonneressources,
         "personneressources": personneressources,
         "id_chapeau": int(Parametre.objects.first().id_chapeau),
+        "monnaie": Parametre.objects.first().monnaie,
+        "typeresponsabilites": typeresponsabilites,
+        "montantfinancements": montantfinancements,
+        "quantitegroupements": quantitegroupements,
 
         "active_typesecteur": active_typesecteur,
         "active_secteur": active_secteur,
@@ -90,6 +106,9 @@ def vieprofessionnelle(request):
         "active_chapeau": active_chapeau,
         "active_typepersonneressource": active_typepersonneressource,
         "active_personneressource": active_personneressource,
+        "active_typeresponsabilite": active_typeresponsabilite,
+        "active_montantfinancement": active_montantfinancement,
+        "active_quantitegroupement": active_quantitegroupement,
 
     }
 
@@ -1317,3 +1336,300 @@ def details_personneressource(request):
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
 # Fin de la Gestion de personne ressource -------------------------------------
+
+# Gestion du type de responsabilité -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_typeresponsabilite', raise_exception=True)
+def ajouter_typeresponsabilite(request):
+    global _active_onglet
+    _active_onglet = "typeresponsabilite"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        type = strip_tags(request.POST.get("type", "")).strip()
+
+        if type:  # On vérifie si le champ a été renseigné
+
+            # On formate les chaines
+            type = type.capitalize()
+
+            try:
+                TypeResponsabilite.objects.get(type=type)
+                messages.error(request, f"Ce type de responsabilité :[{type}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except TypeResponsabilite.DoesNotExist:
+                pass
+
+            # ----
+            objet_typeresponsabilite = TypeResponsabilite()
+            objet_typeresponsabilite.type = type
+            objet_typeresponsabilite.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_typeresponsabilite', raise_exception=True)
+def modifier_typeresponsabilite(request):
+    global _active_onglet
+    _active_onglet = "typeresponsabilite"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_typeresponsabilite = TypeResponsabilite.objects.get(id=request.POST.get('id'))
+        except TypeResponsabilite.DoesNotExist:
+            messages.error(request, "Ce type de responsabilité n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_typeresponsabilite:
+            # On formate les chaines
+            type_nouveau = strip_tags(request.POST.get("type", "")).strip()
+            type_nouveau = type_nouveau.capitalize()
+
+            # On récupère l'ancienne valeur
+            type_ancien = objet_typeresponsabilite.type
+
+            # On vérifie si la valeur a changé
+            if type_nouveau != type_ancien:
+                # On vérifie si la valeur modifiée existe déjà
+                try:
+                    TypeResponsabilite.objects.get(type=type_nouveau)
+                    messages.error(request, f"Ce type de responsabilité [{type_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except TypeResponsabilite.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_typeresponsabilite.type = type_nouveau
+            objet_typeresponsabilite.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_typeresponsabilite', raise_exception=True)
+def supprimer_typeresponsabilite(request, id):
+    global _active_onglet
+    _active_onglet = "typeresponsabilite"  # On initialise la variable
+
+    try:
+        objet_typeresponsabilite = TypeResponsabilite.objects.get(id=id)
+    except TypeResponsabilite.DoesNotExist:
+        messages.error(request, "Ce type de responsabilité n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_typeresponsabilite:
+        objet_typeresponsabilite.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du type de responsabilité -------------------------------------
+
+# Gestion du montant du financement -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_montantfinancement', raise_exception=True)
+def ajouter_montantfinancement(request):
+    global _active_onglet
+    _active_onglet = "montantfinancement"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        montant = strip_tags(request.POST.get("montant", 0)).strip()
+
+        if montant != '0':  # On vérifie si le champ a été renseigné
+
+            try:
+                MontantFinancement.objects.get(montant=montant)
+                messages.error(request, f"Ce montant :[{montant}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except MontantFinancement.DoesNotExist:
+                pass
+
+            # ----
+            objet_montantfinancement = MontantFinancement()
+            objet_montantfinancement.montant = montant
+            objet_montantfinancement.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+        else:
+            messages.error(request, f"Entrer un montant supérieur à {montant}.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_montantfinancement', raise_exception=True)
+def modifier_montantfinancement(request):
+    global _active_onglet
+    _active_onglet = "montantfinancement"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_montantfinancement = MontantFinancement.objects.get(id=request.POST.get('id'))
+        except MontantFinancement.DoesNotExist:
+            messages.error(request, "Ce montant n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_montantfinancement:
+            # On formate les chaines
+            montant_nouveau = strip_tags(request.POST.get("montant", 0)).strip()
+
+            # On récupère l'ancienne valeur
+            montant_ancien = objet_montantfinancement.montant
+
+            # On vérifie si la valeur a changé
+            if montant_nouveau != montant_ancien:
+                # On vérifie si la valeur modifiée existe déjà
+                try:
+                    MontantFinancement.objects.get(montant=montant_nouveau)
+                    messages.error(request, f"Ce montant [{montant_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except MontantFinancement.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_montantfinancement.montant = montant_nouveau
+            objet_montantfinancement.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_montantfinancement', raise_exception=True)
+def supprimer_montantfinancement(request, id):
+    global _active_onglet
+    _active_onglet = "montantfinancement"  # On initialise la variable
+
+    try:
+        objet_montantfinancement = MontantFinancement.objects.get(id=id)
+    except MontantFinancement.DoesNotExist:
+        messages.error(request, "Ce montant n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_montantfinancement:
+        objet_montantfinancement.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du montant du financement -------------------------------------
+
+# Gestion de la quantité du groupement -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_quantitegroupement', raise_exception=True)
+def ajouter_quantitegroupement(request):
+    global _active_onglet
+    _active_onglet = "quantitegroupement"  # On initialise la variable
+
+    if request.method == "POST":
+        # On initialise les variables
+        quantite = strip_tags(request.POST.get("quantite", 0)).strip()
+
+        if quantite != '0':  # On vérifie si le champ a été renseigné
+
+            try:
+                QuantiteGroupement.objects.get(quantite=quantite)
+                messages.error(request, f"Cette quantité :[{quantite}] existe déjà.")
+                return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+            except QuantiteGroupement.DoesNotExist:
+                pass
+
+            # ----
+            objet_quantitegroupement = QuantiteGroupement()
+            objet_quantitegroupement.quantite = quantite
+            objet_quantitegroupement.save()
+
+            messages.success(request, "Enregistrement réussi.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+        else:
+            messages.error(request, f"Entrer une quantité supérieur à {quantite}.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_quantitegroupement', raise_exception=True)
+def modifier_quantitegroupement(request):
+    global _active_onglet
+    _active_onglet = "quantitegroupement"  # On initialise la variable
+
+    if request.method == "POST":
+
+        try:
+            objet_quantitegroupement = QuantiteGroupement.objects.get(id=request.POST.get('id'))
+        except QuantiteGroupement.DoesNotExist:
+            messages.error(request, "Cette quantité n'existe pas.")
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+        if objet_quantitegroupement:
+            # On formate les chaines
+            quantite_nouveau = strip_tags(request.POST.get("quantite", 0)).strip()
+
+            # On récupère l'ancienne valeur
+            quantite_ancien = objet_quantitegroupement.quantite
+
+            # On vérifie si la valeur a changé
+            if quantite_nouveau != quantite_ancien:
+                # On vérifie si la valeur modifiée existe déjà
+                try:
+                    QuantiteGroupement.objects.get(quantite=quantite_nouveau)
+                    messages.error(request, f"Cette quantité [{quantite_nouveau}] existe déjà.")
+                    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+                except QuantiteGroupement.DoesNotExist:
+                    pass
+
+            # On effectue la modification
+            objet_quantitegroupement.quantite = quantite_nouveau
+            objet_quantitegroupement.save()
+
+            messages.success(request, "Modification réussie.")
+
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+    else:
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_quantitegroupement', raise_exception=True)
+def supprimer_quantitegroupement(request, id):
+    global _active_onglet
+    _active_onglet = "quantitegroupement"  # On initialise la variable
+
+    try:
+        objet_quantitegroupement = QuantiteGroupement.objects.get(id=id)
+    except QuantiteGroupement.DoesNotExist:
+        messages.error(request, "Cette quantité n'existe pas.")
+        return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    if objet_quantitegroupement:
+        objet_quantitegroupement.delete()
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion de la quantité du groupement -------------------------------------

@@ -59,5 +59,20 @@ urlpatterns = [
     path('supprimer-personneressource', views.supprimer_personneressource, name='supprimer_personneressource'),
     path('details-personneressource', views.details_personneressource, name='details_personneressource'),
 
+    # Url TypeResponsabilité
+    path('ajouter-typeresponsabilite/', views.ajouter_typeresponsabilite, name='ajouter_typeresponsabilite'),
+    path('modifier-typeresponsabilite/', views.modifier_typeresponsabilite, name='modifier_typeresponsabilite'),
+    path('supprimer-typeresponsabilite/<str:id>', views.supprimer_typeresponsabilite, name='supprimer_typeresponsabilite'),
+
+    # Url MontantFinancement
+    path('ajouter-montantfinancement/', views.ajouter_montantfinancement, name='ajouter_montantfinancement'),
+    path('modifier-montantfinancement/', views.modifier_montantfinancement, name='modifier_montantfinancement'),
+    path('supprimer-montantfinancement/<str:id>', views.supprimer_montantfinancement, name='supprimer_montantfinancement'),
+
+    # Url QUantiteGroupement
+    path('ajouter-quantitegroupement/', views.ajouter_quantitegroupement, name='ajouter_quantitegroupement'),
+    path('modifier-quantitegroupement/', views.modifier_quantitegroupement, name='modifier_quantitegroupement'),
+    path('supprimer-quantitegroupement/<str:id>', views.supprimer_quantitegroupement, name='supprimer_quantitegroupement'),
+
 
 ]
