@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.utils.html import strip_tags
 import datetime
 import os
+from utilisateur.models import Parametre
 
 # Les constatntes et les variables globales
 _active_onglet = ""  # Variable globale pour l'activation des onglets
@@ -146,7 +147,7 @@ def ajouter_secteuragricole(request):
 
 
     # PARTIE DU GET -----------------------
-    if not _active_session :
+    if not _active_session:
         if request.session.get('id_membre'):
             del request.session['id_membre']
 
@@ -167,6 +168,20 @@ def ajouter_secteuragricole(request):
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
     membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
+    typepersonneressources = TypePersonneRessource.objects.order_by('id')
+
+    # On initialise les données
+    _parametre = Parametre.objects.first()
+    chapeaux = None
+    membres_chapeau = None
+    for typepersonneressource in typepersonneressources:
+        if typepersonneressource.id == int(_parametre.id_chapeau):
+            # On récupère la liste des personnes ressources de type chapeau
+            chapeaux = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
+        else:
+            # On récupère la liste des personnes ressources de type membre
+            membres_chapeau = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
+
 
     # Initialisation de l'affichage de l'onglet active
     active_secteuragricole = ['', 'false', '']
@@ -197,18 +212,22 @@ def ajouter_secteuragricole(request):
         "typeparents": typeparents,
         "parents": parents,
         "membres": membres,
+        "typepersonneressources": typepersonneressources,
+        "chapeaux": chapeaux,
+        "membres_chapeau": membres_chapeau,
 
         "active_secteuragricole": active_secteuragricole,
         "active_liste": active_liste,
     }
-
+    print(chapeaux)
+    print(membres_chapeau)
     if request.session.get('id_membre'): # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
         context["membre_secteuragricole"] = MembreSecteurAgricole.objects.get(membre_id=request.session.get('id_membre'))
         return render(request, "presentation/modifier_secteuragricole.html", context)
 
-    return render(request,"presentation/secteuragricole.html", context)
+    return render(request, "presentation/secteuragricole.html", context)
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)

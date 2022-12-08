@@ -117,6 +117,8 @@
 {% block cooperative %}value="{{membre_secteuragricole.secteuragricole.id}}"{% endblock cooperative %}
 {% block dateadhesion %}value="{{membre_secteuragricole.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
 {% block numero_carte %}value="{{membre_secteuragricole.numero_carte}}"{% endblock numero_carte %}
+{% block chapeau_texte %}value="{{membre_secteuragricole.secteuragricole.nom}}"{% endblock chapeau_texte %}
+{% block chapeau %}value="{{membre_secteuragricole.secteuragricole.id}}"{% endblock chapeau %}
 
 {% block situationmatrimoniale %}
 <div class="input-group mb-3 justify-content-center">

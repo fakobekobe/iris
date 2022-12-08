@@ -206,6 +206,19 @@
                                                 <!-- -->
 
                                                 <!-- -->
+                                                <div class="input-group mb-2">
+                                                      <input type="text" name="chapeau_texte" id="chapeau_texte" {% block chapeau_texte %}value=""{% endblock chapeau_texte %} class="form-control" placeholder="Chapeau" readonly>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-danger" id="label_chapeau_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-success" id="label_chapeau_plus" title="Ajouter un chapeau" data-toggle="modal" data-target="#chapeau_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                        </div>
+                                                      <input type="text" hidden name="chapeau" {% block chapeau %}value=""{% endblock chapeau %} id="chapeau" class="form-control">
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- -->
                                                 {% block niveau %}
                                                 <div class="form-row mb-2">
                                                     <select name="niveau" id="niveau" class="form-control" required>
@@ -292,6 +305,7 @@
                         {% include 'presentation/date_de_naissance.html' %}
                         {% include 'presentation/liste_cooperative.html' %}
                         {% include 'presentation/ajouter_cooperative.html' %}
+                        {% include 'presentation/liste_chapeau.html' %}
                         {% include 'presentation/liste_parent.html' %}
                         {% include 'presentation/ajouter_parent.html' %}
                         {% include 'presentation/lieu_habitation.html' %}
@@ -303,9 +317,9 @@
 
       </div>
     </div>
-    <!-- FIN DE CONTENU Type secteur -->
+    <!-- FIN DE CONTENU Fiche d'Identification -->
 
-    <!-- CONTENU Liste des Membre -->
+    <!-- CONTENU Liste des Membres -->
     <div class="tab-pane fade {{ active_liste|last }}" id="secteur" role="tabpanel" aria-labelledby="secteur-tab">
       <div>
         <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
@@ -393,7 +407,7 @@
 
       </div>
     </div>
-    <!-- FIN DE CONTENU secteur -->
+    <!-- FIN DE CONTENU Liste des membres -->
 
   </div>
 
