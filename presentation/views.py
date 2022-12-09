@@ -35,6 +35,7 @@ def index(request):
 
     return reponse
 
+
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def ajouter_secteuragricole(request):
@@ -58,6 +59,7 @@ def ajouter_secteuragricole(request):
         cooperative = request.POST.get('cooperative', None)
         dateadhesion = request.POST.get('dateadhesion', None)
         numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        chapeau = request.POST.get('chapeau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
         situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
         lieu_habitation = request.POST.get('lieu_habitation', None)
@@ -68,10 +70,10 @@ def ajouter_secteuragricole(request):
         if not dateadhesion:
             dateadhesion = None
 
-        if nom is not None and date_naissance is not None and numeropiece is not None and contact is not None and\
-                typepiece is not None and cooperative is not None and lieu_habitation is not None and sexe is not None and\
-                nationalite is not None and lieu_naissance is not None and niveauscolaire is not None and \
-                situationmatrimoniale is not None and lieu_habitation is not None:
+        if nom != 'None' and date_naissance and numeropiece != 'None' and contact != 'None' and\
+                typepiece and cooperative and lieu_habitation and sexe and\
+                nationalite and lieu_naissance and niveauscolaire and \
+                situationmatrimoniale and lieu_habitation and chapeau:
 
             if not request.session.get('id_membre'): # On traite la modification
                 # On vérifie si ce membre existe déjà car le numeropiece et le contact sont uniques
@@ -89,7 +91,7 @@ def ajouter_secteuragricole(request):
                     messages.error(request, "Ce membre n'existe pas.")
                     il_existe = False
 
-            if il_existe: # Si la valeur est True on entre dans la condition
+            if il_existe:  # Si la valeur est True on entre dans la condition
                 objet_membre.nom = nom
                 objet_membre.prenoms = prenoms
                 objet_membre.set_nomprenoms()
@@ -105,9 +107,9 @@ def ajouter_secteuragricole(request):
                 objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
                 objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
                 objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
-                objet_membre.set_identifiant()
 
                 if not request.session.get('id_membre'):
+                    objet_membre.set_identifiant()
                     objet_membre.dateenre = datetime.date.today()
 
                 objet_membre.actif = True  # On active l'utilisateur
@@ -124,23 +126,25 @@ def ajouter_secteuragricole(request):
                         secteuragricole=SecteurAgricole.objects.get(id=cooperative),
                         date_adhesion=dateadhesion,
                         numero_carte=numero_carte,
+                        chapeau=Chapeau.objects.get(id=chapeau),
                     )
 
                     messages.success(request, "Enregistrement réussi")
 
                 else:
                     try:
-                        membresecteura = MembreSecteurAgricole.objects.get(membre = objet_membre)
+                        membresecteura = MembreSecteurAgricole.objects.get(membre=objet_membre)
                         membresecteura.secteuragricole = SecteurAgricole.objects.get(id=cooperative)
                         membresecteura.date_adhesion = dateadhesion
                         membresecteura.numero_carte = numero_carte
+                        membresecteura.chapeau = Chapeau.objects.get(id=chapeau)
                         membresecteura.save()
 
                         messages.success(request, "Modification réussi")
                     except MembreSecteurAgricole.DoesNotExist:
                         pass
 
-                    del request.session['id_membre'] # On détruit la variable
+                    del request.session['id_membre']  # On détruit la variable
 
         else:
             messages.error(request, "Veuillez renseigner les champs.")
@@ -214,6 +218,7 @@ def ajouter_secteuragricole(request):
 
     return render(request, "presentation/secteuragricole.html", context)
 
+
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def detail_secteuragricole(request, id):
@@ -248,6 +253,7 @@ def detail_secteuragricole(request, id):
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
+
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def details_niveauscolaire(request):
@@ -263,9 +269,10 @@ def details_niveauscolaire(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.change_membre', raise_exception=True)
-def modifier_secteuragricole(request,id):
+def modifier_secteuragricole(request, id):
     global _active_onglet
     global _active_session
 
@@ -274,6 +281,7 @@ def modifier_secteuragricole(request,id):
     request.session['id_membre'] = id
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
@@ -294,6 +302,7 @@ def supprimer_secteuragricole(request, id):
         messages.info(request, "Suppression réussie.")
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
@@ -334,6 +343,7 @@ def ajouter_secteur_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_secteur_membre(request):
@@ -372,6 +382,7 @@ def supprimer_secteur_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
@@ -427,6 +438,7 @@ def ajouter_document_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_document_membre(request):
@@ -478,6 +490,7 @@ def supprimer_document_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_parent_membre(request):
@@ -521,6 +534,7 @@ def supprimer_parent_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.add_parent', raise_exception=True)
@@ -566,6 +580,7 @@ def ajouter_parent_membre(request):
     else:
         return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.add_parent', raise_exception=True)
 def retour_liste_membre(request):
@@ -573,6 +588,7 @@ def retour_liste_membre(request):
     _active_onglet = "active_liste"  # On initialise la variable
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
@@ -621,6 +637,7 @@ def ajouter_etatsante_membre(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_etatsante_membre(request):
@@ -662,6 +679,7 @@ def supprimer_etatsante_membre(request):
             return JsonResponse({'data': data}, status=404)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
@@ -731,6 +749,7 @@ def ajouter_etatsante_parent(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
 def supprimer_etatsante_parent(request):
@@ -773,6 +792,7 @@ def supprimer_etatsante_parent(request):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+
 @login_required
 @permission_required('vieprofessionnelle.view_membre', raise_exception=True)
 def imprimer_secteuragricole(request, id):
@@ -807,5 +827,261 @@ def imprimer_secteuragricole(request, id):
         return render(request,'presentation/imprimer_secteuragricole.html', context)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+# Fin de la Gestion du secteur agricole ------------------------------------------------------------------------------
+
+
+# Gestion du secteur femme active ------------------------------------------------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def ajouter_secteurfemmeactive(request):
+
+    # Les variables
+    il_existe = True
+    global _active_session
+
+    if request.method == "POST":
+        # On récupère les données
+        sexe = request.POST.get('sexe', None)
+        nom = strip_tags(request.POST.get('nom', None)).strip().title() # On rétire les tag (<>) et on enleve les espaces au début et fin
+        prenoms = strip_tags(request.POST.get('prenoms', None)).strip().title()
+        nomjeunefille = strip_tags(request.POST.get('nomjeunefille', None)).strip().title()
+        date_naissance = request.POST.get('date_naissance', None)
+        lieu_naissance = request.POST.get('lieu_naissance', None)
+        typepiece = request.POST.get('typepiece', None)
+        numeropiece = strip_tags(request.POST.get('numeropiece', None)).strip()
+        nationalite = request.POST.get('nationalite', None)
+        contact = strip_tags(request.POST.get('contact', None)).strip()
+        cooperative = request.POST.get('cooperative', None)
+        dateadhesion = request.POST.get('dateadhesion', None)
+        numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        chapeau = request.POST.get('chapeau', None)
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
+        lieu_habitation = request.POST.get('lieu_habitation', None)
+
+        if not date_naissance:
+            date_naissance = None
+
+        if not dateadhesion:
+            dateadhesion = None
+
+        if nom != 'None' and date_naissance and numeropiece != 'None' and contact != 'None' and\
+                typepiece and cooperative and lieu_habitation and sexe and\
+                nationalite and lieu_naissance and niveauscolaire and \
+                situationmatrimoniale and lieu_habitation and chapeau:
+
+            if not request.session.get('id_membre'): # On traite la modification
+                # On vérifie si ce membre existe déjà car le numeropiece et le contact sont uniques
+                try:
+                    Membre.objects.get(numeropiece=numeropiece, contact=contact)
+                    messages.error(request, "Ce membre existe déjà.")
+                    il_existe = False
+                except Membre.DoesNotExist:
+                    objet_membre = Membre()
+            else:
+                # On vérifie si le membre à modifier existe
+                try:
+                    objet_membre = Membre.objects.get(id=request.session.get('id_membre'))
+                except Membre.DoesNotExist:
+                    messages.error(request, "Ce membre n'existe pas.")
+                    il_existe = False
+
+            if il_existe:  # Si la valeur est True on entre dans la condition
+                objet_membre.nom = nom
+                objet_membre.prenoms = prenoms
+                objet_membre.set_nomprenoms()
+                objet_membre.nomjeunefille = nomjeunefille
+                objet_membre.sexe = Sexe.objects.get(code=sexe)
+                objet_membre.lieunaissance = Commune.objects.get(id=lieu_naissance)
+                objet_membre.date_naissance = date_naissance
+                objet_membre.typepiece = TypePiece.objects.get(id=typepiece)
+                objet_membre.numeropiece = numeropiece
+                objet_membre.nationalite = Nationalite.objects.get(id=nationalite)
+                objet_membre.contact = contact
+                objet_membre.numerobadge = None
+                objet_membre.niveauscolaire = NiveauScolaire.objects.get(id=niveauscolaire)
+                objet_membre.situationmatrimoniale = SituationMatrimoniale.objects.get(id=situationmatrimoniale)
+                objet_membre.quartier = Quartier.objects.get(id=lieu_habitation)
+
+                if not request.session.get('id_membre'):
+                    objet_membre.set_identifiant()
+                    objet_membre.dateenre = datetime.date.today()
+
+                objet_membre.actif = True  # On active l'utilisateur
+                objet_membre.utilisateur = User.objects.get(id=request.user.id)
+
+                # On sauvegarde les données
+                objet_membre.save()
+
+                if not request.session.get('id_membre'):
+
+                    # On ajoute le secteur agricole en relation
+                    MembreSecteurAgricole.objects.create(
+                        membre=objet_membre,
+                        secteuragricole=SecteurAgricole.objects.get(id=cooperative),
+                        date_adhesion=dateadhesion,
+                        numero_carte=numero_carte,
+                        chapeau=Chapeau.objects.get(id=chapeau),
+                    )
+
+                    messages.success(request, "Enregistrement réussi")
+
+                else:
+                    try:
+                        membresecteura = MembreSecteurAgricole.objects.get(membre=objet_membre)
+                        membresecteura.secteuragricole = SecteurAgricole.objects.get(id=cooperative)
+                        membresecteura.date_adhesion = dateadhesion
+                        membresecteura.numero_carte = numero_carte
+                        membresecteura.chapeau = Chapeau.objects.get(id=chapeau)
+                        membresecteura.save()
+
+                        messages.success(request, "Modification réussi")
+                    except MembreSecteurAgricole.DoesNotExist:
+                        pass
+
+                    del request.session['id_membre']  # On détruit la variable
+
+        else:
+            messages.error(request, "Veuillez renseigner les champs.")
+
+
+    # PARTIE DU GET -----------------------
+    if not _active_session:
+        if request.session.get('id_membre'):
+            del request.session['id_membre']
+
+    if _active_session and request.session.get('id_membre'):
+        _active_session = False
+
+    typepieces = TypePiece.objects.order_by('id')
+    nationalites = Nationalite.objects.order_by('id')
+    niveaux = Niveau.objects.order_by('id')
+    niveauscolaires = NiveauScolaire.objects.order_by('id')
+    situationmatrimoniales = SituationMatrimoniale.objects.order_by('id')
+    districts = District.objects.order_by("libelle")
+    regions = Region.objects.order_by("libelle")
+    departements = Departement.objects.order_by("libelle")
+    villes = Ville.objects.order_by("libelle")
+    communes = Commune.objects.order_by("libelle")
+    secteuragricoles = SecteurAgricole.objects.order_by("nom")
+    typeparents = TypeParent.objects.order_by("libelle")
+    parents = Parent.objects.order_by("nomprenoms")
+    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
+    chapeaux = Chapeau.objects.order_by('-id')
+
+
+    # Initialisation de l'affichage de l'onglet active
+    active_secteurfemmeactive = ['', 'false', '']
+    active_liste = ['', 'false', '']
+
+    if _active_onglet == "active_secteurfemmeactive":
+        active_secteurfemmeactive = ['active', 'true', 'show active']
+    elif _active_onglet == "active_liste":
+        active_liste = ['active', 'true', 'show active']
+    else:
+        # Affichage par défaut
+        active_secteurfemmeactive = ['active', 'true', 'show active']
+
+
+    context = {
+        'titre': "Identification - Secteur Femme Active",
+        'typepieces': typepieces,
+        'nationalites': nationalites,
+        'niveaux': niveaux,
+        'niveauscolaires': niveauscolaires,
+        'situationmatrimoniales': situationmatrimoniales,
+        "districts": districts,
+        "regions": regions,
+        "departements": departements,
+        "villes": villes,
+        "communes": communes,
+        "secteuragricoles": secteuragricoles,
+        "typeparents": typeparents,
+        "parents": parents,
+        "membres": membres,
+        "chapeaux": chapeaux,
+
+        "active_secteurfemmeactive": active_secteurfemmeactive,
+        "active_liste": active_liste,
+    }
+
+    if request.session.get('id_membre'):  # On affiche la page de modification
+        # On récupère le membre
+        context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
+        context["membre_secteuragricole"] = MembreSecteurAgricole.objects.get(membre_id=request.session.get('id_membre'))
+        return render(request, "presentation/secteurfemmeactive/modifier_secteurfemmeactive.html", context)
+
+    return render(request, "presentation/secteurfemmeactive/secteurfemmeactive.html", context)
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def detail_secteurfemmeactive(request, id):
+    try:
+        membre = Membre.objects.get(id=id)
+    except Membre.DoesNotExist:
+        messages.error(request, "Ce membre n'existe pas.")
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+    typesecteurs = TypeSecteur.objects.order_by('id')
+    secteurs = Secteur.objects.filter(membre=membre).order_by('secteur')
+    typedocuments = TypeDocument.objects.order_by('id')
+    documents = Document.objects.filter(membre=membre).order_by('id')
+    parents_membre = Parent.objects.filter(membre=membre).order_by('id')
+    parents = Parent.objects.order_by('id')
+    typeparents = TypeParent.objects.order_by('id')
+    typeetatsantes = TypeEtatSante.objects.order_by('id')
+    etatsantes = EtatSante.objects.filter(membre=membre).order_by('id')
+
+    context = {
+        'title': "Détials du membre",
+        'membre': membre,
+        'typesecteurs': typesecteurs,
+        'secteurs': secteurs,
+        'typedocuments': typedocuments,
+        'documents': documents,
+        'parents_membre': parents_membre,
+        'parents': parents,
+        'typeparents': typeparents,
+        'typeetatsantes': typeetatsantes,
+        'etatsantes': etatsantes,
+    }
+    return render(request, 'presentation/details_secteur_agricole.html', context)
+
+
+@login_required
+@permission_required('vieprofessionnelle.change_membre', raise_exception=True)
+def modifier_secteurfemmeactive(request, id):
+    global _active_onglet
+    global _active_session
+
+    _active_session = True
+    _active_onglet = "active_secteuragricole"  # On initialise la variable
+    request.session['id_membre'] = id
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.delete_membre', raise_exception=True)
+def supprimer_secteurfemmeactive(request, id):
+    global _active_onglet
+    _active_onglet = "active_liste"  # On initialise la variable
+
+    try:
+        objet_membre = Membre.objects.get(id=id)
+    except Membre.DoesNotExist:
+        messages.error(request, "Ce membre n'existe pas.")
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+    if objet_membre:
+        objet_membre.actif = False
+        objet_membre.save()
+
+        messages.info(request, "Suppression réussie.")
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 # Fin de la Gestion du secteur agricole -------------------------------------

@@ -2,6 +2,7 @@ $(document).ready(function() {
 
     // Ajout du champ du champ de recherche
     var table_recherche_membre = "table_recherche_membre";
+    var colonnerecherche = [0,1,2,3,4,5,6];
     var table = $('#' + table_recherche_membre ).DataTable( {
 
     // Pagination du tableau
@@ -39,6 +40,81 @@ $(document).ready(function() {
             sortDescending: ": activer pour trier la colonne par ordre décroissant"
         }
     },
+
+    // Gestion des Bouttons Copie, export excel, PDF, impression
+        dom:'lBfrtip',
+        buttons: [
+
+        { // Boutton de copie
+            extend:'copy',
+            text: '<i class="fas fa-clone"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Copier',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche,
+            },
+        },
+
+        { // Boutton de excel
+            extend:'excel',
+            text: '<i class="fas fa-file-excel"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Excel',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche,
+            },
+        },
+
+        { // Boutton PDF
+            extend:'pdf',
+            text: '<i class="fas fa-file-pdf"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'PDF',
+            exportOptions:{
+                columns: colonnerecherche,
+            },
+
+            tableHeader: {
+                alignment: 'center',
+            },
+
+            customize: function (doc){
+                doc.styles.tableHeader.alignment = 'center'; // Alignement du titre
+                doc.styles.tableBodyOdd.alignment = 'center'; // Alignement des lignes en couleur
+                doc.styles.tableBodyEven.alignment = 'center'; // Alignement des lignes blanches
+                doc.styles.tableHeader.fontSize = 7 ; // Taille de l'entête du tableau
+                doc.defaultStyle.fontSize = 6 ; // Taille du contenu du tableau
+
+                // Centrer le tableau dans le document
+                doc.content[1].table.widths = Array(doc.content[1].table.body[1].length + 1).join('*').split('');
+            },
+
+        },
+
+        { // Boutton Imprimer
+            extend:'print',
+            text: '<i class="fas fa-print"></i>',
+            className: 'btn btn-secondary',
+            titleAttr: 'Imprimer',
+            // Option pour le choix des colonnes a afficher
+            exportOptions:{
+                columns: colonnerecherche,
+            },
+
+            // Personnalisation de l'affichage
+            customize: function(win){
+                $(win.document.body).css('font-size', '10pt')
+                $(win.document.body).find('table')
+                .addClass('compact')
+                .css('font-size', 'inherit');
+            },
+        },
+
+        ],
+
+            // Fin de pagination
 
     } );
 

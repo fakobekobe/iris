@@ -5,7 +5,7 @@ app_name = 'presentation'
 urlpatterns = [
 
     # Url du Secteur Agricole
-    path('index/', views.index, name = 'index'),
+    path('index/', views.index, name='index'),
     path('ajouter-secteuragricole/', views.ajouter_secteuragricole, name='ajouter_secteuragricole'),
     path('modifier-secteuragricole/<str:id>', views.modifier_secteuragricole, name='modifier_secteuragricole'),
     path('supprimer-secteuragricole/<str:id>', views.supprimer_secteuragricole, name='supprimer_secteuragricole'),
@@ -25,7 +25,10 @@ urlpatterns = [
     path('supprimer-etatsante-parent', views.supprimer_etatsante_parent, name='supprimer_etatsante_parent'),
     path('imprimer-secteuragricole/<str:id>', views.imprimer_secteuragricole, name='imprimer_secteuragricole'),
 
-    # Url du Type Secteur
-    #path('supprimer-membre/<str:id>', views.supprimer_membre, name='supprimer_membre'),
+    # Url du Secteur Femme Active
+    path('ajouter-secteurfemmeactive/', views.ajouter_secteurfemmeactive, name='ajouter_secteurfemmeactive'),
+    path('modifier-secteurfemmeactive/<str:id>', views.modifier_secteurfemmeactive, name='modifier_secteurfemmeactive'),
+    path('supprimer-secteurfemmeactive/<str:id>', views.supprimer_secteurfemmeactive, name='supprimer_secteurfemmeactive'),
+    path('details-secteurfemmeactive/<str:id>', views.detail_secteurfemmeactive, name='detail_secteurfemmeactive'),
 
 ]
