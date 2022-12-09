@@ -346,6 +346,33 @@ $(document).ready(function(){
 
     });
 
+// ******************* GESTION AJAX DE L'AJOUT D'UN CHAPEAU *****************************
+    var chapeau_l_fermer = $('#chapeau_l_fermer');
+
+    var label_chapeau_times = $('#label_chapeau_times');
+    var chapeau = $('#chapeau');
+    var chapeau_texte = $('#chapeau_texte');
+
+    // On vide les champs
+    label_chapeau_times.click(function(){
+            chapeau.val("");
+            chapeau_texte.val("");
+        });
+
+    // Partie 2 : GESTION DES TABLEAUX PERSONNES RESSOURCES
+
+    var liens_a = $("#table_personneressource tbody td a");
+        liens_a.each(function(){
+
+            $(this).click(function(){
+                // On remplit les champs
+                 chapeau.val($(this).attr('value')); // On récupère le id de la personne ressource
+                 chapeau_texte.val($(this).text()); // On affiche le chapeau
+                 chapeau_l_fermer.trigger('click'); // On ferme le modal de la recherche
+            });
+
+        });
+
 
 // CONTROL DE L'ENVOI DES DONNEES ****************************************
     var envoyer_fiche = $('#envoyer_fiche');
@@ -383,6 +410,10 @@ $(document).ready(function(){
             valider = false;
             alert("Veuillez ajouter une coopérative.");
             cooperative_texte.focus();
+        }else if(!chapeau.val()){
+            valider = false;
+            alert("Veuillez ajouter un chapeau.");
+            cooperative_texte.focus();
         }else if(!niveau.val()){
             valider = false;
             alert("Veuillez selectionner le niveau.");
@@ -406,6 +437,67 @@ $(document).ready(function(){
 
     });
 
-// ****************************************************************************
+//******************** SCRIPT DU MODULE AJOUTER PERSONNE RESSOURCE **********************************************
+    function f_table_pr(){
+        var table_personneressource = $('#table_personneressource' );
+        var colonnerecherche_personneressource = [0,1,2];
+
+        var table10 = table_personneressource.DataTable( {
+
+        // Pagination du tableau
+        // Paramètres optionnels du DATATABLES
+        paging: true,
+        pageLength: 10,
+        lengthChange: true,
+        autoWidth: true,
+        searching : true,
+        bInfo : true,
+        bSort : true,
+        select : true,
+        order : [],
+
+        // Désactiver le trie d'un ou de plusieurs colonnes
+        /*"columnDefs":[{
+            "targets":4, // [4,5]
+            "orderable":false,
+        }],*/
+
+        // Gestion de l'affichage de la langue des champs
+            language: {
+            processing:     "Traitement en cours...",
+            search:         "Rechercher&nbsp;:",
+            lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+            info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            infoPostFix:    "",
+            loadingRecords: "Chargement en cours...",
+            zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            emptyTable:     "Aucune donnée disponible dans le tableau",
+            paginate: {
+                first:      "Premier",
+                previous:   "Pr&eacute;c&eacute;dent",
+                next:       "Suivant",
+                last:       "Dernier"
+            },
+            aria: {
+                sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                sortDescending: ": activer pour trier la colonne par ordre décroissant"
+            }
+        },
+           // Fin de pagination
+
+        } );
+
+        // Recherche globale du tableau
+        $('#recherche_personneressource').keyup(function(){
+            table10.search($(this).val()).draw();
+        });
+    }
+
+    f_table_pr(); // On appelle la fonction
+
+
+// FIN ***********************************************************************
 
 });

@@ -1152,7 +1152,7 @@ $(document).ready(function() {
 
     } );
 
- //******************** SCRIPT DU MODULE AJOUTER PERSONNE RESSOURCE **********************************************
+//******************** SCRIPT DU MODULE AJOUTER PERSONNE RESSOURCE **********************************************
     function f_table_r_pr(){
         var table_recherche_pr = $('#table_recherche_personneressource' );
         var colonnerecherche_personneressource = [0,1,2];

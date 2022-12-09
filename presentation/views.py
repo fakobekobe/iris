@@ -168,19 +168,7 @@ def ajouter_secteuragricole(request):
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
     membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
-    typepersonneressources = TypePersonneRessource.objects.order_by('id')
-
-    # On initialise les données
-    _parametre = Parametre.objects.first()
-    chapeaux = None
-    membres_chapeau = None
-    for typepersonneressource in typepersonneressources:
-        if typepersonneressource.id == int(_parametre.id_chapeau):
-            # On récupère la liste des personnes ressources de type chapeau
-            chapeaux = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
-        else:
-            # On récupère la liste des personnes ressources de type membre
-            membres_chapeau = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
+    chapeaux = Chapeau.objects.order_by('-id')
 
 
     # Initialisation de l'affichage de l'onglet active
@@ -212,15 +200,12 @@ def ajouter_secteuragricole(request):
         "typeparents": typeparents,
         "parents": parents,
         "membres": membres,
-        "typepersonneressources": typepersonneressources,
         "chapeaux": chapeaux,
-        "membres_chapeau": membres_chapeau,
 
         "active_secteuragricole": active_secteuragricole,
         "active_liste": active_liste,
     }
-    print(chapeaux)
-    print(membres_chapeau)
+
     if request.session.get('id_membre'): # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
