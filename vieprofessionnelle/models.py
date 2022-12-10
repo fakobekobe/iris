@@ -166,8 +166,8 @@ class SecteurFemmeActive(SecteurActive):
 
 
 class MembreSecteurFemmeActive(models.Model):
-    membre = models.ForeignKey(Membre,on_delete=models.CASCADE)
-    secteurfemmeactive = models.ForeignKey(SecteurFemmeActive,on_delete=models.CASCADE)
+    membre = models.ForeignKey(Membre, on_delete=models.CASCADE)
+    secteurfemmeactive = models.ForeignKey(SecteurFemmeActive, on_delete=models.CASCADE)
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
     personneressource = models.ForeignKey("PersonneRessource", null=True, blank=True, default=True, on_delete=models.SET_NULL)

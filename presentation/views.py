@@ -852,10 +852,13 @@ def ajouter_secteurfemmeactive(request):
         numeropiece = strip_tags(request.POST.get('numeropiece', None)).strip()
         nationalite = request.POST.get('nationalite', None)
         contact = strip_tags(request.POST.get('contact', None)).strip()
-        cooperative = request.POST.get('cooperative', None)
+        groupement = request.POST.get('groupement', None)
         dateadhesion = request.POST.get('dateadhesion', None)
         numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        typeresponsabilite = request.POST.get('typeresponsabilite', None)
+        montantfinancement = request.POST.get('montantfinancement', None)
         chapeau = request.POST.get('chapeau', None)
+        personne_ressource = request.POST.get('personne_ressource', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
         situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
         lieu_habitation = request.POST.get('lieu_habitation', None)
@@ -867,11 +870,12 @@ def ajouter_secteurfemmeactive(request):
             dateadhesion = None
 
         if nom != 'None' and date_naissance and numeropiece != 'None' and contact != 'None' and\
-                typepiece and cooperative and lieu_habitation and sexe and\
+                typepiece and groupement and lieu_habitation and sexe and\
                 nationalite and lieu_naissance and niveauscolaire and \
-                situationmatrimoniale and lieu_habitation and chapeau:
+                situationmatrimoniale and lieu_habitation and typeresponsabilite and montantfinancement and\
+                chapeau and personne_ressource:
 
-            if not request.session.get('id_membre'): # On traite la modification
+            if not request.session.get('id_membre'):  # On traite l'ajout
                 # On vérifie si ce membre existe déjà car le numeropiece et le contact sont uniques
                 try:
                     Membre.objects.get(numeropiece=numeropiece, contact=contact)
@@ -879,7 +883,7 @@ def ajouter_secteurfemmeactive(request):
                     il_existe = False
                 except Membre.DoesNotExist:
                     objet_membre = Membre()
-            else:
+            else:  # On traite la modification
                 # On vérifie si le membre à modifier existe
                 try:
                     objet_membre = Membre.objects.get(id=request.session.get('id_membre'))
@@ -916,31 +920,38 @@ def ajouter_secteurfemmeactive(request):
 
                 if not request.session.get('id_membre'):
 
-                    # On ajoute le secteur agricole en relation
-                    MembreSecteurAgricole.objects.create(
+                    # On ajoute le secteur femme active en relation
+                    MembreSecteurFemmeActive.objects.create(
                         membre=objet_membre,
-                        secteuragricole=SecteurAgricole.objects.get(id=cooperative),
+                        secteurfemmeactive=SecteurFemmeActive.objects.get(id=groupement),
                         date_adhesion=dateadhesion,
                         numero_carte=numero_carte,
                         chapeau=Chapeau.objects.get(id=chapeau),
+                        personneressource=PersonneRessource.objects.get(id=personne_ressource),
+                        typeresponsabilite=TypeResponsabilite.objects.get(id=typeresponsabilite),
+                        montantfinancement=MontantFinancement.objects.get(id=montantfinancement),
+
                     )
 
                     messages.success(request, "Enregistrement réussi")
 
                 else:
                     try:
-                        membresecteura = MembreSecteurAgricole.objects.get(membre=objet_membre)
-                        membresecteura.secteuragricole = SecteurAgricole.objects.get(id=cooperative)
-                        membresecteura.date_adhesion = dateadhesion
-                        membresecteura.numero_carte = numero_carte
-                        membresecteura.chapeau = Chapeau.objects.get(id=chapeau)
-                        membresecteura.save()
+                        membresecteur = MembreSecteurFemmeActive.objects.get(membre=objet_membre)
+                        membresecteur.secteurfemmeactive = SecteurFemmeActive.objects.get(id=groupement)
+                        membresecteur.date_adhesion = dateadhesion
+                        membresecteur.numero_carte = numero_carte
+                        membresecteur.chapeau = Chapeau.objects.get(id=chapeau)
+                        membresecteur.personneressource = PersonneRessource.objects.get(id=personne_ressource)
+                        membresecteur.typeresponsabilite = TypeResponsabilite.objects.get(id=typeresponsabilite)
+                        membresecteur.montantfinancement = MontantFinancement.objects.get(id=montantfinancement)
+                        membresecteur.save()
 
                         messages.success(request, "Modification réussi")
-                    except MembreSecteurAgricole.DoesNotExist:
+                    except MembreSecteurFemmeActive.DoesNotExist:
                         pass
-
-                    del request.session['id_membre']  # On détruit la variable
+                    finally:
+                        del request.session['id_membre']  # On détruit la variable
 
         else:
             messages.error(request, "Veuillez renseigner les champs.")
@@ -964,12 +975,26 @@ def ajouter_secteurfemmeactive(request):
     departements = Departement.objects.order_by("libelle")
     villes = Ville.objects.order_by("libelle")
     communes = Commune.objects.order_by("libelle")
-    secteuragricoles = SecteurAgricole.objects.order_by("nom")
+    secteuragricoles = SecteurFemmeActive.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
     membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
+    typeresponsabilites = TypeResponsabilite.objects.order_by('id')
+    montantfinancements = MontantFinancement.objects.order_by('id')
     chapeaux = Chapeau.objects.order_by('-id')
+    typepersonneressources = TypePersonneRessource.objects.order_by('id')
 
+    # On initialise les données
+    _parametre = Parametre.objects.first()
+    chapeaux = None
+    membres_chapeau = None
+    for typepersonneressource in typepersonneressources:
+        if typepersonneressource.id == int(_parametre.id_chapeau):
+            # On récupère la liste des personnes ressources de type chapeau
+            chapeaux = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
+        else:
+            # On récupère la liste des personnes ressources de type membre
+            membres_chapeau = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
 
     # Initialisation de l'affichage de l'onglet active
     active_secteurfemmeactive = ['', 'false', '']
@@ -1000,7 +1025,12 @@ def ajouter_secteurfemmeactive(request):
         "typeparents": typeparents,
         "parents": parents,
         "membres": membres,
+        "typeresponsabilites": typeresponsabilites,
+        "montantfinancements": montantfinancements,
         "chapeaux": chapeaux,
+        "typepersonneressources": typepersonneressources,
+        "membres_chapeau": membres_chapeau,
+        "id_chapeau": int(_parametre.id_chapeau),
 
         "active_secteurfemmeactive": active_secteurfemmeactive,
         "active_liste": active_liste,
@@ -1009,7 +1039,7 @@ def ajouter_secteurfemmeactive(request):
     if request.session.get('id_membre'):  # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
-        context["membre_secteuragricole"] = MembreSecteurAgricole.objects.get(membre_id=request.session.get('id_membre'))
+        context["membre_secteuragricole"] = MembreSecteurFemmeActive.objects.get(membre_id=request.session.get('id_membre'))
         return render(request, "presentation/secteurfemmeactive/modifier_secteurfemmeactive.html", context)
 
     return render(request, "presentation/secteurfemmeactive/secteurfemmeactive.html", context)

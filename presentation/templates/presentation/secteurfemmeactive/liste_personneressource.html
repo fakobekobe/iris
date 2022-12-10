@@ -1,0 +1,122 @@
+<!-- Modal -->
+<div class="modal fade" id="personne_r_Modal" tabindex="-1" aria-labelledby="personne_r_ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="personne_r_ModalLabel">
+            <i class="fas fa-user-shield"></i> Rechercher une personne ressource
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="" autocomplete="off">
+          {%  csrf_token %}
+          <div class="modal-body">
+
+              <!-- Champ de Type de personne ressource -->
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <label class="input-group-text" for="select_typepersonneressource"><i class="fas fa-user-tie"></i></label>
+                  </div>
+
+                  <select name="select_typepersonneressource" id="select_typepersonneressource" class="form-control" required>
+                      <option value="" selected>--- Sélectionnez un type de personne ---</option>
+                      {% for typepersonneressource in typepersonneressources %}
+
+                      {% if id_chapeau == typepersonneressource.id %}
+                      <option value="{{typepersonneressource.id}}" selected>{{typepersonneressource.type}}</option>
+                      {% else %}
+                      <option value="{{typepersonneressource.id}}" >{{typepersonneressource.type}}</option>
+                      {% endif %}
+
+                      {% endfor %}
+                  </select>
+              </div>
+              <!-- -->
+
+              <hr />
+
+              <!-- Tableau de recherche Chapeau-->
+              <div id="trc" value="{{id_chapeau}}" style="height:500px; padding:10px; overflow-y:scroll;">
+                  <!-- Champ de recherche -->
+                  <div class="row mb-3 pl-2 pr-2">
+
+                      <div class="input-group mb-2">
+                          <input type="text" name="recherche_personneressource" id="recherche_personneressource" class="form-control" placeholder="Rechercher">
+                          <div class="input-group-append">
+                              <span class="input-group-text btn btn-success"><i class="fas fa-search"></i></span>
+                          </div>
+                      </div>
+
+                  </div>
+                  <!-- -->
+                  <hr />
+                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_personneressource">
+                      <thead class="text-center">
+                      <tr class="thead-light">
+                          <th>N°</th>
+                          <th>Chapeau</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {% for chapeau in chapeaux %}
+                      <tr>
+                          <td class="text-center">{{forloop.counter}}</td>
+                          <td><a href="#" style="text-decoration:none;" value="{{chapeau.id}}">{{chapeau.chapeau.chapeau}}</a></td>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+              <!-- -->
+
+              <!-- Tableau de recherche Membre-->
+              <div id="trm" class="dn" style="height:500px; padding:10px; overflow-y:scroll;">
+                  <!-- Champ de recherche -->
+                  <div class="row mb-3 pl-2 pr-2">
+
+                      <div class="input-group mb-2">
+                          <input type="text" name="recherche_personneressource_m" id="recherche_personneressource_m" class="form-control" placeholder="Rechercher">
+                          <div class="input-group-append">
+                              <span class="input-group-text btn btn-success"><i class="fas fa-search"></i></span>
+                          </div>
+                      </div>
+
+                  </div>
+                  <!-- -->
+                  <hr />
+                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_personneressource_m">
+                      <thead class="text-center">
+                      <tr class="thead-light">
+                          <th>N°</th>
+                          <th>Nom et prénoms</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {% for membre in membres_chapeau %}
+                      <tr>
+                          <td class="text-center">{{forloop.counter}}</td>
+                          <td><a href="#" style="text-decoration:none;" value="{{membre.id}}">{{membre.membre.nom_prenoms}}</a></td>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+              <!-- -->
+
+          </div>
+
+          <div class="modal-footer text-center">
+              <div style="width:100%;">
+                  <button type="button" class="btn btn-outline-danger" id="pr_l_fermer" data-dismiss="modal">
+                      <i class="fas fa-times"></i> Fermer
+                  </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
