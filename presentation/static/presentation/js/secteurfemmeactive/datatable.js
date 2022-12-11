@@ -241,6 +241,35 @@ $(document).ready(function(){
         });
     });
 
+// ******************* GESTION DES AFFICHAGES DU CHAMP VILLE *****************************
+    var ville_texte = $('#ville_texte');
+    var label_ville_times = $('#label_ville_times');
+    var ville_btn_ajouter = $('#ville_btn_ajouter');
+    var ville = $('#ville');
+    var ville_Modal = $('#ville_Modal');
+    var ville_btn_fermer = $('#ville_btn_fermer');
+
+    label_ville_times.click(function(){
+        ville_texte.val('');
+        ville.val('');
+    });
+
+    ville_btn_ajouter.click(function(e){
+        e.preventDefault();
+        select_ville.each(function(){
+            if($(this).val()){
+                $('select[name=select_ville] option:selected').each(function(n,v){
+                    if(n == 1){
+                        ville_texte.val($(this).text());
+                    }
+                });
+                ville.val($(this).val());
+                ville_Modal.hide('slow');
+                ville_btn_fermer.trigger('click');
+            }
+
+        });
+    });
 
 // ******************* GESTION AJAX DE L'AJOUT D'UNE COOPERATIVE *****************************
 
@@ -677,6 +706,56 @@ $(document).ready(function(){
 
 
     });
+
+
+// GESTION DE LA PAGINATION DE LA TABLE GROUPEMENT ********************************************************
+    var table_recherche_groupement = $('#table_recherche_groupement');
+    var table13 = table_recherche_groupement.DataTable( {
+
+    // Pagination du tableau
+    // Paramètres optionnels du DATATABLES
+    paging: true,
+    pageLength: 10,
+    lengthChange: true,
+    autoWidth: true,
+    searching : true,
+    bInfo : true,
+    bSort : true,
+    select : true,
+    order : [],
+
+    // Gestion de l'affichage de la langue des champs
+        language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+
+    } );
+
+    // Recherche globale du tableau
+    $('#recherche_groupement').keyup(function(){
+        table13.search($(this).val()).draw();
+    });
+
+
 
 
 // FIN ***********************************************************************

@@ -171,7 +171,7 @@
                                             <div class="card-header bg-success">Groupement Solidaire</div>
                                             <div class="card-body">
 
-                                                <!-- -->
+                                                <!-- nom du groupement -->
                                                 <div class="input-group mb-2">
                                                       <input type="text" name="groupement_texte" id="groupement_texte" {% block groupement_texte %}value=""{% endblock groupement_texte %} class="form-control" placeholder="Nom du groupement" readonly>
                                                         <div class="input-group-append">
@@ -184,7 +184,7 @@
                                                 </div>
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!-- date d'adhésion -->
                                                 <div class="input-group mb-2">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text label-sans-fond">Date de début d'activité</span>
@@ -193,7 +193,7 @@
                                                 </div>
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!-- N°Carte de membre -->
                                                 <div class="form-row mb-2">
                                                     <div class="col">
                                                       <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre" {% block numero_carte %}{% endblock numero_carte %}>
@@ -338,8 +338,8 @@
 
                         <!-- LISTE DES INCLUDES -->
                         {% include 'presentation/date_de_naissance.html' %}
-                        {% include 'presentation/liste_cooperative.html' %}
-                        {% include 'presentation/ajouter_cooperative.html' %}
+                        {% include 'presentation/secteurfemmeactive/liste_groupement.html' %}
+                        {% include 'presentation/secteurfemmeactive/ajouter_groupement.html' %}
                         {% include 'presentation/liste_chapeau.html' %}
                         {% include 'presentation/secteurfemmeactive/liste_personneressource.html' %}
                         {% include 'presentation/lieu_habitation.html' %}

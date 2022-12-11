@@ -1,0 +1,124 @@
+<!-- Modal -->
+<div class="modal fade" id="recherche_groupement_Modal" tabindex="-1" aria-labelledby="recherche_groupement_ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recherche_groupement_ModalLabel">
+                    <i class="fas fa-child"></i> Ajouter un groupement
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="" autocomplete="off">
+                {%  csrf_token %}
+                <div class="modal-body">
+
+                    <!-- Liste des Champs -->
+
+                    <!-- -->
+                    <input type="text" hidden name="id_json" id="id_json" class="form-control" value="1">
+                    <!-- -->
+
+                    <!-- Nom du groupement -->
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <input type="text" name="nom_groupement" id="nom_groupement" class="form-control" placeholder="Nom du groupement">
+                        </div>
+                    </div>
+                    <!-- -->
+
+                    <!-- Présidente et contact -->
+                    <!--div class="form-row mb-2">
+                        <div class="col">
+                          <input type="text" name="presidente" id="presidente" class="form-control" placeholder="Nom Président(e) coop">
+                        </div>
+                        <div class="col">
+                          <input type="text" name="contact_presidente" id="contact_presidente" class="form-control" placeholder="Contacts Président(e)">
+                        </div>
+                    </div-->
+                    <!-- -->
+
+                    <!-- Ville -->
+                    <div class="input-group mb-2">
+                        <input type="text" name="ville_texte" id="ville_texte" value="" class="form-control" placeholder="Ville" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-danger" id="label_ville_times" title="Annuler"><i class="fas fa-times"></i></span>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-success" id="label_ville_plus" title="Ajouter une ville" data-toggle="modal" data-target="#ville_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                        </div>
+                        <input type="text" hidden name="ville" value="" id="ville" class="form-control">
+                    </div>
+                    <!-- -->
+
+                    <!-- Marché -->
+                    <div class="input-group mb-2">
+                        <input type="text" name="marche_texte" id="marche_texte" value="" class="form-control" placeholder="Marché" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-danger" id="label_marche_times" title="Annuler"><i class="fas fa-times"></i></span>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-success" id="label_marche_plus" title="Ajouter un marché" data-toggle="modal" data-target="#marche_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                        </div>
+                        <input type="text" hidden name="marche" value="" id="marche" class="form-control">
+                    </div>
+                    <!-- -->
+
+                    <!-- Quantité du groupement -->
+                    <div class="form-row mb-2">
+                        <select name="quantitegroupement" id="select_quantitegroupement" class="form-control" required>
+                            <option value="" selected>--- Sélectionnez la quantité du groupement ---</option>
+                            {% for quantitegroupement in quantitegroupements %}
+                            <option value="{{quantitegroupement.id}}" >{{quantitegroupement.quantite}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- -->
+
+                    <!-- -->
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <input type="text" name="gps_longitude" id="gps_longitude" class="form-control" placeholder="GPS Longitude">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="gps_latitude" id="gps_latitude" class="form-control" placeholder="GPS Latitude">
+                        </div>
+                    </div>
+                    <!-- -->
+
+                    <!-- -->
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text label-sans-fond">Date d'enregistrement</span>
+                        </div>
+                        <input type="date" name="dateenre" id="dateenre" value="{% now 'Y-m-d' %}" class="form-control" >
+                    </div>
+                    <!-- -->
+
+                    <!-- -->
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <div style="width:100%;">
+                        <button type="button" class="btn btn-outline-success" id="groupement_a_ajouter">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                        <button type="reset" class="btn btn-outline-warning" id="groupement_a_annuler" title="Annuler">
+                            <i class="fas fa-sync-alt"></i> Annuler
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" id="groupement_a_fermer" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Fermer
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% include 'presentation/secteurfemmeactive/ville.html' %}
+{% include 'presentation/secteurfemmeactive/marche.html' %}

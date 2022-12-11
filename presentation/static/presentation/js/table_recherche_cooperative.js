@@ -16,12 +16,6 @@ $(document).ready(function() {
     select : true,
     order : [],
 
-    // Désactiver le trie d'un ou de plusieurs colonnes
-   /* "columnDefs":[{
-        "targets":3, // [4,5]
-        "orderable":false,
-    }],*/
-
     // Gestion de l'affichage de la langue des champs
         language: {
         processing:     "Traitement en cours...",

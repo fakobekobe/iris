@@ -1,10 +1,10 @@
 <!-- Modal -->
-<div class="modal fade" id="cooperative_Modal" tabindex="-1" aria-labelledby="cooperative_ModalLabel" aria-hidden="true">
+<div class="modal fade" id="groupement_Modal" tabindex="-1" aria-labelledby="groupement_ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="cooperative_ModalLabel">
-            <i class="fas fa-cannabis"></i> Rechercher une coopérative
+        <h5 class="modal-title" id="groupement_ModalLabel">
+            <i class="fas fa-child"></i> Rechercher un groupement
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -18,32 +18,32 @@
               <div class="row mb-3 pl-2 pr-2">
 
                     <div class="input-group mb-2">
-                        <input type="text" name="recherche_cooperative" id="recherche_cooperative" class="form-control" placeholder="Rechercher">
+                        <input type="text" name="recherche_groupement" id="recherche_groupement" class="form-control" placeholder="Rechercher">
                         <div class="input-group-append">
-                            <span class="input-group-text btn btn-success" id="label_recherche_cooperative_plus" title="Ajouter une coopérative" data-toggle="modal" data-target="#recherche_cooperative_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                            <span class="input-group-text btn btn-success" id="label_recherche_groupement_plus" title="Ajouter un groupement" data-toggle="modal" data-target="#recherche_groupement_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
                         </div>
                     </div>
 
               </div>
               <!-- -->
-
               <hr />
-
               <!-- Tableau de recherche -->
               <div class="row mb-3 pl-2 pr-2">
 
-                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_cooperative">
+                  <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_groupement">
                       <thead class="text-center">
                         <tr class="thead-light">
                             <th>N°</th>
-                            <th>Coopérative</th>
+                            <th>Groupement</th>
+                            <th>Place disponible</th>
                         </tr>
                       </thead>
                       <tbody>
-                      {% for secteuragricole in secteuragricoles %}
+                      {% for groupement in groupements %}
                         <tr>
                             <td class="text-center">{{forloop.counter}}</td>
-                            <td><a href="#" style="text-decoration:none;" value="{{secteuragricole.id}}">{{secteuragricole.nom|capfirst}}</a></td>
+                            <td><a href="#" style="text-decoration:none;" value="{{secteuragricole.id}}">{{groupement.nom}}</a></td>
+                            <td>20</td>
                         </tr>
                       {% endfor %}
                       </tbody>
@@ -52,14 +52,11 @@
               </div>
               <!-- -->
 
-
-
-
           </div>
 
           <div class="modal-footer text-center">
               <div style="width:100%;">
-                  <button type="button" class="btn btn-outline-danger" id="cooperative_l_fermer" data-dismiss="modal">
+                  <button type="button" class="btn btn-outline-danger" id="groupement_l_fermer" data-dismiss="modal">
                       <i class="fas fa-times"></i> Fermer
                   </button>
               </div>

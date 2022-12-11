@@ -983,15 +983,16 @@ def ajouter_secteurfemmeactive(request):
     montantfinancements = MontantFinancement.objects.order_by('id')
     chapeaux = Chapeau.objects.order_by('-id')
     typepersonneressources = TypePersonneRessource.objects.order_by('id')
+    quantitegroupements = QuantiteGroupement.objects.order_by('id')
 
     # On initialise les données
     _parametre = Parametre.objects.first()
-    chapeaux = None
+    chapeaux_liste = None
     membres_chapeau = None
     for typepersonneressource in typepersonneressources:
         if typepersonneressource.id == int(_parametre.id_chapeau):
             # On récupère la liste des personnes ressources de type chapeau
-            chapeaux = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
+            chapeaux_liste = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
         else:
             # On récupère la liste des personnes ressources de type membre
             membres_chapeau = PersonneRessource.objects.filter(typepersonneressource=typepersonneressource)
@@ -1028,9 +1029,11 @@ def ajouter_secteurfemmeactive(request):
         "typeresponsabilites": typeresponsabilites,
         "montantfinancements": montantfinancements,
         "chapeaux": chapeaux,
+        "chapeaux_liste": chapeaux_liste,
         "typepersonneressources": typepersonneressources,
         "membres_chapeau": membres_chapeau,
         "id_chapeau": int(_parametre.id_chapeau),
+        "quantitegroupements": quantitegroupements,
 
         "active_secteurfemmeactive": active_secteurfemmeactive,
         "active_liste": active_liste,
