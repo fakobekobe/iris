@@ -394,9 +394,9 @@
                             <td class="text-center">{{membre.quartier.commune.ville.libelle}}</td>
                             <td class="text-center">{{membre.dateenre|date:'d/m/Y'}}</td>
                             <td class="text-center w-50">
-                                <a href="{% url 'presentation:imprimer_secteuragricole' membre.id %}" class="btn btn-outline-secondary btn-sm" title="Imprimer"><i class="fas fa-print"></i></a>
-                                <a href="{% url 'presentation:detail_secteuragricole' membre.id %}" class="btn btn-outline-primary btn-sm" title="Détails"><i class="fas fa-eye"></i></a>
-                                <a href="{% url 'presentation:modifier_secteuragricole' membre.id %}" class="btn btn-outline-warning btn-sm" title="Modifier"><i class="fas fa-pen"></i></a>
+                                <a href="{% url 'presentation:imprimer_secteurfemmeactive' membre.id %}" class="btn btn-outline-secondary btn-sm" title="Imprimer"><i class="fas fa-print"></i></a>
+                                <a href="{% url 'presentation:detail_secteurfemmeactive' membre.id %}" class="btn btn-outline-primary btn-sm" title="Détails"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'presentation:modifier_secteurfemmeactive' membre.id %}" class="btn btn-outline-warning btn-sm" title="Modifier"><i class="fas fa-pen"></i></a>
                                 <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#recherche_membre_supressionmodal{{membre.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="recherche_membre_supressionmodal{{membre.id}}" role="dialog">
@@ -415,7 +415,7 @@
                                         </div>
                                         <div class="modal-footer justify-content-center">
 
-                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_secteuragricole' membre.id %}">
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_secteurfemmeactive' membre.id %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-success btn-sm">Oui</button>
                                             </form>

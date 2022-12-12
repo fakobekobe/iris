@@ -44,4 +44,5 @@ urlpatterns = [
     path('modifier-marche', views.modifier_marche, name='modifier_marche'),
     path('supprimer-marche/<str:id>', views.supprimer_marche, name='supprimer_marche'),
     path('details-quartier', views.details_quartier, name='details_quartier'),
+    path('details-marche', views.details_marche, name='details_marche'),
 ]

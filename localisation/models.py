@@ -2,7 +2,7 @@ from django.db import models
 from projet.models import *
 
 # Liste des méthodes Globales du projet --------
-def nombre_membre_par_ville(quartier, ville=None):
+def nombre_membre_par_ville(quartier=None, ville=None):
     """
         Cette méthode permet d'obtenir le nombre de membres par ville
         Ex: quartier = objet quartier ou ville = objet ville
@@ -66,12 +66,12 @@ class Quartier(models.Model):
         return self.libelle
 
     def get_nombre_membre_par_ville(self):
-        return nombre_membre_par_ville(self)
+        return nombre_membre_par_ville(quartier=self)
 
 class Marche(models.Model):
     code = models.CharField(max_length=100, unique=True)
     libelle = models.CharField(max_length=250, verbose_name="Marché", unique=True)
-    quartier = models.ForeignKey(Quartier,on_delete=models.SET_NULL, null=True)
+    quartier = models.ForeignKey(Quartier, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.libelle

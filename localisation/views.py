@@ -904,4 +904,20 @@ def details_quartier(request):
 
     return HttpResponseRedirect(reverse('localisation:localisation'))
 
+@login_required
+@permission_required('localisation.view_marche', raise_exception=True)
+def details_marche(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        if id:
+            ajax_marche = Marche.objects.filter(quartier=id).order_by('libelle')
+
+            if ajax_marche:
+                data = [{'id': marche.id, 'libelle': marche.libelle} for marche in ajax_marche]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('localisation:localisation'))
+
 # Fin de la Gestion du marché -------------------------------------

@@ -2,13 +2,25 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 from etatcivil.models import *
-from localisation.models import Quartier, Commune, Marche, Ville
+from localisation.models import *
 from django.contrib.auth.models import User
 from projet.models import *
 
 # Fonction pour ajouter les détails du temps devant le nom du fichier
 def nomfichier(self, fichier):
     return f"{datetime.now().strftime('%d%m%Y%H%M%S')}_{fichier}"
+
+
+def nombre_groupement_par_ville(ville):
+    """
+        Cette méthode permet d'obtenir le nombre de groupements par ville
+        Ex: ville = objet ville
+            la valeur de retour = 0 s'il n'y a aucun groupement dans cette ville
+            la valeur de retour = 12 s'il y a des groupements dans cette ville
+    """
+    return SecteurFemmeActive.objects.filter(ville__code=ville.code).count()
+
+
 #----------------------------------
 
 class TypeSecteur(models.Model):
@@ -158,8 +170,8 @@ class SecteurFemmeActive(SecteurActive):
     quantitegroupement = models.ForeignKey("QuantiteGroupement", default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
     def set_identifiant(self):
-        self.identifiant = f"0{self.quantitegroupement}{self.ville.departement.region.code}" \
-                           f"{ajoute_zero_a_identifiant(departement=self.ville.departement.code, ville=self.ville.code, identifiant=nombre_membre_par_ville(self.ville) + 1)}"
+        self.identifiant = f"0{self.quantitegroupement.quantite}{self.ville.departement.region.code}" \
+                           f"{ajoute_zero_a_identifiant(departement=self.ville.departement.code, ville=self.ville.code, identifiant=nombre_groupement_par_ville(ville=self.ville) + 1)}"
 
     def __str__(self):
         return self.nom

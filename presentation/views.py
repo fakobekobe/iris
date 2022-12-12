@@ -978,12 +978,13 @@ def ajouter_secteurfemmeactive(request):
     secteuragricoles = SecteurFemmeActive.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
-    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
+    membres = SecteurFemmeActive.objects.filter(membres__utilisateur_id=request.user.id, membres__actif=True).order_by('membres__nom_prenoms')
     typeresponsabilites = TypeResponsabilite.objects.order_by('id')
     montantfinancements = MontantFinancement.objects.order_by('id')
     chapeaux = Chapeau.objects.order_by('-id')
     typepersonneressources = TypePersonneRessource.objects.order_by('id')
     quantitegroupements = QuantiteGroupement.objects.order_by('id')
+    groupements = SecteurFemmeActive.objects.order_by('nom')
 
     # On initialise les données
     _parametre = Parametre.objects.first()
@@ -1034,6 +1035,7 @@ def ajouter_secteurfemmeactive(request):
         "membres_chapeau": membres_chapeau,
         "id_chapeau": int(_parametre.id_chapeau),
         "quantitegroupements": quantitegroupements,
+        "groupements": groupements,
 
         "active_secteurfemmeactive": active_secteurfemmeactive,
         "active_liste": active_liste,
@@ -1116,5 +1118,39 @@ def supprimer_secteurfemmeactive(request, id):
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
+@login_required
+@permission_required('vieprofessionnelle.view_membre', raise_exception=True)
+def imprimer_secteurfemmeactive(request, id):
+    if request.method == "GET":
+
+        try:
+            membre = Membre.objects.get(id=id)
+        except Membre.DoesNotExist:
+            messages.error(request, "Ce membre n'existe pas.")
+            return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
+        # On lui ajoute la propriété
+        membre.get_region = membre.get_region()
+        membre.secteuragricole = membre.secteuragricole_set.first()
+        membre.nombrefemme = membre.get_nombre_parent('Femme')
+        membre.nombreenfant = membre.get_nombre_parent('Enfant')
+        membre.lieu_habitation = membre.get_lieu_habitation()
+        try:
+            document = Document.objects.get(membre=membre)
+            membre.photo = document.get_photo_membre()
+        except Document.DoesNotExist:
+            pass
+        try:
+            membre.cooperative = MembreSecteurAgricole.objects.get(membre=membre, secteuragricole=membre.secteuragricole)
+        except MembreSecteurAgricole.DoesNotExist:
+            pass
+
+        context = {
+            'title': "Fiche d'identification Secteur Agricole",
+            'membre': membre,
+        }
+        return render(request,'presentation/imprimer_secteuragricole.html', context)
+
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
 
 # Fin de la Gestion du secteur agricole -------------------------------------

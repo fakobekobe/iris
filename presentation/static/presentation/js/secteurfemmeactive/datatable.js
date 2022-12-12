@@ -42,7 +42,6 @@ $(document).ready(function(){
         });
 
 
-
 // ******************* GESTION DES LISTES DEROULANTES *****************************
 
     var select_district = $('select[name=select_district]');
@@ -51,6 +50,7 @@ $(document).ready(function(){
     var select_ville = $('select[name=select_ville]');
     var select_commune = $('select[name=select_commune]');
     var select_quartier = $('select[name=select_quartier]');
+    var select_marche = $('select[name=select_marche]');
 
         // Traitement AJAX de la region
         $(select_district).change(function(){
@@ -82,6 +82,10 @@ $(document).ready(function(){
                     // On initialise la selection du quartier
                     select_quartier.html('');
                     select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
+
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
 
                     $.each(data.data, function(key, value){
                         select_region.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
@@ -119,6 +123,10 @@ $(document).ready(function(){
                     select_quartier.html('');
                     select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
 
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_departement.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
@@ -151,6 +159,10 @@ $(document).ready(function(){
                     select_quartier.html('');
                     select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
 
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_ville.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
@@ -178,6 +190,10 @@ $(document).ready(function(){
                     select_quartier.html('');
                     select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
 
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_commune.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
@@ -201,8 +217,36 @@ $(document).ready(function(){
                     select_quartier.html('');
                     select_quartier.append("<option value='' selected>--- Selectionnez un quartier ---</option>");
 
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
+
                     $.each(data.data, function(key, value){
                         select_quartier.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+
+
+        });
+
+        // Traitement AJAX du marché
+        select_quartier.change(function(){
+
+            // On utilise ajax pour récupérer les villes
+            $.ajax({
+                url: "/localisation/details-marche", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du marché
+                    select_marche.html('');
+                    select_marche.append("<option value='' selected>--- Selectionnez un marché ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_marche.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
                     });
                 },
             });
@@ -271,39 +315,67 @@ $(document).ready(function(){
         });
     });
 
-// ******************* GESTION AJAX DE L'AJOUT D'UNE COOPERATIVE *****************************
+// ******************* GESTION DES AFFICHAGES DU CHAMP MARCHE *****************************
+    var marche_texte = $('#marche_texte');
+    var label_marche_times = $('#label_marche_times');
+    var marche_btn_ajouter = $('#marche_btn_ajouter');
+    var marche = $('#marche');
+    var marche_Modal = $('#marche_Modal');
+    var marche_btn_fermer = $('#marche_btn_fermer');
 
-    var cooperative_a_ajouter = $('#cooperative_a_ajouter');
-    var cooperative_a_fermer = $('#cooperative_a_fermer');
-    var cooperative_a_annuler = $('#cooperative_a_annuler');
-    var cooperative_l_fermer = $('#cooperative_l_fermer');
+    label_marche_times.click(function(){
+        marche_texte.val('');
+        marche.val('');
+    });
 
-    var label_cooperative_times = $('#label_cooperative_times');
-    var cooperative = $('#cooperative');
-    var cooperative_texte = $('#cooperative_texte');
+    marche_btn_ajouter.click(function(e){
+        e.preventDefault();
+        select_marche.each(function(){
+            if($(this).val()){
+                $('select[name=select_marche] option:selected').each(function(n,v){
+                    if(n == 0){
+                        marche_texte.val($(this).text());
+                    }
+                });
+                marche.val($(this).val());
+                marche_Modal.hide('slow');
+                marche_btn_fermer.trigger('click');
+            }
+
+        });
+    });
+
+// ******************* GESTION AJAX DE L'AJOUT D'UN GROUPEMENT *****************************
+
+    var groupement_a_ajouter = $('#groupement_a_ajouter');
+    var groupement_a_fermer = $('#groupement_a_fermer');
+    var groupement_a_annuler = $('#groupement_a_annuler');
+    var groupement_l_fermer = $('#groupement_l_fermer');
+
+    var label_groupement_times = $('#label_groupement_times');
+    var groupement = $('#groupement');
+    var groupement_texte = $('#groupement_texte');
 
         // On vide les champs
-        label_cooperative_times.click(function(){
-            cooperative.val("");
-            cooperative_texte.val("");
+        label_groupement_times.click(function(){
+            groupement.val("");
+            groupement_texte.val("");
         });
 
         // Traitement AJAX
-        cooperative_a_ajouter.click(function(e){
+        groupement_a_ajouter.click(function(e){
             e.preventDefault(); // On annule l'envoi du formulaire
 
-            // On utilise ajax pour récupérer les régions
+            // On utilise ajax pour envoyer les données
             $.ajax({
-                url: "/vieprofessionnelle/ajouter-cooperative", // On ajoute l'url absolue en commençant par la racine
+                url: "/vieprofessionnelle/ajouter-groupement", // On ajoute l'url absolue en commençant par la racine
                 type: 'post',
                 data: {
                     id_json: $('#id_json').val(),
-                    nom_cooperative: $('#nom_cooperative').val(),
-                    presidente: $('#presidente').val(),
-                    contact_presidente: $('#contact_presidente').val(),
-                    speculation_agricole: $('#speculation_agricole').val(),
-                    superficie_en_culture: $('#superficie_en_culture').val(),
-                    superficie_en_production: $('#superficie_en_production').val(),
+                    nom_groupement: $('#nom_groupement').val(),
+                    ville: $('#ville').val(),
+                    marche: $('#marche').val(),
+                    quantitegroupement: $('#select_quantitegroupement').val(),
                     gps_longitude: $('#gps_longitude').val(),
                     gps_latitude: $('#gps_latitude').val(),
                     dateenre: $('#dateenre').val(),
@@ -312,23 +384,23 @@ $(document).ready(function(){
                 success: function(data){
 
                     // On remplit les champs
-                    cooperative.val(data.data.id);
-                    cooperative_texte.val(data.data.cooperative);
+                    groupement.val(data.data.id);
+                    groupement_texte.val(data.data.groupement);
 
                     // Affichage du message
                     alert(data.data.message);
 
                     // Gestion des fermetures des boutons
-                    cooperative_a_annuler.trigger('click'); // On initialise les champs du modal en cours
-                    cooperative_a_fermer.trigger('click'); // On ferme le modal en cours
-                    cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+                    groupement_a_annuler.trigger('click'); // On initialise les champs du modal en cours
+                    groupement_a_fermer.trigger('click'); // On ferme le modal en cours
+                    groupement_l_fermer.trigger('click'); // On ferme le modal de la recherche
                 },
                 statusCode: {
                     404: function(data){
                             alert('Veuillez renseigner les champs SVP.');
                          },
                     400: function(data){
-                            alert('Cette coopérative existe déjà.');
+                            alert('Ce groupement existe déjà.');
                          },
                 },
             });
@@ -336,16 +408,16 @@ $(document).ready(function(){
 
         });
 
-    // Partie 2 : GESTION DU TABLEAU COOPERATIVE
+    // Partie 2 : GESTION DU TABLEAU GROUPEMENT
 
-    var liens = $("#table_recherche_cooperative tbody td a");
-        liens.each(function(){
+    var liens_g = $("#table_recherche_groupement tbody td a");
+        liens_g.each(function(){
 
             $(this).click(function(){
                 // On remplit les champs
-                 cooperative.val($(this).attr('value')); // On récupère le id du Secteur Agricole
-                 cooperative_texte.val($(this).text()); // On affiche le nom de la coopérative
-                 cooperative_l_fermer.trigger('click'); // On ferme le modal de la recherche
+                 groupement.val($(this).attr('value')); // On récupère le id du Secteur Femme active
+                 groupement_texte.val($(this).text()); // On affiche le nom du groupement
+                 groupement_l_fermer.trigger('click'); // On ferme le modal de la recherche
             });
 
         });
@@ -365,13 +437,20 @@ $(document).ready(function(){
 
     lieu_btn_ajouter.click(function(e){
         e.preventDefault();
+        select_quartier.each(function(){
+            if ($(this).val()){
+                $('select[name=select_quartier] option:selected').each(function(k, v){
+                    if(k==1){
+                        label_lieu_habitation.val($(this).text());
+                    }
+                });
 
-        if(select_quartier.val()){
-            label_lieu_habitation.val($('#select_quartier option:selected').text());
-            lieu_habitation.val(select_quartier.val());
-            lieu_habitation_Modal.hide('slow');
-            lieu_btn_fermer.trigger('click');
-        }
+                lieu_habitation.val($(this).val());
+                lieu_habitation_Modal.hide('slow');
+                lieu_btn_fermer.trigger('click');
+            }
+        });
+
 
     });
 
@@ -664,10 +743,10 @@ $(document).ready(function(){
             valider = false;
             alert("Veuillez renseigner le contact.");
             contact.focus();
-        }else if(!cooperative.val()){
+        }else if(!groupement.val()){
             valider = false;
-            alert("Veuillez ajouter une coopérative.");
-            cooperative_texte.focus();
+            alert("Veuillez ajouter un groupement.");
+            groupement_texte.focus();
         }else if(!typeresponsabilite.val()){
             valider = false;
             alert("Veuillez selectionner le type de responsabilité.");

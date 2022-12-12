@@ -952,6 +952,79 @@ def ajouter_cooperative(request):
 
 # Fin de la Gestion de la Coopérative -------------------------------------
 
+# Gestion du Groupement -----------------------------------------------
+@login_required
+@permission_required('vieprofessionnelle.add_secteurfemmeactive', raise_exception=True)
+def ajouter_groupement(request):
+    if request.method == 'POST':
+        if request.POST.get('id_json', None):
+
+            nom_groupement = strip_tags(request.POST.get('nom_groupement', None)).strip()
+            ville = request.POST.get('ville', None)
+            marche = request.POST.get('marche', None)
+            quantitegroupement = request.POST.get('quantitegroupement', None)
+            gps_longitude = request.POST.get('gps_longitude', None)
+            gps_latitude = request.POST.get('gps_latitude', None)
+            dateenre = request.POST.get('dateenre', None)
+
+
+            if nom_groupement and ville and quantitegroupement: #On vérifie si la champ a été saisi
+
+                nom_groupement = nom_groupement.title()  # On formate la variable
+
+                # On vérifie si ce Secteur femme active existe déjà
+                try:
+                    quantitegroupement = QuantiteGroupement.objects.get(id=quantitegroupement)
+                    SecteurFemmeActive.objects.get(nom=nom_groupement, quantitegroupement=quantitegroupement)
+                    return JsonResponse({'data': 'Ce groupement existe déjà.'}, status=400)
+                except SecteurFemmeActive.DoesNotExist:
+                    pass
+
+                # On récupère le marché s'il existe
+                if marche:
+                    try:
+                        marche = Marche.objects.get(id=marche)
+                    except Marche.DoesNotExist:
+                        marche = None
+                else:
+                    marche = None
+
+                if not dateenre:
+                    dateenre = None
+
+                # On Ajoute un nouveau Secteur Femme active
+                secteur_femmeactive = SecteurFemmeActive()
+
+                secteur_femmeactive.nom = nom_groupement
+                secteur_femmeactive.presidente = None
+                secteur_femmeactive.contact = None
+                secteur_femmeactive.ville = Ville.objects.get(id=ville)
+                secteur_femmeactive.marche = marche
+                secteur_femmeactive.quantitegroupement = quantitegroupement
+                secteur_femmeactive.gps_longitude = gps_longitude
+                secteur_femmeactive.gps_latitude = gps_latitude
+                secteur_femmeactive.dateenre = dateenre
+                secteur_femmeactive.set_identifiant()
+
+                secteur_femmeactive.save()
+
+                data = {
+                    'id': secteur_femmeactive.id,
+                    'groupement': secteur_femmeactive.nom,
+                    'message': "Enregistrement réussi",
+                }
+
+                return JsonResponse({'data': data}, status=200)
+            else:
+                return JsonResponse({'data': 'non'}, status=404)
+
+        else:
+            return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+
+# Fin de la Gestion du Groupement -------------------------------------
+
 # Gestion du type de document -----------------------------------------------
 @login_required
 @permission_required('vieprofessionnelle.add_chapeau', raise_exception=True)
