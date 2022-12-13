@@ -1058,7 +1058,7 @@ def detail_secteurfemmeactive(request, id):
         membre = Membre.objects.get(id=id)
     except Membre.DoesNotExist:
         messages.error(request, "Ce membre n'existe pas.")
-        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
     typesecteurs = TypeSecteur.objects.order_by('id')
     secteurs = Secteur.objects.filter(membre=membre).order_by('secteur')
@@ -1129,11 +1129,11 @@ def imprimer_secteurfemmeactive(request, id):
             membre = Membre.objects.get(id=id)
         except Membre.DoesNotExist:
             messages.error(request, "Ce membre n'existe pas.")
-            return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+            return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
         # On lui ajoute la propriété
         membre.get_region = membre.get_region()
-        membre.secteuragricole = membre.secteuragricole_set.first()
+        membre.secteuragricole = membre.secteurfemmeactive_set.first()
         membre.nombrefemme = membre.get_nombre_parent('Femme')
         membre.nombreenfant = membre.get_nombre_parent('Enfant')
         membre.lieu_habitation = membre.get_lieu_habitation()
@@ -1143,17 +1143,17 @@ def imprimer_secteurfemmeactive(request, id):
         except Document.DoesNotExist:
             pass
         try:
-            membre.cooperative = MembreSecteurAgricole.objects.get(membre=membre, secteuragricole=membre.secteuragricole)
-        except MembreSecteurAgricole.DoesNotExist:
+            membre.cooperative = MembreSecteurFemmeActive.objects.get(membre=membre, secteurfemmeactive=membre.secteuragricole)
+        except MembreSecteurFemmeActive.DoesNotExist:
             pass
 
         context = {
-            'title': "Fiche d'identification Secteur Agricole",
+            'title': "Fiche d'identification Secteur Femme Active",
             'membre': membre,
         }
-        return render(request,'presentation/imprimer_secteuragricole.html', context)
+        return render(request, 'presentation/imprimer_secteuragricole.html', context)
 
-    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
 
 # Fin de la Gestion du secteur agricole -------------------------------------
