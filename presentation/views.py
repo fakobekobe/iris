@@ -11,6 +11,7 @@ from django.utils.html import strip_tags
 import datetime
 import os
 from utilisateur.models import Parametre
+from django.db.models import F
 
 # Les constatntes et les variables globales
 _active_onglet = ""  # Variable globale pour l'activation des onglets
@@ -171,7 +172,7 @@ def ajouter_secteuragricole(request):
     secteuragricoles = SecteurAgricole.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
-    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True).order_by('nom_prenoms')
+    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True, secteuragricole=F('secteuragricole')).order_by('nom_prenoms')
     chapeaux = Chapeau.objects.order_by('-id')
 
 
@@ -978,7 +979,7 @@ def ajouter_secteurfemmeactive(request):
     secteuragricoles = SecteurFemmeActive.objects.order_by("nom")
     typeparents = TypeParent.objects.order_by("libelle")
     parents = Parent.objects.order_by("nomprenoms")
-    membres = SecteurFemmeActive.objects.filter(membres__utilisateur_id=request.user.id, membres__actif=True).order_by('membres__nom_prenoms')
+    membres = Membre.objects.filter(utilisateur_id=request.user.id, actif=True, secteurfemmeactive=F('secteurfemmeactive')).order_by('nom_prenoms')
     typeresponsabilites = TypeResponsabilite.objects.order_by('id')
     montantfinancements = MontantFinancement.objects.order_by('id')
     chapeaux = Chapeau.objects.order_by('-id')
@@ -1044,7 +1045,7 @@ def ajouter_secteurfemmeactive(request):
     if request.session.get('id_membre'):  # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
-        context["membre_secteuragricole"] = MembreSecteurFemmeActive.objects.get(membre_id=request.session.get('id_membre'))
+        context["membre_secteurfemmeactive"] = MembreSecteurFemmeActive.objects.get(membre_id=request.session.get('id_membre'))
         return render(request, "presentation/secteurfemmeactive/modifier_secteurfemmeactive.html", context)
 
     return render(request, "presentation/secteurfemmeactive/secteurfemmeactive.html", context)
@@ -1092,10 +1093,10 @@ def modifier_secteurfemmeactive(request, id):
     global _active_session
 
     _active_session = True
-    _active_onglet = "active_secteuragricole"  # On initialise la variable
+    _active_onglet = "active_secteurfemmeactive"  # On initialise la variable
     request.session['id_membre'] = id
 
-    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
 
 @login_required
@@ -1108,7 +1109,7 @@ def supprimer_secteurfemmeactive(request, id):
         objet_membre = Membre.objects.get(id=id)
     except Membre.DoesNotExist:
         messages.error(request, "Ce membre n'existe pas.")
-        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
     if objet_membre:
         objet_membre.actif = False
@@ -1116,7 +1117,8 @@ def supprimer_secteurfemmeactive(request, id):
 
         messages.info(request, "Suppression réussie.")
 
-    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
+
 
 @login_required
 @permission_required('vieprofessionnelle.view_membre', raise_exception=True)
@@ -1152,5 +1154,6 @@ def imprimer_secteurfemmeactive(request, id):
         return render(request,'presentation/imprimer_secteuragricole.html', context)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+
 
 # Fin de la Gestion du secteur agricole -------------------------------------

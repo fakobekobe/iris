@@ -1,4 +1,4 @@
-{% extends 'presentation/secteuragricole.html' %}
+{% extends 'presentation/secteurfemmeactive/secteurfemmeactive.html' %}
 
 {% block id-membre %}
 <input class="form-control" type="text" name="id" value="{{membre_actif.id}}" hidden>
@@ -15,10 +15,10 @@
             <label class="form-check-label" for="sexefemme">F</label>
         </div>
 
-        <div class="form-check form-check-inline">
+        <!--div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="sexe" id="sexehomme" value="M" {% if membre_actif.sexe.code == 'M' %}checked{% endif %}>
             <label class="form-check-label" for="sexehomme">M</label>
-        </div>
+        </div-->
     </div>
 {% endblock sexe %}
 
@@ -113,12 +113,46 @@
 {% endblock niveauscolaire %}
 <!-- -->
 
-{% block cooperative_texte %}value="{{membre_secteuragricole.secteuragricole.nom}}"{% endblock cooperative_texte %}
-{% block cooperative %}value="{{membre_secteuragricole.secteuragricole.id}}"{% endblock cooperative %}
-{% block dateadhesion %}value="{{membre_secteuragricole.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
-{% block numero_carte %}value="{{membre_secteuragricole.numero_carte}}"{% endblock numero_carte %}
-{% block chapeau_texte %}value="{{membre_secteuragricole.chapeau.chapeau}}"{% endblock chapeau_texte %}
-{% block chapeau %}value="{{membre_secteuragricole.chapeau.id}}"{% endblock chapeau %}
+{% block typeresponsabilite %}
+<div class="form-row mb-2">
+    <select name="typeresponsabilite" id="select_typeresponsabilite" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un type de responsabilité ---</option>
+        {% for typeresponsabilite in typeresponsabilites %}
+        {% if membre_secteurfemmeactive.typeresponsabilite.id == typeresponsabilite.id %}
+         <option value="{{typeresponsabilite.id}}" selected>{{typeresponsabilite.type}}</option>
+        {% else %}
+        <option value="{{typeresponsabilite.id}}">{{typeresponsabilite.type}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock typeresponsabilite %}
+
+{% block montantfinancement %}
+<div class="form-row mb-2">
+    <select name="montantfinancement" id="select_montantfinancement" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un montant de financement ---</option>
+        {% for montantfinancement in montantfinancements %}
+        {% if montantfinancement.id == membre_secteurfemmeactive.montantfinancement.id %}
+        <option value="{{montantfinancement.id}}" selected>{{montantfinancement.montant}}</option>
+        {% else %}
+        <option value="{{montantfinancement.id}}">{{montantfinancement.montant}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock montantfinancement %}
+
+{% block groupement_texte %}value="{{membre_secteurfemmeactive.secteurfemmeactive.nom}}"{% endblock groupement_texte %}
+{% block groupement %}value="{{membre_secteurfemmeactive.secteurfemmeactive.id}}"{% endblock groupement %}
+{% block dateadhesion %}value="{{membre_secteurfemmeactive.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
+{% block numero_carte %}value="{{membre_secteurfemmeactive.numero_carte}}"{% endblock numero_carte %}
+{% block chapeau_texte %}value="{{membre_secteurfemmeactive.chapeau.chapeau}}"{% endblock chapeau_texte %}
+{% block chapeau %}value="{{membre_secteurfemmeactive.chapeau.id}}"{% endblock chapeau %}
+{% block personne_r_texte %}value="{% if membre_secteurfemmeactive.personneressource.chapeau %} {{membre_secteurfemmeactive.personneressource.chapeau.chapeau}} {% else %} {{membre_secteurfemmeactive.personneressource.membre.nom_prenoms}} {% endif %}"{% endblock personne_r_texte %}
+{% block personne_ressource %}value="{{membre_secteurfemmeactive.personneressource.id}}"{% endblock personne_ressource %}
+
+
 
 {% block situationmatrimoniale %}
 <div class="input-group mb-3 justify-content-center">
