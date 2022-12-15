@@ -1,0 +1,61 @@
+{% extends 'presentation/secteurfemmeactive/ville.html' %}
+
+{% block id %}marche_Modal{% endblock id %}
+{% block id-2 %}marche_ModalLabel{% endblock id-2 %}
+{% block id-3 %}marche_ModalLabel{% endblock id-3 %}
+{% block id-titre %}<i class="fas fa-store-alt"></i> Sélectionnez un marché {% endblock id-titre %}
+
+{% block select-commune %}
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="select_commune"><i class="fas fa-warehouse"></i></label>
+    </div>
+
+    <select name="select_commune" id="select_commune" class="form-control" required>
+        <option value="" selected>--- Sélectionnez une commune ---</option>
+    </select>
+</div>
+{% endblock select-commune %}
+
+{% block select-quartier %}
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
+    </div>
+
+    <select name="select_quartier" id="select_quartier" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un quartier ---</option>
+    </select>
+</div>
+{% endblock select-quartier %}
+
+{% block select-marche %}
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="select_marche"><i class="fas fa-store-alt"></i></label>
+    </div>
+
+    <select name="select_marche" id="select_marche" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un marché ---</option>
+    </select>
+</div>
+{% endblock select-marche %}
+
+
+
+
+{% block id-btn %}
+<div class="modal-footer text-center">
+    <div style="width:100%;">
+        <button type="submit" class="btn btn-outline-success" id="marche_btn_ajouter">
+            <i class="fas fa-plus"></i> Ajouter
+        </button>
+        <button type="reset" class="btn btn-outline-warning" title="Annuler">
+            <i class="fas fa-sync-alt"></i> Annuler
+        </button>
+        <button type="button" class="btn btn-outline-danger" id="marche_btn_fermer" data-dismiss="modal">
+            <i class="fas fa-times"></i> Fermer
+        </button>
+    </div>
+</div>
+{% endblock id-btn %}

@@ -1,0 +1,180 @@
+{% extends 'presentation/secteurfemmeactive/secteurfemmeactive.html' %}
+
+{% block id-membre %}
+<input class="form-control" type="text" name="id" value="{{membre_actif.id}}" hidden>
+{% endblock id-membre %}
+
+{% block sexe %}
+    <div class="input-group mb-3 justify-content-center">
+        <div class="input-group-prepend">
+            <label class="input-group-text label-sans-fond">Sexe : </label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="sexe" id="sexefemme" value="F" {% if membre_actif.sexe.code == 'F' %}checked{% endif %}>
+            <label class="form-check-label" for="sexefemme">F</label>
+        </div>
+
+        <!--div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="sexe" id="sexehomme" value="M" {% if membre_actif.sexe.code == 'M' %}checked{% endif %}>
+            <label class="form-check-label" for="sexehomme">M</label>
+        </div-->
+    </div>
+{% endblock sexe %}
+
+{% block nom-value %}value="{{membre_actif.nom}}"{% endblock nom-value %}
+{% block prenoms-value %}value="{{membre_actif.prenoms}}"{% endblock prenoms-value %}
+{% block nomjeunefille %}value="{{membre_actif.nomjeunefille}}"{% endblock nomjeunefille %}
+{% block date_naissance %}value="{{membre_actif.date_naissance|date:'Y-m-d'}}"{% endblock date_naissance %}
+{% block lieunaissancetexte %}value="{{membre_actif.lieunaissance.libelle}}"{% endblock lieunaissancetexte %}
+{% block lieu_naissance %}value="{{membre_actif.lieunaissance.id}}"{% endblock lieu_naissance %}
+
+<!-- -->
+{% block type-piece %}
+    <div class="input-group mb-3 justify-content-center">
+        <div class="input-group-prepend">
+            <label class="input-group-text label-sans-fond">Type de pièce : </label>
+        </div>
+
+        {% for typepiece in typepieces %}
+        {% if typepiece.id == membre_actif.typepiece.id %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="typepiece" id="typepiece{{typepiece.id}}" value="{{typepiece.id}}" checked >
+            <label class="form-check-label" for="typepiece{{typepiece.id}}">{{typepiece.type}}</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="typepiece" id="typepiece{{typepiece.id}}" value="{{typepiece.id}}" >
+            <label class="form-check-label" for="typepiece{{typepiece.id}}">{{typepiece.type}}</label>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+{% endblock type-piece %}
+<!-- -->
+
+{% block numeropiece %}value="{{membre_actif.numeropiece}}"{% endblock numeropiece %}
+
+{% block nationalite %}
+<div class="form-row mb-2">
+    <select name="nationalite" id="select_nationalite" class="form-control" required>
+        <option value="">--- Sélectionnez une nationalité ---</option>
+        {% for nationalite in nationalites %}
+        {% if nationalite.id == membre_actif.nationalite.id %}
+        <option value="{{nationalite.id}}" selected>{{nationalite.nationalite|capfirst}}</option>
+        {% else %}
+        <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock nationalite %}
+
+{% block contact %}value="{{membre_actif.contact}}"{% endblock contact %}
+
+<!-- -->
+{% block niveau %}
+<div class="form-row mb-2">
+    <select name="niveau" id="niveau" class="form-control" required>
+        <option value="">--- Sélectionnez un niveau ---</option>
+        {% for niveau in niveaux %}
+        {% if niveau.id == membre_actif.niveauscolaire.niveau.id %}
+        <option value="{{niveau.id}}" selected>{{niveau.niveau|upper}}</option>
+        {% else %}
+        <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock niveau %}
+<!-- -->
+
+<!-- -->
+{% block niveauscolaire %}
+<div class="form-row mb-2">
+    <select name="niveauscolaire" id="niveauscolaire" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
+        {% for niveau in niveaux %}
+            {% if niveau.id == membre_actif.niveauscolaire.niveau.id %}
+                {% for niveauscolaire in niveauscolaires %}
+                    {% if niveau.id == niveauscolaire.niveau.id %}
+                        {% if niveauscolaire.id == membre_actif.niveauscolaire.id %}
+                        <option value="{{niveauscolaire.id}}" selected>{{niveauscolaire.classe|upper}}</option>
+                        {% else %}
+                        <option value="{{niveauscolaire.id}}" >{{niveauscolaire.classe|upper}}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock niveauscolaire %}
+<!-- -->
+
+{% block typeresponsabilite %}
+<div class="form-row mb-2">
+    <select name="typeresponsabilite" id="select_typeresponsabilite" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un type de responsabilité ---</option>
+        {% for typeresponsabilite in typeresponsabilites %}
+        {% if membre_secteurfemmeactive.typeresponsabilite.id == typeresponsabilite.id %}
+         <option value="{{typeresponsabilite.id}}" selected>{{typeresponsabilite.type}}</option>
+        {% else %}
+        <option value="{{typeresponsabilite.id}}">{{typeresponsabilite.type}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock typeresponsabilite %}
+
+{% block montantfinancement %}
+<div class="form-row mb-2">
+    <select name="montantfinancement" id="select_montantfinancement" class="form-control" required>
+        <option value="" selected>--- Sélectionnez un montant de financement ---</option>
+        {% for montantfinancement in montantfinancements %}
+        {% if montantfinancement.id == membre_secteurfemmeactive.montantfinancement.id %}
+        <option value="{{montantfinancement.id}}" selected>{{montantfinancement.montant}}</option>
+        {% else %}
+        <option value="{{montantfinancement.id}}">{{montantfinancement.montant}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>
+{% endblock montantfinancement %}
+
+{% block groupement_texte %}value="{{membre_secteurfemmeactive.secteurfemmeactive.nom}}"{% endblock groupement_texte %}
+{% block groupement %}value="{{membre_secteurfemmeactive.secteurfemmeactive.id}}"{% endblock groupement %}
+{% block dateadhesion %}value="{{membre_secteurfemmeactive.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
+{% block numero_carte %}value="{{membre_secteurfemmeactive.numero_carte}}"{% endblock numero_carte %}
+{% block chapeau_texte %}value="{{membre_secteurfemmeactive.chapeau.chapeau}}"{% endblock chapeau_texte %}
+{% block chapeau %}value="{{membre_secteurfemmeactive.chapeau.id}}"{% endblock chapeau %}
+{% block personne_r_texte %}value="{% if membre_secteurfemmeactive.personneressource.chapeau %} {{membre_secteurfemmeactive.personneressource.chapeau.chapeau}} {% else %} {{membre_secteurfemmeactive.personneressource.membre.nom_prenoms}} {% endif %}"{% endblock personne_r_texte %}
+{% block personne_ressource %}value="{{membre_secteurfemmeactive.personneressource.id}}"{% endblock personne_ressource %}
+
+
+
+{% block situationmatrimoniale %}
+<div class="input-group mb-3 justify-content-center">
+
+    {% for situationmatrimoniale in situationmatrimoniales %}
+    {% if situationmatrimoniale.id == membre_actif.situationmatrimoniale.id %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="situationmatrimoniale" id="situationmatrimoniale{{situationmatrimoniale.id}}" value="{{situationmatrimoniale.id}}" checked>
+        <label class="form-check-label" for="situationmatrimoniale{{situationmatrimoniale.id}}">{{situationmatrimoniale.situation}}</label>
+    </div>
+    {% else %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="situationmatrimoniale" id="situationmatrimoniale{{situationmatrimoniale.id}}" value="{{situationmatrimoniale.id}}">
+        <label class="form-check-label" for="situationmatrimoniale{{situationmatrimoniale.id}}">{{situationmatrimoniale.situation}}</label>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+{% endblock situationmatrimoniale %}
+
+{% block label_lieu_habitation %}value="{{membre_actif.quartier.libelle}}"{% endblock label_lieu_habitation %}
+{% block lieu_habitation %}value="{{membre_actif.quartier.id}}"{% endblock lieu_habitation %}
+
+{% block envoyer_fiche %}value="Modifier"{% endblock envoyer_fiche %}

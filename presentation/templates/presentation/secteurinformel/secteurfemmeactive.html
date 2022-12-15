@@ -1,0 +1,472 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+
+<div>
+
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_secteurfemmeactive|first}}" id="typesecteur-tab" data-toggle="tab" data-target="#typesecteur" type="button" role="tab" aria-controls="typesecteur" aria-selected="{{ active_secteurfemmeactive|slice:'1:2'|first }}">
+        Fiche d'Identification
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_liste|first}}" id="secteur-tab" data-toggle="tab" data-target="#secteur" type="button" role="tab" aria-controls="secteur" aria-selected="{{ active_liste|slice:'1:2'|first }}">
+        Liste des membres
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+
+    <!-- CONTENU Fiche d'Identification -->
+    <div class="tab-pane fade {{ active_secteurfemmeactive|last }}" id="typesecteur" role="tabpanel" aria-labelledby="typesecteur-tab">
+      <div>
+        <h1 class="text-primary"><i class="fas fa-child"></i> Fiche d'identification : Secteur Femme Active</h1>
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- Ligne -->
+                <div class="row">
+                    <div class="col">
+                        <hr />
+                    </div>
+                </div>
+                <!-- -->
+
+                <!-- Contenu -->
+                <div class="row">
+                    <div class="col">
+                        <form method="post" action="{% url 'presentation:ajouter_secteurfemmeactive' %}" id="form_fiche" enctype="multipart/form-data" autocomplete="off">
+                            {%  csrf_token %}
+                            <div class="row mt-3 mb-3 text-center">
+                                <!-- Membre -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-header text-white bg-warning">Membre</div>
+                                        <div class="card-body">
+
+                                            <!-- -->
+                                            {% block id-membre %}{% endblock id-membre %}
+                                            <!-- -->
+
+                                            <!-- -->
+                                            {% block sexe %}
+                                            <div class="input-group mb-3 justify-content-center">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text label-sans-fond">Sexe : </label>
+                                              </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="sexe" id="sexefemme" value="F" checked>
+                                                    <label class="form-check-label" for="sexefemme">F</label>
+                                                </div>
+
+                                            </div>
+                                            {% endblock sexe %}
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="form-row mb-2">
+                                                <div class="col">
+                                                  <input type="text" name="nom" class="form-control" placeholder="Nom" {% block nom-value %}{% endblock nom-value %} required>
+                                                </div>
+                                                <div class="col">
+                                                  <input type="text" name="prenoms" class="form-control" placeholder="Prénoms" {% block prenoms-value %}{% endblock prenoms-value %}>
+                                                </div>
+                                            </div>
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="form-row mb-2" id="nomjeunefille">
+                                                <div class="col">
+                                                  <input type="text" name="nomjeunefille" class="form-control" placeholder="Nom de jeune fille" {% block nomjeunefille %}{% endblock nomjeunefille %}>
+                                                </div>
+                                            </div>
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text label-sans-fond">Date de naissance</span>
+                                                </div>
+                                                <input type="date" name="date_naissance"  class="form-control" {% block date_naissance %}value="{% now 'Y-m-d' %}"{% endblock date_naissance %}>
+                                            </div>
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="input-group mb-2">
+                                                  <input type="text" name="lieunaissancetexte" id="label_naissance" class="form-control" placeholder="Lieu de naissance" {% block lieunaissancetexte %}{% endblock lieunaissancetexte %} readonly>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text btn btn-danger" id="label_naissance_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text btn btn-success" id="label_naissance_plus" title="Ajouter un lieu de naissance" data-toggle="modal" data-target="#date_de_naissance_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                    </div>
+                                                  <input type="text" hidden name="lieu_naissance" id="lieu_naissance" class="form-control" {% block lieu_naissance %}{% endblock lieu_naissance %}>
+                                            </div>
+                                            <!-- -->
+
+                                            <!-- -->
+                                            {% block type-piece %}
+                                            <div class="input-group mb-3 justify-content-center">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text label-sans-fond">Type de pièce : </label>
+                                              </div>
+
+                                                {% for typepiece in typepieces %}
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="typepiece" id="typepiece{{typepiece.id}}" value="{{typepiece.id}}">
+                                                    <label class="form-check-label" for="typepiece{{typepiece.id}}">{{typepiece.type}}</label>
+                                                </div>
+                                                {% endfor %}
+
+                                            </div>
+                                            {% endblock type-piece %}
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="form-row mb-2">
+                                                <div class="col">
+                                                  <input type="text" name="numeropiece" class="form-control" placeholder="N° de la pièce" {% block numeropiece %}{% endblock numeropiece %} required>
+                                                </div>
+                                            </div>
+                                            <!-- -->
+
+                                            <!-- -->
+                                            {% block nationalite %}
+                                            <div class="form-row mb-2">
+                                              <select name="nationalite" id="select_nationalite" class="form-control" required>
+                                                  <option value="" selected>--- Sélectionnez une nationalité ---</option>
+                                                  {% for nationalite in nationalites %}
+                                                  <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
+                                                  {% endfor %}
+                                              </select>
+                                            </div>
+                                            {% endblock nationalite %}
+                                            <!-- -->
+
+                                            <!-- -->
+                                            <div class="form-row mb-2">
+                                                <div class="col">
+                                                  <input type="text" name="contact" class="form-control" placeholder="Contacts" {% block contact %}{% endblock contact %}>
+                                                </div>
+                                            </div>
+                                            <!-- -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- -->
+
+                                <!-- Groupement et Statut matrimonial  -->
+                                <div class="col-md-6 mb-3">
+
+                                    <!-- Groupement -->
+                                    <div class="row mb-1 text-center">
+                                        <div class="col-md-12 mb-3">
+                                            <div class="card text-white">
+                                            <div class="card-header bg-success">Vie professionnelle</div>
+                                            <div class="card-body">
+
+                                                <!-- nom du groupement -->
+                                                <div class="input-group mb-2">
+                                                      <input type="text" name="groupement_texte" id="groupement_texte" {% block groupement_texte %}value=""{% endblock groupement_texte %} class="form-control" placeholder="Nom du groupement" readonly>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-danger" id="label_groupement_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-success" id="label_groupement_plus" title="Ajouter un groupement" data-toggle="modal" data-target="#groupement_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                        </div>
+                                                      <input type="text" hidden name="groupement" {% block groupement %}value=""{% endblock groupement %} id="groupement" class="form-control">
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- date d'adhésion -->
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text label-sans-fond">Date de début d'activité</span>
+                                                    </div>
+                                                    <input type="date" name="dateadhesion" {% block dateadhesion %}value="{% now 'Y-m-d' %}"{% endblock dateadhesion %} class="form-control" >
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- N°Carte de membre -->
+                                                <div class="form-row mb-2">
+                                                    <div class="col">
+                                                      <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre" {% block numero_carte %}{% endblock numero_carte %}>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- Type de responsabilité -->
+                                                {% block typeresponsabilite %}
+                                                <div class="form-row mb-2">
+                                                    <select name="typeresponsabilite" id="select_typeresponsabilite" class="form-control" required>
+                                                        <option value="" selected>--- Sélectionnez un type de responsabilité ---</option>
+                                                        {% for typeresponsabilite in typeresponsabilites %}
+                                                        <option value="{{typeresponsabilite.id}}" >{{typeresponsabilite.type}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                {% endblock typeresponsabilite %}
+                                                <!-- -->
+
+                                                <!-- Montant du financement -->
+                                                {% block montantfinancement %}
+                                                <div class="form-row mb-2">
+                                                    <select name="montantfinancement" id="select_montantfinancement" class="form-control" required>
+                                                        <option value="" selected>--- Sélectionnez un montant de financement ---</option>
+                                                        {% for montantfinancement in montantfinancements %}
+                                                        <option value="{{montantfinancement.id}}" >{{montantfinancement.montant}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                {% endblock montantfinancement %}
+                                                <!-- -->
+
+                                                <!-- Chapeau -->
+                                                <div class="input-group mb-2">
+                                                      <input type="text" name="chapeau_texte" id="chapeau_texte" {% block chapeau_texte %}value=""{% endblock chapeau_texte %} class="form-control" placeholder="Chapeau" readonly>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-danger" id="label_chapeau_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-success" id="label_chapeau_plus" title="Ajouter un chapeau" data-toggle="modal" data-target="#chapeau_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                        </div>
+                                                      <input type="text" hidden name="chapeau" {% block chapeau %}value=""{% endblock chapeau %} id="chapeau" class="form-control">
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- Personne ressource -->
+                                                <div class="input-group mb-2">
+                                                      <input type="text" name="personne_r_texte" id="personne_r_texte" {% block personne_r_texte %}value=""{% endblock personne_r_texte %} class="form-control" placeholder="Personne ressource" readonly>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-danger" id="label_pr_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-success" id="label_pr_plus" title="Ajouter une personne ressource" data-toggle="modal" data-target="#personne_r_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                        </div>
+                                                      <input type="text" hidden name="personne_ressource" {% block personne_ressource %}value=""{% endblock personne_ressource %} id="personne_ressource" class="form-control">
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- Niveau -->
+                                                {% block niveau %}
+                                                <div class="form-row mb-2">
+                                                    <select name="niveau" id="niveau" class="form-control" required>
+                                                        <option value="" selected>--- Sélectionnez un niveau ---</option>
+                                                        {% for niveau in niveaux %}
+                                                        <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                {% endblock niveau %}
+                                                <!-- -->
+
+                                                <!-- Niveau scolaire -->
+                                                {% block niveauscolaire %}
+                                                <div class="form-row mb-2">
+                                                    <select name="niveauscolaire" id="niveauscolaire" class="form-control" required>
+                                                        <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
+                                                    </select>
+                                                </div>
+                                                {% endblock niveauscolaire %}
+                                                <!-- -->
+
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <!-- -->
+
+                                    <!-- Statut matrimonial -->
+                                    <div class="row mb-3 text-center">
+                                        <div class="col-md-12 mb-3">
+                                            <div class="card">
+                                            <div class="card-header text-white bg-primary">Statut matrimonial</div>
+                                            <div class="card-body">
+
+                                                <!-- -->
+                                                {% block situationmatrimoniale %}
+                                                <div class="input-group mb-3 justify-content-center">
+
+                                                    {% for situationmatrimoniale in situationmatrimoniales %}
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="situationmatrimoniale" id="situationmatrimoniale{{situationmatrimoniale.id}}" value="{{situationmatrimoniale.id}}">
+                                                        <label class="form-check-label" for="situationmatrimoniale{{situationmatrimoniale.id}}">{{situationmatrimoniale.situation}}</label>
+                                                    </div>
+                                                    {% endfor %}
+
+                                                </div>
+                                                {% endblock situationmatrimoniale %}
+                                                <!-- -->
+
+                                                <!-- -->
+                                                <div class="input-group mb-2">
+                                                    <input type="text" name="label_lieu_habitation" id="label_lieu_habitation" class="form-control" placeholder="Lieu d'habitation" {% block label_lieu_habitation %}{% endblock label_lieu_habitation %} readonly>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text btn btn-danger" id="lieu_habitation_times" title="Annuler"><i class="fas fa-times"></i></span>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text btn btn-success" id="label_lieu_habitation_plus" title="Ajouter un lieu d'habitation" data-toggle="modal" data-target="#lieu_habitation_Modal" data-backdrop="static"><i class="fas fa-plus"></i></span>
+                                                    </div>
+                                                    <input type="text" hidden name="lieu_habitation" id="lieu_habitation" class="form-control" {% block lieu_habitation %}value=""{% endblock lieu_habitation %}>
+                                                </div>
+                                                <!-- -->
+
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <!-- -->
+
+                                </div>
+                                <!-- -->
+                            </div>
+
+                            <!-- -->
+                            <div class="input-group mb-3 justify-content-center">
+                                <input type="submit" id="envoyer_fiche" {% block envoyer_fiche %}value="Enregistrer"{% endblock envoyer_fiche %} name="envoyer_fiche" class="btn btn-primary mr-3">
+                                <input type="reset" value="Annuler" class="btn btn-danger">
+                            </div>
+                            <!-- -->
+
+                        </form>
+
+                        <!-- LISTE DES INCLUDES -->
+                        {% include 'presentation/date_de_naissance.html' %}
+                        {% include 'presentation/secteurfemmeactive/liste_groupement.html' %}
+                        {% include 'presentation/secteurfemmeactive/ajouter_groupement.html' %}
+                        {% include 'presentation/liste_chapeau.html' %}
+                        {% include 'presentation/secteurfemmeactive/liste_personneressource.html' %}
+                        {% include 'presentation/lieu_habitation.html' %}
+                    </div>
+                </div>
+                <!-- -->
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Fiche d'Identification -->
+
+    <!-- CONTENU Liste des Membres -->
+    <div class="tab-pane fade {{ active_liste|last }}" id="secteur" role="tabpanel" aria-labelledby="secteur-tab">
+      <div>
+        <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
+          <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Champ de recherche -->
+                <div class="input-group mb-2 w-25">
+                    <input type="text" name="recherche_membre" id="recherche_membre" class="form-control" placeholder="Rechercher un membre">
+                </div>
+                <!-- -->
+                <hr />
+
+                <!-- Tableau de recherche -->
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <table class="table  table-bordered table-hover table-responsive-md" id="table_recherche_membre">
+                      <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Nom et prénoms</th>
+                            <th>Identifiant</th>
+                            <th>N°de pièce</th>
+                            <th>Contact</th>
+                            <th>Ville</th>
+                            <th>Date d'enregistrement</th>
+                            <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for membre in membres %}
+                        <tr>
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td>{{membre.nom_prenoms}}</td>
+                            <td>{{membre.identifiant}}</td>
+                            <td>{{membre.numeropiece}}</td>
+                            <td class="text-center">{{membre.contact}}</td>
+                            <td class="text-center">{{membre.quartier.commune.ville.libelle}}</td>
+                            <td class="text-center">{{membre.dateenre|date:'d/m/Y'}}</td>
+                            <td class="text-center w-50">
+                                <a href="{% url 'presentation:imprimer_secteurfemmeactive' membre.id %}" class="btn btn-outline-secondary btn-sm" title="Imprimer"><i class="fas fa-print"></i></a>
+                                <a href="{% url 'presentation:detail_secteurfemmeactive' membre.id %}" class="btn btn-outline-primary btn-sm" title="Détails"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'presentation:modifier_secteurfemmeactive' membre.id %}" class="btn btn-outline-warning btn-sm" title="Modifier"><i class="fas fa-pen"></i></a>
+                                <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#recherche_membre_supressionmodal{{membre.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="recherche_membre_supressionmodal{{membre.id}}" role="dialog">
+                                    <div class="modal-dialog">
+
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Confirmez-vous la suppression ?</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>
+                                                Membre : <strong>{{membre.nom_prenoms}}</strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+
+                                            <form style="display:inline-block; text-align:center" method="post" action="{% url 'presentation:supprimer_secteurfemmeactive' membre.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Oui</button>
+                                            </form>
+                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">Non</a>
+
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <!-- Modal Fin -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+                <!-- -->
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Liste des membres -->
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>// Gestion des notifications
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'error' %}
+                var m = "{{ message }}";
+                swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'info' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
+            {% endif %}
+        {% endfor %}
+    </script>
+    <script src="{% static 'presentation/js/secteurfemmeactive/datatable.js' %}"></script>
+    <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
+    <script src="{% static 'presentation/js/table_r_membre_sa.js' %}"></script>
+{% endblock javascript %}
