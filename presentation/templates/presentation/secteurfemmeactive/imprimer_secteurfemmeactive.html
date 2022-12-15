@@ -12,9 +12,9 @@
         <div class="form-row" style="margin:0px;padding:0px;">
             <div class="col text-center ml-3">
                 <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:160px;" />
-                <h5 style="text-decoration:underline;">
-                    FICHE D'IDENTIFICATION SECTEUR AGRICOLE
-                </h5>
+                <h6 style="text-decoration:underline; font-size:1.1em;">
+                    FICHE D'IDENTIFICATION SECTEUR FEMME ACTIVE
+                </h6>
                 <img src="{{membre.photo.url}}" alt="{{membre.photo.name}}" style="width:150px;height:200px; border:solid 1px black;" />
             </div>
             <div class="col ml-3" >
@@ -139,7 +139,7 @@
                                     <strong>Chapeau</strong>
                                 </td>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    {{membre.cooperative.chapeau.chapeau}}
+                                    {{membre.secteurfemmeactive.chapeau.chapeau}}
                                 </td>
                             </tr>
                             <tr>
@@ -147,12 +147,12 @@
                                     <strong>Président(e)</strong>
                                 </td>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    {{membre.cooperative.chapeau.nom}}
+                                    {{membre.secteurfemmeactive.chapeau.nom}}
                                 </td>
                             </tr>
                             <tr>
                                 <td style="border:1px solid black; padding:5px 10px 0 10px;">
-                                    {{membre.cooperative.chapeau.contact}}
+                                    {{membre.secteurfemmeactive.chapeau.contact}}
                                 </td>
                             </tr>
                         </table>
@@ -221,11 +221,6 @@
             <div class="mb-2">
                 Statut : <strong>{{membre.situationmatrimoniale.situation}}</strong>
             </div>
-            {% if membre.sexe.code == 'M' %}
-            <div class="mb-2">
-                Nombre de femmes : <strong>{{membre.nombrefemme}}</strong>
-            </div>
-            {% endif %}
             <div class="mb-2">
                 Nombre d'enfants : <strong>{{membre.nombreenfant}}</strong>
             </div>
@@ -237,36 +232,37 @@
     </div>
     <!-- -->
 
-    <!-- Vie coopérative-->
+    <!-- Groupement -->
     <div class="row mb-3" style="font-size:1.1em;">
         <div class="col-md-11 offset-1">
             <div class="mb-3">
                 <h5 style="text-decoration:underline;">
-                    Vie coopérative :
+                    Vie professionnelle :
                 </h5>
             </div>
             <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
             <div class="mb-2">
-                Nom de la coopérative : <strong>{{membre.secteuragricole.nom}}</strong>
+                Nom du marché : <strong>{{membre.groupement.marche.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Commune d'implantation : <strong>{{membre.groupement.marche.quartier.commune.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Secteur d'activités : <strong>{{membre.secteuractivite.secteur}}</strong>
             </div>
             <div class="row mb-2">
                 <div class="col">
-                    Date d'adhésion: <strong>{{membre.cooperative.date_adhesion|date:'d/m/Y'}}</strong>
+                    Date de début d'activités: <strong>{{membre.secteurfemmeactive.date_adhesion|date:'d/m/Y'}}</strong>
                 </div>
                 <div class="col">
-                    N°de carte de membre : <strong>{{membre.cooperative.numero_carte}}</strong>
+                    N°de carte de membre : <strong>{{membre.secteurfemmeactive.numero_carte}}</strong>
                 </div>
             </div>
             <div class="mb-2">
-                Spéculation agricole : <strong>{{membre.secteuragricole.speculation_agricole}} Kg</strong>
+                Personne ressource : <strong>{{membre.secteurfemmeactive.personneressource}}</strong>
             </div>
-            <div class="row mb-2">
-                <div class="col">
-                    Superficie en culture: <strong>{{membre.secteuragricole.superficie_en_culture}} m<sup>2</sup></strong>
-                </div>
-                <div class="col">
-                    Superficie en production : <strong>{{membre.secteuragricole.superficie_en_production}} m<sup>2</sup></strong>
-                </div>
+            <div class="mb-2">
+                Contact de la personne ressource : <strong>{{membre.personneressource_contact}}</strong>
             </div>
 
         </div>
@@ -274,7 +270,7 @@
     <!-- -->
 
     <!-- Niveau scolaire -->
-    <div class="row" style="font-size:1.1em; margin-bottom:45px;">
+    <div class="row" style="font-size:1.1em; margin-bottom:20px;">
         <div class="col-md-11 offset-1">
             <div class="mb-3">
                 <h5 style="text-decoration:underline;">
@@ -317,7 +313,6 @@
             </div>
         </div>
     </div>
-
     <!-- Gestion de l'espace pour l'impression-->
     {% if membre.sexe.code == 'M' %}
     <div class="pb-2">
@@ -334,7 +329,7 @@
 
 <!-- boutton d'impression et de retour -->
 <div style="position:fixed;top:0px;right:0px;">
-    <a href="{% url 'presentation:retour_liste_membre' 1 %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Liste des membres</a>
+    <a href="{% url 'presentation:retour_liste_membre' 2 %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Liste des membres</a>
     <button id="imprimer" class="btn btn-primary">
         <i class="fas fa-print"></i> Imprimer
     </button>

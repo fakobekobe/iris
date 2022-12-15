@@ -251,6 +251,7 @@ def detail_secteuragricole(request, id):
         'typeparents': typeparents,
         'typeetatsantes': typeetatsantes,
         'etatsantes': etatsantes,
+        'id_retour': 1,  # Variable pour le lien de retour vers la liste des membres
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
@@ -583,12 +584,15 @@ def ajouter_parent_membre(request):
 
 
 @login_required
-@permission_required('vieprofessionnelle.add_parent', raise_exception=True)
-def retour_liste_membre(request):
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def retour_liste_membre(request, id):
     global _active_onglet
     _active_onglet = "active_liste"  # On initialise la variable
 
-    return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    if int(id) == 1:
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteuragricole'))
+    elif int(id) == 2:
+        return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 
 
 @login_required
@@ -1082,6 +1086,7 @@ def detail_secteurfemmeactive(request, id):
         'typeparents': typeparents,
         'typeetatsantes': typeetatsantes,
         'etatsantes': etatsantes,
+        'id_retour': 2,  # Variable pour le lien de retour vers la liste des membres
     }
     return render(request, 'presentation/details_secteur_agricole.html', context)
 
@@ -1133,17 +1138,19 @@ def imprimer_secteurfemmeactive(request, id):
 
         # On lui ajoute la propriété
         membre.get_region = membre.get_region()
-        membre.secteuragricole = membre.secteurfemmeactive_set.first()
-        membre.nombrefemme = membre.get_nombre_parent('Femme')
+        membre.groupement = membre.secteurfemmeactive_set.first()
+        #membre.nombrefemme = membre.get_nombre_parent('Femme')
         membre.nombreenfant = membre.get_nombre_parent('Enfant')
         membre.lieu_habitation = membre.get_lieu_habitation()
+        membre.secteuractivite = membre.secteurs.first()
         try:
             document = Document.objects.get(membre=membre)
             membre.photo = document.get_photo_membre()
         except Document.DoesNotExist:
             pass
         try:
-            membre.cooperative = MembreSecteurFemmeActive.objects.get(membre=membre, secteurfemmeactive=membre.secteuragricole)
+            membre.secteurfemmeactive = MembreSecteurFemmeActive.objects.get(membre=membre, secteurfemmeactive=membre.groupement)
+            membre.personneressource_contact = membre.secteurfemmeactive.personneressource.get_personneressource_contact()
         except MembreSecteurFemmeActive.DoesNotExist:
             pass
 
@@ -1151,7 +1158,7 @@ def imprimer_secteurfemmeactive(request, id):
             'title': "Fiche d'identification Secteur Femme Active",
             'membre': membre,
         }
-        return render(request, 'presentation/imprimer_secteuragricole.html', context)
+        return render(request, 'presentation/secteurfemmeactive/imprimer_secteurfemmeactive.html', context)
 
     return HttpResponseRedirect(reverse('presentation:ajouter_secteurfemmeactive'))
 

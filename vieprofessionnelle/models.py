@@ -31,7 +31,7 @@ class TypeSecteur(models.Model):
 
 class Secteur(models.Model):
     secteur = models.CharField(max_length=250, unique=True)
-    typesecteur = models.ForeignKey(TypeSecteur,null=True, on_delete=models.SET_NULL)
+    typesecteur = models.ForeignKey(TypeSecteur, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.secteur
@@ -260,8 +260,20 @@ class PersonneRessource(models.Model):
     chapeau = models.ForeignKey(Chapeau, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     typepersonneressource = models.ForeignKey(TypePersonneRessource, null=True, blank=True, default=None, on_delete=models.SET_NULL)
 
+    def get_personneressource(self):
+        if self.membre:
+            return self.membre.nom_prenoms
+        else:
+            return self.chapeau.chapeau
+
+    def get_personneressource_contact(self):
+        if self.membre:
+            return self.membre.contact
+        else:
+            return self.chapeau.contact
+
     def __str__(self):
-        return self.typepersonneressource.type
+        return self.get_personneressource()
 
 class QuantiteGroupement(models.Model):
     quantite = models.IntegerField(unique=True, verbose_name="Quantité")
