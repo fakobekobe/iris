@@ -991,6 +991,22 @@ def ajouter_secteurfemmeactive(request):
     quantitegroupements = QuantiteGroupement.objects.order_by('id')
     groupements = SecteurFemmeActive.objects.order_by('nom')
 
+    # On détermine le nombre de places disponibles par groupement
+    nombre_places = []
+    nouveau_groupement = []
+
+    for groupement in groupements:
+        nbg = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=groupement).count()
+        if groupement.quantitegroupement.quantite > nbg:
+            # On ajoute le groupement dans la nouvelle liste
+            nouveau_groupement.append(groupement)
+            # On ajoute le nombre de places disponibles
+            nombre_places.append(groupement.quantitegroupement.quantite - nbg)
+
+    # On initialise le nouveau groupement
+    groupements = nouveau_groupement
+
+
     # On initialise les données
     _parametre = Parametre.objects.first()
     chapeaux_liste = None
@@ -1041,6 +1057,7 @@ def ajouter_secteurfemmeactive(request):
         "id_chapeau": int(_parametre.id_chapeau),
         "quantitegroupements": quantitegroupements,
         "groupements": groupements,
+        "nombre_places": nombre_places,
 
         "active_secteurfemmeactive": active_secteurfemmeactive,
         "active_liste": active_liste,

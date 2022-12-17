@@ -1,3 +1,4 @@
+{% load presentation_filtre %}
 <!-- Modal -->
 <div class="modal fade" id="groupement_Modal" tabindex="-1" aria-labelledby="groupement_ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -43,7 +44,7 @@
                         <tr>
                             <td class="text-center">{{forloop.counter}}</td>
                             <td><a href="#" style="text-decoration:none;" value="{{groupement.id}}">{{groupement.nom}}</a></td>
-                            <td>20</td>
+                            <td>{{nombre_places|liste:forloop.counter0}}</td>
                         </tr>
                       {% endfor %}
                       </tbody>
