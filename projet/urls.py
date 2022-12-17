@@ -14,9 +14,10 @@ handler403 = 'utilisateur.views.handler403'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('utilisateur.urls')),
-    path('localisation/',include('localisation.urls')),
-    path('etatcivil/',include('etatcivil.urls')),
-    path('vieprofessionnelle/',include('vieprofessionnelle.urls')),
-    path('presentation/',include('presentation.urls')),
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    path('', include('utilisateur.urls')),
+    path('localisation/', include('localisation.urls')),
+    path('etatcivil/', include('etatcivil.urls')),
+    path('vieprofessionnelle/', include('vieprofessionnelle.urls')),
+    path('presentation/', include('presentation.urls')),
+    path('etat/', include('etat.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

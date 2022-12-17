@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'localisation',
     'etatcivil',
     'vieprofessionnelle',
+    'etat',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,84 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+
+<div>
+
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_membre|first}}" id="membre-tab" data-toggle="tab" data-target="#membre" type="button" role="tab" aria-controls="membre" aria-selected="{{ active_membre|slice:'1:2'|first }}">
+        Membre
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_cooperative|first}}" id="cooperative-tab" data-toggle="tab" data-target="#cooperative" type="button" role="tab" aria-controls="cooperative" aria-selected="{{ active_cooperative|slice:'1:2'|first }}">
+        Coopérative et Groupement
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {{active_statistique|first}}" id="statistique-tab" data-toggle="tab" data-target="#statistique" type="button" role="tab" aria-controls="statistique" aria-selected="{{ active_statistique|slice:'1:2'|first }}">
+        Statistiques
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+
+    <!-- CONTENU Membre -->
+    <div class="tab-pane fade {{ active_membre|last }}" id="membre" role="tabpanel" aria-labelledby="membre-tab">
+      <div>
+        <h1 class="text-primary"><i class="fas fa-child"></i> Fiche d'identification : Secteur Femme Active</h1>
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Membre -->
+
+    <!-- CONTENU Coopérative -->
+    <div class="tab-pane fade {{ active_cooperative|last }}" id="cooperative" role="tabpanel" aria-labelledby="cooperative-tab">
+      <div>
+        <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
+          <hr />
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Coopérative -->
+
+    <!-- CONTENU Statistique -->
+    <div class="tab-pane fade {{ active_statistique|last }}" id="statistique" role="tabpanel" aria-labelledby="statistique-tab">
+      <div>
+        <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
+          <hr />
+
+      </div>
+    </div>
+    <!-- FIN DE CONTENU Statistique -->
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>// Gestion des notifications
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'error' %}
+                var m = "{{ message }}";
+                swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
+
+            {% elif message.tags == 'info' %}
+                var m = "{{ message }}";
+                swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
+            {% endif %}
+        {% endfor %}
+    </script>
+    <script src="{% static 'presentation/js/secteurfemmeactive/datatable.js' %}"></script>
+    <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
+    <script src="{% static 'presentation/js/table_r_membre_sa.js' %}"></script>
+{% endblock javascript %}
