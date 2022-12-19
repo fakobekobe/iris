@@ -28,8 +28,178 @@
 
     <!-- CONTENU Membre -->
     <div class="tab-pane fade {{ active_membre|last }}" id="membre" role="tabpanel" aria-labelledby="membre-tab">
-      <div>
-        <h1 class="text-primary"><i class="fas fa-child"></i> Fiche d'identification : Secteur Femme Active</h1>
+      <div class="row m-0 p-0 pt-3">
+        <div class="col">
+          <div class="card">
+            <div class="card-header text-white bg-warning text-center" style="padding:0px;">SECTEUR D'ACTIVITE</div>
+            <div class="card-body">
+
+              <!-- Type Secteur -->
+              <div class="row mb-2">
+                <select name="typesecteur" id="typesecteur" class="form-control">
+                  <option value="" selected>--- Type de secteur d'activité ---</option>
+                  {% for typesecteur in typesecteurs %}
+                  <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Secteur -->
+              <div class="row mb-2">
+                <select name="secteur" id="secteur" class="form-control">
+                  <option value="" selected>--- Sélectionnez un secteur ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Activité -->
+              <div class="row mb-2">
+                <select name="activite" id="activite" class="form-control">
+                  <option value="" selected>--- Sélectionnez le nom  ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-header text-white bg-primary text-center" style="padding:0px;">LOCALISATION</div>
+            <div class="card-body">
+
+              <!-- District -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_district"><i class="fas fa-igloo"></i></label>
+                </div>
+                <select name="select_district" id="select_district" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez un district ---</option>
+                  {% for district in districts %}
+                  <option value="{{district.id}}" >{{district.libelle}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Region -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_region"><i class="fas fa-home"></i></label>
+                </div>
+                <select name="select_region" id="select_region" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez une région ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Departement -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_departement"><i class="fas fa-building"></i></label>
+                </div>
+                <select name="select_departement" id="select_departement" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez un département ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Ville -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_ville"><i class="fas fa-city"></i></label>
+                </div>
+                <select name="select_ville" id="select_ville" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez une ville ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Commune -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_commune"><i class="fas fa-warehouse"></i></label>
+                </div>
+                <select name="select_commune" id="select_commune" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez une commune ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Quartier -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
+                </div>
+                <select name="select_quartier" id="select_quartier" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez un quartier ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Marche -->
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="select_marche"><i class="fas fa-store-alt"></i></label>
+                </div>
+                <select name="select_marche" id="select_marche" class="form-control" required>
+                  <option value="" selected>--- Sélectionnez un marché ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-header text-white bg-info text-center" style="padding:0px;">CRITAIRES</div>
+            <div class="card-body">
+
+              <!-- Identifiant -->
+              <div class="row mb-2">
+                <div class="col">
+                  <input type="text" name="identifiant" class="form-control" placeholder="identifiant Ex: 0010020040007">
+                </div>
+              </div>
+              <!-- -->
+
+              <!-- Nationalité -->
+              <div class="row mb-2">
+                <select name="nationalite" id="nationalite" class="form-control">
+                  <option value="" selected>--- Sélectionnez une nationalité ---</option>
+                  {% for nationalite in nationalites %}
+                  <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Niveau -->
+              <div class="row mb-2">
+                <select name="niveau" id="niveau" class="form-control">
+                  <option value="" selected>--- Sélectionnez un niveau ---</option>
+                  {% for niveau in niveaux %}
+                  <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <!-- -->
+
+              <!-- Niveau scolaire -->
+              <div class="row mb-2">
+                <select name="niveauscolaire" id="niveauscolaire" class="form-control">
+                  <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
+                </select>
+              </div>
+              <!-- -->
+
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -39,7 +209,7 @@
     <div class="tab-pane fade {{ active_cooperative|last }}" id="cooperative" role="tabpanel" aria-labelledby="cooperative-tab">
       <div>
         <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
-          <hr />
+        <hr />
 
       </div>
     </div>
@@ -49,7 +219,7 @@
     <div class="tab-pane fade {{ active_statistique|last }}" id="statistique" role="tabpanel" aria-labelledby="statistique-tab">
       <div>
         <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
-          <hr />
+        <hr />
 
       </div>
     </div>
@@ -62,23 +232,5 @@
 {% endblock %}
 
 {% block javascript %}
-    <script>// Gestion des notifications
-        {% for message in messages %}
-            {% if message.tags == 'success' %}
-                var m = "{{ message }}";
-                swal("Parfait !",m,"success");  // "success" ou "error" ou "info"
-
-            {% elif message.tags == 'error' %}
-                var m = "{{ message }}";
-                swal("Erreur !",m,"error");  // "success" ou "error" ou "info"
-
-            {% elif message.tags == 'info' %}
-                var m = "{{ message }}";
-                swal("Parfait !",m,"info");  // "success" ou "error" ou "info"
-            {% endif %}
-        {% endfor %}
-    </script>
-    <script src="{% static 'presentation/js/secteurfemmeactive/datatable.js' %}"></script>
-    <script src="{% static 'presentation/js/table_recherche_cooperative.js' %}"></script>
-    <script src="{% static 'presentation/js/table_r_membre_sa.js' %}"></script>
+<script src="{% static 'etat/js/membre/data.js' %}"></script>
 {% endblock javascript %}

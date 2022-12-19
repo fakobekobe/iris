@@ -15,6 +15,7 @@ urlpatterns = [
     path('modifier-secteur', views.modifier_secteur, name='modifier_secteur'),
     path('supprimer-secteur/<str:id>', views.supprimer_secteur, name='supprimer_secteur'),
     path('details-secteur', views.details_secteur, name='details_secteur'),
+    path('details-activite', views.details_activite, name='details_activite'),
 
     # Url Type de Parent
     path('ajouter-typeparent', views.ajouter_typeparent, name='ajouter_typeparent'),
@@ -71,7 +72,7 @@ urlpatterns = [
     path('modifier-montantfinancement/', views.modifier_montantfinancement, name='modifier_montantfinancement'),
     path('supprimer-montantfinancement/<str:id>', views.supprimer_montantfinancement, name='supprimer_montantfinancement'),
 
-    # Url QUantiteGroupement
+    # Url QuantiteGroupement
     path('ajouter-quantitegroupement/', views.ajouter_quantitegroupement, name='ajouter_quantitegroupement'),
     path('modifier-quantitegroupement/', views.modifier_quantitegroupement, name='modifier_quantitegroupement'),
     path('supprimer-quantitegroupement/<str:id>', views.supprimer_quantitegroupement, name='supprimer_quantitegroupement'),

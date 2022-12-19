@@ -7,6 +7,9 @@ from vieprofessionnelle.models import *
 class Parametre(models.Model):
     monnaie = models.CharField(max_length=10, null=True, blank=True, default="")
     id_chapeau = models.CharField(max_length=10, null=True, blank=True, default="")
+    id_secteuragricole = models.IntegerField(default=0)
+    id_secteurfemmeactive = models.IntegerField(default=0)
+    id_secteurinformel = models.IntegerField(default=0)
 
 # Liste des variables Globales
 LISTE_MODELS = {

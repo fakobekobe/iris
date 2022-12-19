@@ -333,6 +333,32 @@ def details_secteur(request):
     return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
 # Fin de la Gestion du secteur -------------------------------------
 
+@login_required
+@permission_required('vieprofessionnelle.add_secteur', raise_exception=True)
+def details_activite(request):
+
+    if request.method == "GET":
+        id = request.GET.get('id', None)
+        ajax_activite = []
+
+        if id:
+            _parametre = Parametre.objects.first()
+
+            if int(id) == _parametre.id_secteuragricole:
+                ajax_activite = SecteurAgricole.objects.order_by('nom')
+            elif int(id) == _parametre.id_secteurfemmeactive:
+                ajax_activite = SecteurFemmeActive.objects.order_by('nom')
+            else:
+                ajax_activite = SecteurInformel.objects.order_by('nom')
+
+            if ajax_activite:
+                data = [{'id': activite.id, 'nom': activite.nom} for activite in ajax_activite]
+
+                return JsonResponse({'data': data}, status=200)
+
+    return HttpResponseRedirect(reverse('vieprofessionnelle:vieprofessionnelle'))
+# Fin de la Gestion du secteur -------------------------------------
+
 # Gestion du type de parent -----------------------------------------------
 @login_required
 @permission_required('vieprofessionnelle.add_typeparent', raise_exception=True)
