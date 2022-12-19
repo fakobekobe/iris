@@ -1,5 +1,6 @@
 {% extends 'utilisateur/base.html' %}
 {% load static %}
+{% load presentation_filtre %}
 {% block titre %}{{titre}}{% endblock %}
 
 {% block tableau_de_bord %}
@@ -220,7 +221,7 @@
                                                     <select name="montantfinancement" id="select_montantfinancement" class="form-control" required>
                                                         <option value="" selected>--- Sélectionnez un montant de financement ---</option>
                                                         {% for montantfinancement in montantfinancements %}
-                                                        <option value="{{montantfinancement.id}}" >{{montantfinancement.montant}}</option>
+                                                        <option value="{{montantfinancement.id}}" >{{montantfinancement.montant|separateur_millier}}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>

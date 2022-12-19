@@ -1,4 +1,5 @@
 {% extends 'presentation/secteurfemmeactive/secteurfemmeactive.html' %}
+{% load presentation_filtre %}
 
 {% block id-membre %}
 <input class="form-control" type="text" name="id" value="{{membre_actif.id}}" hidden>
@@ -134,9 +135,9 @@
         <option value="" selected>--- Sélectionnez un montant de financement ---</option>
         {% for montantfinancement in montantfinancements %}
         {% if montantfinancement.id == membre_secteurfemmeactive.montantfinancement.id %}
-        <option value="{{montantfinancement.id}}" selected>{{montantfinancement.montant}}</option>
+        <option value="{{montantfinancement.id}}" selected>{{montantfinancement.montant|separateur_millier}}</option>
         {% else %}
-        <option value="{{montantfinancement.id}}">{{montantfinancement.montant}}</option>
+        <option value="{{montantfinancement.id}}">{{montantfinancement.montant|separateur_millier}}</option>
         {% endif %}
         {% endfor %}
     </select>

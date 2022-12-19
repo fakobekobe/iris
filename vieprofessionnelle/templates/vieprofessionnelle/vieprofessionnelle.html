@@ -1,5 +1,6 @@
 {% extends 'utilisateur/base.html' %}
 {% load static %}
+{% load presentation_filtre %}
 {% block titre %}{{titre}}{% endblock %}
 
 {% block tableau_de_bord %}
@@ -916,7 +917,7 @@
                             {% for montantfinancement in montantfinancements %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td>{{montantfinancement.montant}}</td>
+                                <td>{{montantfinancement.montant|separateur_millier}}</td>
                                 <td class="text-center">
                                     <a class="btn btn-outline-warning btn-sm" title="Modifier" data-toggle="modal" data-target="#montantfinancementmodifierModal{{montantfinancement.id}}" data-backdrop="static"><i class="fas fa-pen"></i></a>
                                     <button type="button" title="Supprimer" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#montantfinancementsupprimermodal{{montantfinancement.id}}" data-backdrop="static"><i class="fas fa-trash-alt"></i></button>
