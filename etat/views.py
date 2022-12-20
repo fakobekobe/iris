@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from django.utils.html import strip_tags
 from django.db.models import F, Q
+from utilisateur.models import *
 
 # Les constatntes et les variables globales
 _active_onglet = ""  # Variable globale pour l'activation des onglets
@@ -74,14 +75,73 @@ def fiche_identification(request):
 
         # Les variables
         membres = []
-        # On débute par les deux critaires
-        if identifiant or nomprenoms:
-            if identifiant:
-                membres = Membre.objects.filter(identifiant__iexact=identifiant)
-            if nomprenoms and not membres:
-                membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
-        else:
-            pass
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or secteur or activite or \
+                district or region or departement or \
+                ville or commune or quartier or marche or \
+                nationalite or niveau or niveauscolaire or utilisateur:
+
+            # On débute par les deux critaires
+            if identifiant or nomprenoms:
+                if identifiant:
+                    membres = Membre.objects.filter(identifiant__iexact=identifiant)
+                if nomprenoms and not membres:
+                    membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
+            else:
+                # On traite d'abord le secteur d'activité ----------------
+                if typesecteur:  # On traite le type de secteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        # On vérifie si le typesecteur correspond au
+                        # paramètre id secteur agricole puis on récupère
+                        # tous les membres qui ont une valeur non nul pour le secteuragricole
+                        membres = Membre.objects.filter(secteuragricole=F('secteuragricole'), actif=True)
+                    elif int(
+                            typesecteur) == _parametre.id_secteurfemmeactive:  # On vérifie si le typesecteur correspond au paramètre id secteur femme active puis on récupère tous les membres qui ont une valeur non nul pour le secteurfemmeactive
+                        membres = Membre.objects.filter(secteurfemmeactive=F('secteurfemmeactive'), actif=True)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        # On vérifie si le typesecteur correspond au paramètre
+                        # id secteur informel puis on récupère tous les membres
+                        # qui ont une valeur non nul pour le secteurinformel
+                        membres = Membre.objects.filter(secteurinformel=F('secteurinformel'), actif=True)
+                if secteur and membres:  # On traite le secteur
+                    membres = membres.filter(secteurs=secteur)
+                if activite and membres:  # On traite le nom des coopératives et groupements
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        membres = membres.filter(secteuragricole=activite)
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        membres = membres.filter(secteurfemmeactive=activite)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        membres = membres.filter(secteurinformel=activite)
+
+                # On traite ensuite la localisation ---------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if district:
+                    membres = membres.filter(quartier__commune__ville__departement__region__district=district)
+                if region and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region=region)
+                if departement and membres:
+                    membres = membres.filter(quartier__commune__ville__departement=departement)
+                if ville and membres:
+                    membres = membres.filter(quartier__commune__ville=ville)
+                if commune and membres:
+                    membres = membres.filter(quartier__commune=commune)
+                if quartier and membres:
+                    membres = membres.filter(quartier=quartier)
+                if marche and membres:
+                    #  Le marché concerne le secteurfemmeactive
+                    membres = membres.filter(
+                        secteurfemmeactive=F('secteurfemmeactive'),
+                        secteurfemmeactive__marche=marche)
+
+        else:  # On récupère tous les membres actif
+            membres = Membre.objects.filter(actif=True)
 
         print(membres)
 
