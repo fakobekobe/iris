@@ -27,181 +27,343 @@
   <div class="tab-content" id="myTabContent">
 
     <!-- CONTENU Membre -->
-    <div class="tab-pane fade {{ active_membre|last }}" id="membre" role="tabpanel" aria-labelledby="membre-tab">
-      <div class="row m-0 p-0 pt-3">
-        <div class="col">
-          <div class="card">
-            <div class="card-header text-white bg-warning text-center" style="padding:0px;">SECTEUR D'ACTIVITE</div>
-            <div class="card-body">
+    <div class="tab-pane fade {{ active_membre|last }} pb-3" id="membre" role="tabpanel" aria-labelledby="membre-tab">
+      <form id="form_membre" method="post" action="#" autocomplete="off">
+        {% csrf_token %}
+        <div class="row m-0 p-0 pt-3">
 
-              <!-- Type Secteur -->
-              <div class="row mb-2">
-                <select name="typesecteur" id="typesecteur" class="form-control">
-                  <option value="" selected>--- Type de secteur d'activité ---</option>
-                  {% for typesecteur in typesecteurs %}
-                  <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
-                  {% endfor %}
-                </select>
+          <!-- SECTEUR D'ACTIVITE -->
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-white bg-warning text-center" style="padding:0px;">SECTEUR D'ACTIVITE</div>
+              <div class="card-body">
+
+                <!-- Type Secteur -->
+                <div class="row mb-2">
+                  <select name="typesecteur" id="typesecteur" class="form-control">
+                    <option value="" selected>--- Type de secteur d'activité ---</option>
+                    {% for typesecteur in typesecteurs %}
+                    <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Secteur -->
+                <div class="row mb-2">
+                  <select name="secteur" id="secteur" class="form-control">
+                    <option value="" selected>--- Sélectionnez un secteur ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Activité -->
+                <div class="row mb-2">
+                  <select name="activite" id="activite" class="form-control">
+                    <option value="" selected>--- Sélectionnez le nom  ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
               </div>
-              <!-- -->
+            </div>
+          </div>
+          <!-- -->
 
-              <!-- Secteur -->
-              <div class="row mb-2">
-                <select name="secteur" id="secteur" class="form-control">
-                  <option value="" selected>--- Sélectionnez un secteur ---</option>
-                </select>
+          <!-- LOCALISATION -->
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-white bg-primary text-center" style="padding:0px;">LOCALISATION</div>
+              <div class="card-body">
+
+                <!-- District -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_district"><i class="fas fa-igloo"></i></label>
+                  </div>
+                  <select name="select_district" id="select_district" class="form-control">
+                    <option value="" selected>--- Sélectionnez un district ---</option>
+                    {% for district in districts %}
+                    <option value="{{district.id}}" >{{district.libelle}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Region -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_region"><i class="fas fa-home"></i></label>
+                  </div>
+                  <select name="select_region" id="select_region" class="form-control">
+                    <option value="" selected>--- Sélectionnez une région ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Departement -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_departement"><i class="fas fa-building"></i></label>
+                  </div>
+                  <select name="select_departement" id="select_departement" class="form-control">
+                    <option value="" selected>--- Sélectionnez un département ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Ville -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_ville"><i class="fas fa-city"></i></label>
+                  </div>
+                  <select name="select_ville" id="select_ville" class="form-control">
+                    <option value="" selected>--- Sélectionnez une ville ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Commune -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_commune"><i class="fas fa-warehouse"></i></label>
+                  </div>
+                  <select name="select_commune" id="select_commune" class="form-control">
+                    <option value="" selected>--- Sélectionnez une commune ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Quartier -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
+                  </div>
+                  <select name="select_quartier" id="select_quartier" class="form-control">
+                    <option value="" selected>--- Sélectionnez un quartier ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Marche -->
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_marche"><i class="fas fa-store-alt"></i></label>
+                  </div>
+                  <select name="select_marche" id="select_marche" class="form-control">
+                    <option value="" selected>--- Sélectionnez un marché ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
               </div>
-              <!-- -->
+            </div>
+          </div>
+          <!-- -->
 
-              <!-- Activité -->
-              <div class="row mb-2">
-                <select name="activite" id="activite" class="form-control">
-                  <option value="" selected>--- Sélectionnez le nom  ---</option>
-                </select>
+          <!-- CRITAIRES -->
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-white bg-info text-center" style="padding:0px;">CRITAIRES</div>
+              <div class="card-body">
+
+                <!-- Identifiant -->
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="identifiant" class="form-control" placeholder="identifiant Ex: 0010020040007">
+                  </div>
+                </div>
+                <!-- -->
+
+                <!-- Nom et prénoms -->
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="nomprenoms" class="form-control" placeholder="Nom et prénoms">
+                  </div>
+                </div>
+                <!-- -->
+
+                <!-- Nationalité -->
+                <div class="row mb-2">
+                  <select name="nationalite" id="nationalite" class="form-control">
+                    <option value="" selected>--- Sélectionnez une nationalité ---</option>
+                    {% for nationalite in nationalites %}
+                    <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Niveau -->
+                <div class="row mb-2">
+                  <select name="niveau" id="niveau" class="form-control">
+                    <option value="" selected>--- Sélectionnez un niveau ---</option>
+                    {% for niveau in niveaux %}
+                    <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Niveau scolaire -->
+                <div class="row mb-2">
+                  <select name="niveauscolaire" id="niveauscolaire" class="form-control">
+                    <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Utilisateur -->
+                <div class="row mb-2">
+                  <select name="utilisateur" class="form-control">
+                    <option value="" selected>--- Sélectionnez un utilisateur ---</option>
+                    {% for utilisateur in utilisateurs %}
+                    <option value="{{utilisateur.id}}" >{{utilisateur.username|upper}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
               </div>
-              <!-- -->
+            </div>
+          </div>
+          <!-- -->
 
+        </div>
+        <hr />
+        <div class="row m-0 p-0 mb-3">
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-copy text-success"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-success">
+                <h5>
+                  <button id="btn_fiche_identification" class="a_decoration">Fiche d'identification</button>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-id-badge text-warning"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-warning">
+                <h5>
+                  <button id="btn_liste_badge" class="a_decoration">Liste n°badge</button>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-baby text-primary"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-primary">
+                <h5>
+                  <button id="btn_total_enfant" class="a_decoration">Nombre Total d'enfants</button>
+                </h5>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-header text-white bg-primary text-center" style="padding:0px;">LOCALISATION</div>
-            <div class="card-body">
-
-              <!-- District -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_district"><i class="fas fa-igloo"></i></label>
-                </div>
-                <select name="select_district" id="select_district" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez un district ---</option>
-                  {% for district in districts %}
-                  <option value="{{district.id}}" >{{district.libelle}}</option>
-                  {% endfor %}
-                </select>
+        <div class="row m-0 p-0 mb-3">
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-baby-carriage text-info"></i>
+                </h1>
               </div>
-              <!-- -->
-
-              <!-- Region -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_region"><i class="fas fa-home"></i></label>
-                </div>
-                <select name="select_region" id="select_region" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez une région ---</option>
-                </select>
+              <div class="card-body text-center bg-info">
+                <h5>
+                  <button id="btn_nouvelle_naissance" class="a_decoration">Nouvelles naissances</button>
+                </h5>
               </div>
-              <!-- -->
-
-              <!-- Departement -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_departement"><i class="fas fa-building"></i></label>
-                </div>
-                <select name="select_departement" id="select_departement" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez un département ---</option>
-                </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-user-alt-slash text-danger"></i>
+                </h1>
               </div>
-              <!-- -->
-
-              <!-- Ville -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_ville"><i class="fas fa-city"></i></label>
-                </div>
-                <select name="select_ville" id="select_ville" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez une ville ---</option>
-                </select>
+              <div class="card-body text-center bg-danger">
+                <h5>
+                  <button id="btn_total_deces" class="a_decoration">Total de décès</button>
+                </h5>
               </div>
-              <!-- -->
-
-              <!-- Commune -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_commune"><i class="fas fa-warehouse"></i></label>
-                </div>
-                <select name="select_commune" id="select_commune" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez une commune ---</option>
-                </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-baby"></i>
+                </h1>
               </div>
-              <!-- -->
-
-              <!-- Quartier -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_quartier"><i class="fas fa-hotel"></i></label>
-                </div>
-                <select name="select_quartier" id="select_quartier" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez un quartier ---</option>
-                </select>
+              <div class="card-body text-center bg-light">
+                <h5>
+                  <button id="btn_total_deces_enfant" class="a_decoration">Total de décès enfants</button>
+                </h5>
               </div>
-              <!-- -->
-
-              <!-- Marche -->
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="select_marche"><i class="fas fa-store-alt"></i></label>
-                </div>
-                <select name="select_marche" id="select_marche" class="form-control" required>
-                  <option value="" selected>--- Sélectionnez un marché ---</option>
-                </select>
-              </div>
-              <!-- -->
-
             </div>
           </div>
         </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-header text-white bg-info text-center" style="padding:0px;">CRITAIRES</div>
-            <div class="card-body">
-
-              <!-- Identifiant -->
-              <div class="row mb-2">
-                <div class="col">
-                  <input type="text" name="identifiant" class="form-control" placeholder="identifiant Ex: 0010020040007">
-                </div>
+        <div class="row m-0 p-0 mb-3">
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-user-nurse text-secondary"></i>
+                </h1>
               </div>
-              <!-- -->
-
-              <!-- Nationalité -->
-              <div class="row mb-2">
-                <select name="nationalite" id="nationalite" class="form-control">
-                  <option value="" selected>--- Sélectionnez une nationalité ---</option>
-                  {% for nationalite in nationalites %}
-                  <option value="{{nationalite.id}}" >{{nationalite.nationalite|capfirst}}</option>
-                  {% endfor %}
-                </select>
+              <div class="card-body text-center bg-secondary">
+                <h5>
+                  <button id="btn_total_accident" class="a_decoration">Total d'accidents</button>
+                </h5>
               </div>
-              <!-- -->
-
-              <!-- Niveau -->
-              <div class="row mb-2">
-                <select name="niveau" id="niveau" class="form-control">
-                  <option value="" selected>--- Sélectionnez un niveau ---</option>
-                  {% for niveau in niveaux %}
-                  <option value="{{niveau.id}}" >{{niveau.niveau|upper}}</option>
-                  {% endfor %}
-                </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-user-ninja text-primary"></i>
+                </h1>
               </div>
-              <!-- -->
-
-              <!-- Niveau scolaire -->
-              <div class="row mb-2">
-                <select name="niveauscolaire" id="niveauscolaire" class="form-control">
-                  <option value="" selected>--- Sélectionnez un niveau scolaire ---</option>
-                </select>
+              <div class="card-body text-center bg-primary">
+                <h5>
+                  <button id="btn_total_accident_enfant" class="a_decoration">Total d'accidents d'enfants</button>
+                </h5>
               </div>
-              <!-- -->
-
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-baby text-success"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-success">
+                <h5>
+                  <button href="#" class="a_decoration">Total de décès enfants</button>
+                </h5>
+              </div>
             </div>
           </div>
         </div>
-
-      </div>
+      </form>
     </div>
     <!-- FIN DE CONTENU Membre -->
 

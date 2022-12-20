@@ -97,6 +97,22 @@ nav div ul li a{
     display: block;
 }
 
+.a_decoration{
+    text-decoration:none;
+    background:none;
+    border: none;
+    color: white;
+    text-shadow: 2px 2px black;
+    transition: 0.5s;
+    transition-property: text-shadow, color;
+}
+
+.a_decoration:hover{
+    text-decoration:none;
+    color: yellow;
+    text-shadow: -2px 2px black;
+}
+
 /*  Fin Menu nav */
 
 /* Le contenu */

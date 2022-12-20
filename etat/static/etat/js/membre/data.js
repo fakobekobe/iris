@@ -255,6 +255,63 @@ $(document).ready(function(){
 
         });
 
+
+// ******************* GESTION DES LISTES DEROULANTES *****************************
+
+    var niveau = $('select[name=niveau]');
+    var niveauscolaire = $('select[name=niveauscolaire]');
+
+    // Traitement AJAX du niveau
+    niveau.change(function(){
+            // On utilise ajax pour récupérer les niveaux
+            $.ajax({
+                url: "/presentation/details-niveauscolaire", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du niveau scolaire
+                    niveauscolaire.html('');
+                    niveauscolaire.append("<option value='' selected>--- Selectionnez un niveau scolaire ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        niveauscolaire.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+        });
+
+// ------------ CHARGEMENT DES DONNEES DU FORMULAIRE DES ETATS --------------------
+
+var form_membre = $('#form_membre');
+var btn_fiche_identification = $('#btn_fiche_identification');
+    btn_fiche_identification.click(function(e){
+        e.preventDefault();
+        // On instancie un objet formulaire pour l'envoi des champs du formulaire
+        var formData = new FormData(form_membre[0]);
+
+        // On utilise ajax pour transmettre les données
+        $.ajax({
+              url: "/etat/fiche-identification", // On ajoute l'url absolue en commençant par la racine
+              type: 'POST',
+              data: formData,
+              success: function(data){
+                    alert(data.data);
+              },
+              statusCode: {
+                 404: function(data){
+                     alert('Veuillez réessayer car une erreur est survenue.');
+                 },
+              },
+              cache: false,
+              contentType: false,
+              processData: false,
+        });
+    });
+
+
+
 // FIN ****************************************************************************
 
 });
