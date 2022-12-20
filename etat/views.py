@@ -122,7 +122,7 @@ def fiche_identification(request):
                     # on continue avec les membres existants
                     membres = Membre.objects.filter(actif=True)
 
-                if district:
+                if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region=region)
@@ -139,6 +139,22 @@ def fiche_identification(request):
                     membres = membres.filter(
                         secteurfemmeactive=F('secteurfemmeactive'),
                         secteurfemmeactive__marche=marche)
+
+                # On traite enfin les derniers critaires ------------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if nationalite and membres:
+                    membres = membres.filter(nationalite=nationalite)
+                if niveau and membres:
+                    membres = membres.filter(niveauscolaire__niveau=niveau)
+                if niveauscolaire and membres:
+                    membres = membres.filter(niveauscolaire=niveauscolaire)
+                if utilisateur and membres:
+                    membres = membres.filter(utilisateur=utilisateur)
 
         else:  # On récupère tous les membres actif
             membres = Membre.objects.filter(actif=True)
