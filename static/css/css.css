@@ -113,6 +113,14 @@ nav div ul li a{
     text-shadow: -2px 2px black;
 }
 
+.scrollery{
+    overflow-y: scroll;
+}
+
+.scrollerx{
+    overflow-x: scroll;
+}
+
 /*  Fin Menu nav */
 
 /* Le contenu */

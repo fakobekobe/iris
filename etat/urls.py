@@ -7,7 +7,7 @@ urlpatterns = [
 
     # Url des bouttons
     path('fiche-identification', views.fiche_identification, name='fiche_identification'),
-    #path('modifier-typepiece', views.modifier_typepiece, name = 'modifier_typepiece'),
-    #path('supprimer-typepiece/<str:id>', views.supprimer_typepiece, name = 'supprimer_typepiece'),
+    path('retour-etat/<str:id>', views.retour_etat, name='retour_etat'),
+    path('liste-badge', views.liste_badge, name='liste_badge'),
 
 ]
