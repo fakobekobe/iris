@@ -9,5 +9,6 @@ urlpatterns = [
     path('fiche-identification', views.fiche_identification, name='fiche_identification'),
     path('retour-etat/<str:id>', views.retour_etat, name='retour_etat'),
     path('liste-badge', views.liste_badge, name='liste_badge'),
+    path('total-enfants', views.total_enfants, name='total_enfants'),
 
 ]
