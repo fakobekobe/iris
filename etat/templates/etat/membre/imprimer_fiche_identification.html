@@ -1,0 +1,689 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% load presentation_filtre %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<!-- page a imprimer -->
+<div id="pageImprimer" style="background:white;">
+
+    <!-- On parcourt la liste des membres  -->
+    {% for membre in imembres %}
+    <!-- On vérifie le type de secteur d'activité  -->
+    {% if membre.secteuragricole %}
+    <!-- On affiche les membres du secteur agricole  -->
+
+    <!-- Entête -->
+    <div class="row mb-3">
+        <!-- -->
+        <div class="form-row" style="margin:0px;padding:0px;">
+            <div class="col text-center ml-3">
+                <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:160px;" />
+                <h5 style="text-decoration:underline;">
+                    FICHE D'IDENTIFICATION SECTEUR AGRICOLE
+                </h5>
+                <img src="{{membre.photo.url}}" alt="{{membre.photo.name}}" style="width:150px;height:200px; border:solid 1px black;" />
+            </div>
+            <div class="col ml-3" >
+                <div style="border: 1px double black; padding-left:5px;  padding-right:100px;">
+                    <!-- Identifiant -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Identifiant :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:2}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:3}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:4}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:5}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:6}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:7}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:8}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:9}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:10}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:11}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:12}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                    <!-- Région -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Région :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:2}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Date :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'d'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'d'|liste:1}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'m'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'m'|liste:1}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:2}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:3}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+                </div>
+                <div>
+                    <!-- Chapeau -->
+                    <div class="mt-3">
+                        <table>
+                            <tr>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px; text-align:center">
+                                    <strong>Chapeau</strong>
+                                </td>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.cooperative.chapeau.chapeau}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" style="border:1px solid black; padding:5px 10px 0 10px; text-align:center">
+                                    <strong>Président(e)</strong>
+                                </td>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.cooperative.chapeau.nom}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.cooperative.chapeau.contact}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                </div>
+            </div>
+        </div>
+        <!-- -->
+    </div>
+    <!-- -->
+
+    <!-- membre -->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <h5 style="text-decoration:underline;">
+                    Membre :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:75%; position:relative; top:-20px;" />
+            <div class="mb-2">
+                Nom : <strong>{{membre.nom}}</strong>
+            </div>
+            {% if membre.sexe.code == 'F' %}
+            <div class="mb-2">
+                Nom de jeune fille : <strong>{{membre.nomjeunefille}}</strong>
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                Prénoms : <strong>{{membre.prenoms}}</strong>
+            </div>
+            <div class="mb-2">
+                Date et lieu de naissance : Le <strong>{{membre.date_naissance|date:'d/m/Y'}}</strong> à <strong>{{membre.lieunaissance.libelle|upper}}</strong>
+            </div>
+            <div class="mb-2">
+                Sexe : <strong>{{membre.sexe.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Type de pièce : <strong>{{membre.typepiece.libelle}} ({{membre.typepiece.type}})</strong>
+            </div>
+            <div class="mb-2">
+                N°de la pièce : <strong>{{membre.numeropiece}}</strong>
+            </div>
+            <div class="mb-2">
+                Nationalité : <strong>{{membre.nationalite.nationalite}}</strong>
+            </div>
+            <div class="mb-2">
+                Contact : <strong>{{membre.contact}}</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Statut matrimonial-->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <h5 style="text-decoration:underline;">
+                    Statut matrimonial :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:65%; position:relative; top:-20px; left:60px;" />
+            <div class="mb-2">
+                Statut : <strong>{{membre.situationmatrimoniale.situation}}</strong>
+            </div>
+            {% if membre.sexe.code == 'M' %}
+            <div class="mb-2">
+                Nombre de femmes : <strong>{{membre.nombrefemme}}</strong>
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                Nombre d'enfants : <strong>{{membre.nombreenfant}}</strong>
+            </div>
+            <div class="mb-2">
+                Lieu d'habitation : <strong>{{membre.lieu_habitation}}</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Vie coopérative-->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div class="mb-3">
+                <h5 style="text-decoration:underline;">
+                    Vie coopérative :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
+            <div class="mb-2">
+                Nom de la coopérative : <strong>{{membre.secteuragricole.nom}}</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    Date d'adhésion: <strong>{{membre.cooperative.date_adhesion|date:'d/m/Y'}}</strong>
+                </div>
+                <div class="col">
+                    N°de carte de membre : <strong>{{membre.cooperative.numero_carte}}</strong>
+                </div>
+            </div>
+            <div class="mb-2">
+                Spéculation agricole : <strong>{{membre.secteuragricole.speculation_agricole}} Kg</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    Superficie en culture: <strong>{{membre.secteuragricole.superficie_en_culture}} m<sup>2</sup></strong>
+                </div>
+                <div class="col">
+                    Superficie en production : <strong>{{membre.secteuragricole.superficie_en_production}} m<sup>2</sup></strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Niveau scolaire -->
+    <div class="row" style="font-size:1.1em; margin-bottom:45px;">
+        <div class="col-md-11 offset-1">
+            <div class="mb-3">
+                <h5 style="text-decoration:underline;">
+                    Niveau scolaire :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
+            <div class="row mb-3">
+                <div class="col">
+                    Niveau: <strong>{{membre.niveauscolaire.niveau.niveau}}</strong>
+                </div>
+                <div class="col">
+                    Classe : <strong>{{membre.niveauscolaire.classe}}</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong style="text-decoration:underline;">Signature</strong>
+                </div>
+                <div class="col">
+                    <strong style="text-decoration:underline; display:block">Agent identificateur</strong>
+                    <strong>{{membre.utilisateur.get_full_name|default:membre.utilisateur}}</strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Je soussigné-->
+    <div class="row" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong>Je soussigné(e),</strong> <strong>{{membre.nom_prenoms}}</strong>,
+            </div>
+            <div>
+                <strong>reconnais avoir donné mon accord pour l'utilisation de mes données personnelles dans
+                le cadre de ce projet de l'entreprise CHLOHE SAS.
+                </strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestion de l'espace pour l'impression-->
+    {% if membre.sexe.code == 'M' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+    {% if membre.sexe.code == 'F' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+
+    {% elif membre.groupement %}
+    <!-- On affiche les membres du secteur femme active  -->
+
+    <!-- Entête -->
+    <div class="row mb-3">
+        <!-- -->
+        <div class="form-row" style="margin:0px;padding:0px;">
+            <div class="col text-center ml-3">
+                <img src="{% static 'images/logo_chlohe.jpg' %}" alt="Logo CHLOHE SAS" style="width:150px;height:160px;" />
+                <h6 style="text-decoration:underline; font-size:1.1em;">
+                    FICHE D'IDENTIFICATION SECTEUR FEMME ACTIVE
+                </h6>
+                <img src="{{membre.photo.url}}" alt="{{membre.photo.name}}" style="width:150px;height:200px; border:solid 1px black;" />
+            </div>
+            <div class="col ml-3" >
+                <div style="border: 1px double black; padding-left:5px;  padding-right:100px;">
+                    <!-- Identifiant -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Identifiant :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:2}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:3}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:4}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:5}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:6}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:7}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:8}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:9}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:10}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:11}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.identifiant|liste:12}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                    <!-- Région -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Région :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.get_region|liste:2}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label style="text-decoration:underline;">
+                            Date :
+                        </label>
+                        <table>
+                            <tr>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'d'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'d'|liste:1}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'m'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'m'|liste:1}}
+                                </td>
+
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:0}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:1}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:1px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:2}}
+                                </td>
+                                <td style="border-left:1px solid black; border-right:2px solid black; border-bottom:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.dateenre|date:'Y'|liste:3}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+                </div>
+                <div>
+                    <!-- Chapeau -->
+                    <div class="mt-3">
+                        <table>
+                            <tr>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px; text-align:center">
+                                    <strong>Chapeau</strong>
+                                </td>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.secteurfemmeactive.chapeau.chapeau}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" style="border:1px solid black; padding:5px 10px 0 10px; text-align:center">
+                                    <strong>Président(e)</strong>
+                                </td>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.secteurfemmeactive.chapeau.nom}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; padding:5px 10px 0 10px;">
+                                    {{membre.secteurfemmeactive.chapeau.contact}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- -->
+
+                </div>
+            </div>
+        </div>
+        <!-- -->
+    </div>
+    <!-- -->
+
+    <!-- membre -->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <h5 style="text-decoration:underline;">
+                    Membre :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:75%; position:relative; top:-20px;" />
+            <div class="mb-2">
+                Nom : <strong>{{membre.nom}}</strong>
+            </div>
+            {% if membre.sexe.code == 'F' %}
+            <div class="mb-2">
+                Nom de jeune fille : <strong>{{membre.nomjeunefille}}</strong>
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                Prénoms : <strong>{{membre.prenoms}}</strong>
+            </div>
+            <div class="mb-2">
+                Date et lieu de naissance : Le <strong>{{membre.date_naissance|date:'d/m/Y'}}</strong> à <strong>{{membre.lieunaissance.libelle|upper}}</strong>
+            </div>
+            <div class="mb-2">
+                Sexe : <strong>{{membre.sexe.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Type de pièce : <strong>{{membre.typepiece.libelle}} ({{membre.typepiece.type}})</strong>
+            </div>
+            <div class="mb-2">
+                N°de la pièce : <strong>{{membre.numeropiece}}</strong>
+            </div>
+            <div class="mb-2">
+                Nationalité : <strong>{{membre.nationalite.nationalite}}</strong>
+            </div>
+            <div class="mb-2">
+                Contact : <strong>{{membre.contact}}</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Statut matrimonial-->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <h5 style="text-decoration:underline;">
+                    Statut matrimonial :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:65%; position:relative; top:-20px; left:60px;" />
+            <div class="mb-2">
+                Statut : <strong>{{membre.situationmatrimoniale.situation}}</strong>
+            </div>
+            <div class="mb-2">
+                Nombre d'enfants : <strong>{{membre.nombreenfant}}</strong>
+            </div>
+            <div class="mb-2">
+                Lieu d'habitation : <strong>{{membre.lieu_habitation}}</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Groupement -->
+    <div class="row mb-3" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div class="mb-3">
+                <h5 style="text-decoration:underline;">
+                    Vie professionnelle :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
+            <div class="mb-2">
+                Nom du marché : <strong>{{membre.groupement.marche.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Commune d'implantation : <strong>{{membre.groupement.marche.quartier.commune.libelle}}</strong>
+            </div>
+            <div class="mb-2">
+                Secteur d'activités : <strong>{{membre.secteuractivite.secteur}}</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    Date de début d'activités: <strong>{{membre.secteurfemmeactive.date_adhesion|date:'d/m/Y'}}</strong>
+                </div>
+                <div class="col">
+                    N°de carte de membre : <strong>{{membre.secteurfemmeactive.numero_carte}}</strong>
+                </div>
+            </div>
+            <div class="mb-2">
+                Personne ressource : <strong>{{membre.secteurfemmeactive.personneressource}}</strong>
+            </div>
+            <div class="mb-2">
+                Contact de la personne ressource : <strong>{{membre.personneressource_contact}}</strong>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Niveau scolaire -->
+    <div class="row" style="font-size:1.1em; margin-bottom:20px;">
+        <div class="col-md-11 offset-1">
+            <div class="mb-3">
+                <h5 style="text-decoration:underline;">
+                    Niveau scolaire :
+                </h5>
+            </div>
+            <hr style="height:1px; background:black; width:70%; position:relative; top:-20px; left:40px;" />
+            <div class="row mb-3">
+                <div class="col">
+                    Niveau: <strong>{{membre.niveauscolaire.niveau.niveau}}</strong>
+                </div>
+                <div class="col">
+                    Classe : <strong>{{membre.niveauscolaire.classe}}</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong style="text-decoration:underline;">Signature</strong>
+                </div>
+                <div class="col">
+                    <strong style="text-decoration:underline; display:block">Agent identificateur</strong>
+                    <strong>{{membre.utilisateur.get_full_name|default:membre.utilisateur}}</strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- -->
+
+    <!-- Je soussigné-->
+    <div class="row" style="font-size:1.1em;">
+        <div class="col-md-11 offset-1">
+            <div>
+                <strong>Je soussigné(e),</strong> <strong>{{membre.nom_prenoms}}</strong>,
+            </div>
+            <div>
+                <strong>reconnais avoir donné mon accord pour l'utilisation de mes données personnelles dans
+                le cadre de ce projet de l'entreprise CHLOHE SAS.
+                </strong>
+            </div>
+        </div>
+    </div>
+    <!-- Gestion de l'espace pour l'impression-->
+    {% if membre.sexe.code == 'M' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+    {% if membre.sexe.code == 'F' %}
+    <div class="pb-2">
+        &nbsp;
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- On affiche les membres du secteur informel  -->
+
+    {% endif %}
+    {% endfor %}
+
+
+</div>
+<!-- -->
+
+<!-- boutton d'impression et de retour -->
+<div style="position:fixed;top:0px;right:0px;">
+    <a href="{% url 'presentation:retour_liste_membre' 1 %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Liste des membres</a>
+    <button id="imprimer" class="btn btn-primary">
+        <i class="fas fa-print"></i> Imprimer
+    </button>
+</div>
+<!-- -->
+{% endblock %}
+
+{% block javascript %}
+<script>
+        var imprimer = $('#imprimer');
+        imprimer.click(function(){
+            $('#pageImprimer').printThis();
+        });
+</script>
+{% endblock javascript %}

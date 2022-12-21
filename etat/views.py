@@ -75,6 +75,7 @@ def fiche_identification(request):
 
         # Les variables
         membres = []
+        imembres = []
         _parametre = Parametre.objects.first()
 
         # On vérifie si au moins une donnée existe
@@ -159,8 +160,61 @@ def fiche_identification(request):
         else:  # On récupère tous les membres actif
             membres = Membre.objects.filter(actif=True)
 
-        print(membres)
+        # On parcourt la liste des membres pour leur ajouter
+        # des propriétés pour l'impression selon le type de secteur
 
-        return JsonResponse({'data': 'ok'}, status=200)
+        for membre in membres:
+            if membre.secteuragricole_set.first():
+
+                membre.get_region = membre.get_region()
+                membre.secteuragricole = membre.secteuragricole_set.first()
+                membre.nombrefemme = membre.get_nombre_parent('Femme')
+                membre.nombreenfant = membre.get_nombre_parent('Enfant')
+                membre.lieu_habitation = membre.get_lieu_habitation()
+                try:
+                    document = Document.objects.get(membre=membre)
+                    membre.photo = document.get_photo_membre()
+                except Document.DoesNotExist:
+                    pass
+                try:
+                    membre.cooperative = MembreSecteurAgricole.objects.get(membre=membre,
+                                                                           secteuragricole=membre.secteuragricole)
+                except MembreSecteurAgricole.DoesNotExist:
+                    pass
+
+                # On ajoute le membre dans la liste à imprimer
+                imembres.append(membre)
+
+            elif membre.secteurfemmeactive_set.first():
+
+                membre.get_region = membre.get_region()
+                membre.groupement = membre.secteurfemmeactive_set.first()
+                membre.nombreenfant = membre.get_nombre_parent('Enfant')
+                membre.lieu_habitation = membre.get_lieu_habitation()
+                membre.secteuractivite = membre.secteurs.first()
+                try:
+                    document = Document.objects.get(membre=membre)
+                    membre.photo = document.get_photo_membre()
+                except Document.DoesNotExist:
+                    pass
+                try:
+                    membre.secteurfemmeactive = MembreSecteurFemmeActive.objects.get(membre=membre,
+                                                                                     secteurfemmeactive=membre.groupement)
+                    membre.personneressource_contact = membre.secteurfemmeactive.personneressource.get_personneressource_contact()
+                except MembreSecteurFemmeActive.DoesNotExist:
+                    pass
+
+                # On ajoute le membre dans la liste à imprimer
+                imembres.append(membre)
+
+            else:
+                print('secteurinformel')
+
+        context = {
+            'title': "Fiche d'identification",
+            'imembres': imembres,
+        }
+
+        return render(request, 'etat/membre/imprimer_fiche_identification.html', context)
 
     return HttpResponseRedirect(reverse('etat:etat'))
