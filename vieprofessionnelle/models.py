@@ -104,6 +104,10 @@ class Membre(models.Model):
     def get_nombre_parent(self, libelle):
         return self.parents.filter(typeparent__libelle=libelle).count()
 
+    def get_nouvelle_naissance(self, libelle, datelimite):
+        return self.parents.filter(typeparent__libelle=libelle).\
+            filter(datenaissance__year__gte=datelimite).count()
+
     def get_lieu_habitation(self):
         return f"{self.quartier.commune.ville.departement.region.district.libelle}/" \
                f"{self.quartier.commune.ville.departement.region.libelle}/" \

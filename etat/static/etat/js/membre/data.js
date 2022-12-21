@@ -288,6 +288,8 @@ var form_membre = $('#form_membre');
 var btn_fiche_identification = $('#btn_fiche_identification');
 var btn_liste_badge = $('#btn_liste_badge');
 var btn_total_enfant = $('#btn_total_enfant');
+var btn_nouvelle_naissance = $('#btn_nouvelle_naissance');
+
     btn_fiche_identification.click(function(e){
         e.preventDefault();
         form_membre.attr('action','/etat/fiche-identification');
@@ -322,6 +324,11 @@ var btn_total_enfant = $('#btn_total_enfant');
     btn_total_enfant.click(function(e){
         e.preventDefault();
         form_membre.attr('action','/etat/total-enfants');
+        form_membre.submit();
+    });
+    btn_nouvelle_naissance.click(function(e){
+        e.preventDefault();
+        form_membre.attr('action','/etat/nouvelle-naissance');
         form_membre.submit();
     });
 

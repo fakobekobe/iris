@@ -5,7 +5,7 @@
 {% block tableau_de_bord %}
 
 <div>
-    <h1 class="text-primary"><i class="fas fa-baby"></i> Nombre total d'enfants : <strong>{{total_enfants}}</strong></h1>
+    <h1 class="text-primary"><i class="fas fa-baby-carriage"></i> Total Nouvelles naissances : <strong>{{total_enfants}}</strong></h1>
     <hr />
     <div class="row">
         <div class="col-md-12">
@@ -17,7 +17,7 @@
                         <tr class="thead-light">
                             <th>N°</th>
                             <th>Nom et prénoms</th>
-                            <th>Nombre d'enfants</th>
+                            <th>Nouvelle naissance</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -25,7 +25,7 @@
                         <tr>
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>{{membre.nom_prenoms}}</td>
-                            <td class="text-center">{{membre.nombreenfant}}</td>
+                            <td class="text-center">{{membre.nouvellenaissance}}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
