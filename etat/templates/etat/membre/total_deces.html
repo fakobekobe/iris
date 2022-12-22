@@ -1,0 +1,52 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+
+<div>
+    <h1 class="text-primary"><i class="fas fa-user-alt-slash"></i> Total de décès : <strong>{{total}}</strong></h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Tableau de recherche -->
+            <div class="row mb-3 scrollerx">
+                <div class="col-md-12">
+                    <table class="table  table-bordered table-hover table-responsive-md" id="table_total_enfants">
+                        <thead class="text-center">
+                        <tr class="thead-light">
+                            <th>N°</th>
+                            <th>Nom et prénoms</th>
+                            <th>Décès</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for membre in imembres %}
+                        <tr>
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td>{{membre.nom_prenoms}}</td>
+                            <td class="text-center">{{membre.deces}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- -->
+
+        </div>
+    </div>
+
+</div>
+
+<!-- boutton d'impression et de retour -->
+<div style="position:fixed;top:50px;right:0px;">
+    <a href="{% url 'etat:retour_etat' 1 %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Retour</a>
+</div>
+<!-- -->
+
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'etat/js/membre/data.js' %}"></script>
+{% endblock javascript %}

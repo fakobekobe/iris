@@ -108,6 +108,27 @@ class Membre(models.Model):
         return self.parents.filter(typeparent__libelle=libelle).\
             filter(datenaissance__year__gte=datelimite).count()
 
+    def get_etat_sante(self, id_etat_sante):
+        """
+        Cette méthode retourne l'état de santé du membre selon le paramètre
+        :param id_etat_sante: id du type état de sansté du membre
+        :return: 1 si le type du membre existe sinon 0
+        """
+        return 1 if self.etatsante_set.filter(typeetatsante=id_etat_sante).last() else 0
+
+    def get_nombre_etat_parent(self, parent, id_etat_sante):
+        """
+        Cette méthode retourne le nombre d'état des parents
+        :param parent: le libellé du parent
+        :param id_etat_sante: id du type état de sansté du membre
+        :return:  0 ou le nombre de décédés
+        """
+        liste_parent = self.parents.filter(typeparent__libelle=parent)
+        total = 0
+        for parent in liste_parent:
+            total += 1 if parent.etatsante_set.filter(typeetatsante=id_etat_sante).last() else 0
+        return total
+
     def get_lieu_habitation(self):
         return f"{self.quartier.commune.ville.departement.region.district.libelle}/" \
                f"{self.quartier.commune.ville.departement.region.libelle}/" \
@@ -213,7 +234,6 @@ class Parent(models.Model):
     def __str__(self):
         return self.nomprenoms
 
-
 class TypeEtatSante(models.Model):
     libelle = models.CharField(max_length=250, verbose_name="Libellé", unique=True)
 
@@ -229,7 +249,7 @@ class EtatSante(models.Model):
     membre = models.ForeignKey(Membre, null=True, blank=True, default=None, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.typeetatsante + " le " + self.dateenre
+        return self.typeetatsante.libelle + " le " + self.dateenre
 
 
 class TypeDocument(models.Model):

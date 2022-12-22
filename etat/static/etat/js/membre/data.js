@@ -289,6 +289,10 @@ var btn_fiche_identification = $('#btn_fiche_identification');
 var btn_liste_badge = $('#btn_liste_badge');
 var btn_total_enfant = $('#btn_total_enfant');
 var btn_nouvelle_naissance = $('#btn_nouvelle_naissance');
+var btn_total_deces = $('#btn_total_deces');
+var btn_total_deces_enfant = $('#btn_total_deces_enfant');
+var btn_total_accident = $('#btn_total_accident');
+var btn_total_accident_enfant = $('#btn_total_accident_enfant');
 
     btn_fiche_identification.click(function(e){
         e.preventDefault();
@@ -329,6 +333,26 @@ var btn_nouvelle_naissance = $('#btn_nouvelle_naissance');
     btn_nouvelle_naissance.click(function(e){
         e.preventDefault();
         form_membre.attr('action','/etat/nouvelle-naissance');
+        form_membre.submit();
+    });
+    btn_total_deces.click(function(e){
+        e.preventDefault();
+        form_membre.attr('action','/etat/total-deces');
+        form_membre.submit();
+    });
+    btn_total_deces_enfant.click(function(e){
+        e.preventDefault();
+        form_membre.attr('action','/etat/total-deces-enfant');
+        form_membre.submit();
+    });
+    btn_total_accident.click(function(e){
+        e.preventDefault();
+        form_membre.attr('action','/etat/total-accident');
+        form_membre.submit();
+    });
+    btn_total_accident_enfant.click(function(e){
+        e.preventDefault();
+        form_membre.attr('action','/etat/total-accident-enfant');
         form_membre.submit();
     });
 

@@ -613,7 +613,7 @@ def nouvelle_naissance(request):
             imembres.append(membre)
 
         context = {
-            'title': "Nombre Total d'enfants",
+            'title': "Total Nouvelles naissances",
             'imembres': membres,
             'total_enfants': total_enfants,
         }
@@ -621,3 +621,526 @@ def nouvelle_naissance(request):
         return render(request, 'etat/membre/nouvelle_naissance.html', context)
 
     return HttpResponseRedirect(reverse('etat:etat'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def total_deces(request):
+    if request.method == 'POST':
+        typesecteur = request.POST.get('typesecteur', None)
+        secteur = request.POST.get('secteur', None)
+        activite = request.POST.get('activite', None)
+
+        district = request.POST.get('select_district', None)
+        region = request.POST.get('select_region', None)
+        departement = request.POST.get('select_departement', None)
+        ville = request.POST.get('select_ville', None)
+        commune = request.POST.get('select_commune', None)
+        quartier = request.POST.get('select_quartier', None)
+        marche = request.POST.get('select_marche', None)
+
+        identifiant = strip_tags(request.POST.get('identifiant', '')).strip()
+        nomprenoms = strip_tags(request.POST.get('nomprenoms', '')).strip()
+        nationalite = request.POST.get('nationalite', None)
+        niveau = request.POST.get('niveau', None)
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        utilisateur = request.POST.get('utilisateur', None)
+
+        # Les variables
+        membres = []
+        imembres = []
+        total_deces = 0
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or secteur or activite or \
+                district or region or departement or \
+                ville or commune or quartier or marche or \
+                identifiant or nomprenoms or nationalite or \
+                niveau or niveauscolaire or utilisateur:
+
+            # On débute par les deux critaires
+            if identifiant or nomprenoms:
+                if identifiant:
+                    membres = Membre.objects.filter(identifiant__iexact=identifiant)
+                if nomprenoms and not membres:
+                    membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
+            else:
+                # On traite d'abord le secteur d'activité ----------------
+                if typesecteur:  # On traite le type de secteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        # On vérifie si le typesecteur correspond au
+                        # paramètre id secteur agricole puis on récupère
+                        # tous les membres qui ont une valeur non nul pour le secteuragricole
+                        membres = Membre.objects.filter(secteuragricole=F('secteuragricole'), actif=True)
+                    elif int(
+                            typesecteur) == _parametre.id_secteurfemmeactive:  # On vérifie si le typesecteur correspond au paramètre id secteur femme active puis on récupère tous les membres qui ont une valeur non nul pour le secteurfemmeactive
+                        membres = Membre.objects.filter(secteurfemmeactive=F('secteurfemmeactive'), actif=True)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        # On vérifie si le typesecteur correspond au paramètre
+                        # id secteur informel puis on récupère tous les membres
+                        # qui ont une valeur non nul pour le secteurinformel
+                        membres = Membre.objects.filter(secteurinformel=F('secteurinformel'), actif=True)
+                if secteur and membres:  # On traite le secteur
+                    membres = membres.filter(secteurs=secteur)
+                if activite and membres:  # On traite le nom des coopératives et groupements
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        membres = membres.filter(secteuragricole=activite)
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        membres = membres.filter(secteurfemmeactive=activite)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        membres = membres.filter(secteurinformel=activite)
+
+                # On traite ensuite la localisation ---------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if district and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region__district=district)
+                if region and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region=region)
+                if departement and membres:
+                    membres = membres.filter(quartier__commune__ville__departement=departement)
+                if ville and membres:
+                    membres = membres.filter(quartier__commune__ville=ville)
+                if commune and membres:
+                    membres = membres.filter(quartier__commune=commune)
+                if quartier and membres:
+                    membres = membres.filter(quartier=quartier)
+                if marche and membres:
+                    #  Le marché concerne le secteurfemmeactive
+                    membres = membres.filter(
+                        secteurfemmeactive=F('secteurfemmeactive'),
+                        secteurfemmeactive__marche=marche)
+
+                # On traite enfin les derniers critaires ------------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if nationalite and membres:
+                    membres = membres.filter(nationalite=nationalite)
+                if niveau and membres:
+                    membres = membres.filter(niveauscolaire__niveau=niveau)
+                if niveauscolaire and membres:
+                    membres = membres.filter(niveauscolaire=niveauscolaire)
+                if utilisateur and membres:
+                    membres = membres.filter(utilisateur=utilisateur)
+
+        else:  # On récupère tous les membres actif
+            membres = Membre.objects.filter(actif=True)
+
+        # On parcourt la liste des membres pour leur ajouter
+        # des propriétés
+        for membre in membres:
+            membre.deces = membre.get_etat_sante(_parametre.id_deces)
+            total_deces += membre.deces
+            imembres.append(membre)
+
+        context = {
+            'title': "Nombre Total de décès",
+            'imembres': membres,
+            'total': total_deces,
+        }
+
+        return render(request, 'etat/membre/total_deces.html', context)
+
+    return HttpResponseRedirect(reverse('etat:etat'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def total_deces_enfant(request):
+    if request.method == 'POST':
+        typesecteur = request.POST.get('typesecteur', None)
+        secteur = request.POST.get('secteur', None)
+        activite = request.POST.get('activite', None)
+
+        district = request.POST.get('select_district', None)
+        region = request.POST.get('select_region', None)
+        departement = request.POST.get('select_departement', None)
+        ville = request.POST.get('select_ville', None)
+        commune = request.POST.get('select_commune', None)
+        quartier = request.POST.get('select_quartier', None)
+        marche = request.POST.get('select_marche', None)
+
+        identifiant = strip_tags(request.POST.get('identifiant', '')).strip()
+        nomprenoms = strip_tags(request.POST.get('nomprenoms', '')).strip()
+        nationalite = request.POST.get('nationalite', None)
+        niveau = request.POST.get('niveau', None)
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        utilisateur = request.POST.get('utilisateur', None)
+
+        # Les variables
+        membres = []
+        imembres = []
+        total_deces = 0
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or secteur or activite or \
+                district or region or departement or \
+                ville or commune or quartier or marche or \
+                identifiant or nomprenoms or nationalite or \
+                niveau or niveauscolaire or utilisateur:
+
+            # On débute par les deux critaires
+            if identifiant or nomprenoms:
+                if identifiant:
+                    membres = Membre.objects.filter(identifiant__iexact=identifiant)
+                if nomprenoms and not membres:
+                    membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
+            else:
+                # On traite d'abord le secteur d'activité ----------------
+                if typesecteur:  # On traite le type de secteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        # On vérifie si le typesecteur correspond au
+                        # paramètre id secteur agricole puis on récupère
+                        # tous les membres qui ont une valeur non nul pour le secteuragricole
+                        membres = Membre.objects.filter(secteuragricole=F('secteuragricole'), actif=True)
+                    elif int(
+                            typesecteur) == _parametre.id_secteurfemmeactive:  # On vérifie si le typesecteur correspond au paramètre id secteur femme active puis on récupère tous les membres qui ont une valeur non nul pour le secteurfemmeactive
+                        membres = Membre.objects.filter(secteurfemmeactive=F('secteurfemmeactive'), actif=True)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        # On vérifie si le typesecteur correspond au paramètre
+                        # id secteur informel puis on récupère tous les membres
+                        # qui ont une valeur non nul pour le secteurinformel
+                        membres = Membre.objects.filter(secteurinformel=F('secteurinformel'), actif=True)
+                if secteur and membres:  # On traite le secteur
+                    membres = membres.filter(secteurs=secteur)
+                if activite and membres:  # On traite le nom des coopératives et groupements
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        membres = membres.filter(secteuragricole=activite)
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        membres = membres.filter(secteurfemmeactive=activite)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        membres = membres.filter(secteurinformel=activite)
+
+                # On traite ensuite la localisation ---------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if district and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region__district=district)
+                if region and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region=region)
+                if departement and membres:
+                    membres = membres.filter(quartier__commune__ville__departement=departement)
+                if ville and membres:
+                    membres = membres.filter(quartier__commune__ville=ville)
+                if commune and membres:
+                    membres = membres.filter(quartier__commune=commune)
+                if quartier and membres:
+                    membres = membres.filter(quartier=quartier)
+                if marche and membres:
+                    #  Le marché concerne le secteurfemmeactive
+                    membres = membres.filter(
+                        secteurfemmeactive=F('secteurfemmeactive'),
+                        secteurfemmeactive__marche=marche)
+
+                # On traite enfin les derniers critaires ------------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if nationalite and membres:
+                    membres = membres.filter(nationalite=nationalite)
+                if niveau and membres:
+                    membres = membres.filter(niveauscolaire__niveau=niveau)
+                if niveauscolaire and membres:
+                    membres = membres.filter(niveauscolaire=niveauscolaire)
+                if utilisateur and membres:
+                    membres = membres.filter(utilisateur=utilisateur)
+
+        else:  # On récupère tous les membres actif
+            membres = Membre.objects.filter(actif=True)
+
+        # On parcourt la liste des membres pour leur ajouter
+        # des propriétés
+        for membre in membres:
+            membre.deces = membre.get_nombre_etat_parent('Enfant', _parametre.id_deces)
+            total_deces += membre.deces
+            imembres.append(membre)
+
+        context = {
+            'title': "Nombre Total de décès enfants",
+            'imembres': membres,
+            'total': total_deces,
+        }
+
+        return render(request, 'etat/membre/total_deces_enfant.html', context)
+
+    return HttpResponseRedirect(reverse('etat:etat'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def total_accident(request):
+    if request.method == 'POST':
+        typesecteur = request.POST.get('typesecteur', None)
+        secteur = request.POST.get('secteur', None)
+        activite = request.POST.get('activite', None)
+
+        district = request.POST.get('select_district', None)
+        region = request.POST.get('select_region', None)
+        departement = request.POST.get('select_departement', None)
+        ville = request.POST.get('select_ville', None)
+        commune = request.POST.get('select_commune', None)
+        quartier = request.POST.get('select_quartier', None)
+        marche = request.POST.get('select_marche', None)
+
+        identifiant = strip_tags(request.POST.get('identifiant', '')).strip()
+        nomprenoms = strip_tags(request.POST.get('nomprenoms', '')).strip()
+        nationalite = request.POST.get('nationalite', None)
+        niveau = request.POST.get('niveau', None)
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        utilisateur = request.POST.get('utilisateur', None)
+
+        # Les variables
+        membres = []
+        imembres = []
+        total_accident = 0
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or secteur or activite or \
+                district or region or departement or \
+                ville or commune or quartier or marche or \
+                identifiant or nomprenoms or nationalite or \
+                niveau or niveauscolaire or utilisateur:
+
+            # On débute par les deux critaires
+            if identifiant or nomprenoms:
+                if identifiant:
+                    membres = Membre.objects.filter(identifiant__iexact=identifiant)
+                if nomprenoms and not membres:
+                    membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
+            else:
+                # On traite d'abord le secteur d'activité ----------------
+                if typesecteur:  # On traite le type de secteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        # On vérifie si le typesecteur correspond au
+                        # paramètre id secteur agricole puis on récupère
+                        # tous les membres qui ont une valeur non nul pour le secteuragricole
+                        membres = Membre.objects.filter(secteuragricole=F('secteuragricole'), actif=True)
+                    elif int(
+                            typesecteur) == _parametre.id_secteurfemmeactive:  # On vérifie si le typesecteur correspond au paramètre id secteur femme active puis on récupère tous les membres qui ont une valeur non nul pour le secteurfemmeactive
+                        membres = Membre.objects.filter(secteurfemmeactive=F('secteurfemmeactive'), actif=True)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        # On vérifie si le typesecteur correspond au paramètre
+                        # id secteur informel puis on récupère tous les membres
+                        # qui ont une valeur non nul pour le secteurinformel
+                        membres = Membre.objects.filter(secteurinformel=F('secteurinformel'), actif=True)
+                if secteur and membres:  # On traite le secteur
+                    membres = membres.filter(secteurs=secteur)
+                if activite and membres:  # On traite le nom des coopératives et groupements
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        membres = membres.filter(secteuragricole=activite)
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        membres = membres.filter(secteurfemmeactive=activite)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        membres = membres.filter(secteurinformel=activite)
+
+                # On traite ensuite la localisation ---------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if district and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region__district=district)
+                if region and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region=region)
+                if departement and membres:
+                    membres = membres.filter(quartier__commune__ville__departement=departement)
+                if ville and membres:
+                    membres = membres.filter(quartier__commune__ville=ville)
+                if commune and membres:
+                    membres = membres.filter(quartier__commune=commune)
+                if quartier and membres:
+                    membres = membres.filter(quartier=quartier)
+                if marche and membres:
+                    #  Le marché concerne le secteurfemmeactive
+                    membres = membres.filter(
+                        secteurfemmeactive=F('secteurfemmeactive'),
+                        secteurfemmeactive__marche=marche)
+
+                # On traite enfin les derniers critaires ------------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if nationalite and membres:
+                    membres = membres.filter(nationalite=nationalite)
+                if niveau and membres:
+                    membres = membres.filter(niveauscolaire__niveau=niveau)
+                if niveauscolaire and membres:
+                    membres = membres.filter(niveauscolaire=niveauscolaire)
+                if utilisateur and membres:
+                    membres = membres.filter(utilisateur=utilisateur)
+
+        else:  # On récupère tous les membres actif
+            membres = Membre.objects.filter(actif=True)
+
+        # On parcourt la liste des membres pour leur ajouter
+        # des propriétés
+        for membre in membres:
+            membre.accident = membre.get_etat_sante(_parametre.id_accident)
+            total_accident += membre.accident
+            imembres.append(membre)
+
+        context = {
+            'title': "Nombre Total de décès",
+            'imembres': membres,
+            'total': total_accident,
+        }
+
+        return render(request, 'etat/membre/total_accident.html', context)
+
+    return HttpResponseRedirect(reverse('etat:etat'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def total_accident_enfant(request):
+    if request.method == 'POST':
+        typesecteur = request.POST.get('typesecteur', None)
+        secteur = request.POST.get('secteur', None)
+        activite = request.POST.get('activite', None)
+
+        district = request.POST.get('select_district', None)
+        region = request.POST.get('select_region', None)
+        departement = request.POST.get('select_departement', None)
+        ville = request.POST.get('select_ville', None)
+        commune = request.POST.get('select_commune', None)
+        quartier = request.POST.get('select_quartier', None)
+        marche = request.POST.get('select_marche', None)
+
+        identifiant = strip_tags(request.POST.get('identifiant', '')).strip()
+        nomprenoms = strip_tags(request.POST.get('nomprenoms', '')).strip()
+        nationalite = request.POST.get('nationalite', None)
+        niveau = request.POST.get('niveau', None)
+        niveauscolaire = request.POST.get('niveauscolaire', None)
+        utilisateur = request.POST.get('utilisateur', None)
+
+        # Les variables
+        membres = []
+        imembres = []
+        total_accident = 0
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or secteur or activite or \
+                district or region or departement or \
+                ville or commune or quartier or marche or \
+                identifiant or nomprenoms or nationalite or \
+                niveau or niveauscolaire or utilisateur:
+
+            # On débute par les deux critaires
+            if identifiant or nomprenoms:
+                if identifiant:
+                    membres = Membre.objects.filter(identifiant__iexact=identifiant)
+                if nomprenoms and not membres:
+                    membres = Membre.objects.filter(nom_prenoms__iexact=nomprenoms)
+            else:
+                # On traite d'abord le secteur d'activité ----------------
+                if typesecteur:  # On traite le type de secteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        # On vérifie si le typesecteur correspond au
+                        # paramètre id secteur agricole puis on récupère
+                        # tous les membres qui ont une valeur non nul pour le secteuragricole
+                        membres = Membre.objects.filter(secteuragricole=F('secteuragricole'), actif=True)
+                    elif int(
+                            typesecteur) == _parametre.id_secteurfemmeactive:  # On vérifie si le typesecteur correspond au paramètre id secteur femme active puis on récupère tous les membres qui ont une valeur non nul pour le secteurfemmeactive
+                        membres = Membre.objects.filter(secteurfemmeactive=F('secteurfemmeactive'), actif=True)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        # On vérifie si le typesecteur correspond au paramètre
+                        # id secteur informel puis on récupère tous les membres
+                        # qui ont une valeur non nul pour le secteurinformel
+                        membres = Membre.objects.filter(secteurinformel=F('secteurinformel'), actif=True)
+                if secteur and membres:  # On traite le secteur
+                    membres = membres.filter(secteurs=secteur)
+                if activite and membres:  # On traite le nom des coopératives et groupements
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        membres = membres.filter(secteuragricole=activite)
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        membres = membres.filter(secteurfemmeactive=activite)
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        membres = membres.filter(secteurinformel=activite)
+
+                # On traite ensuite la localisation ---------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if district and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region__district=district)
+                if region and membres:
+                    membres = membres.filter(quartier__commune__ville__departement__region=region)
+                if departement and membres:
+                    membres = membres.filter(quartier__commune__ville__departement=departement)
+                if ville and membres:
+                    membres = membres.filter(quartier__commune__ville=ville)
+                if commune and membres:
+                    membres = membres.filter(quartier__commune=commune)
+                if quartier and membres:
+                    membres = membres.filter(quartier=quartier)
+                if marche and membres:
+                    #  Le marché concerne le secteurfemmeactive
+                    membres = membres.filter(
+                        secteurfemmeactive=F('secteurfemmeactive'),
+                        secteurfemmeactive__marche=marche)
+
+                # On traite enfin les derniers critaires ------------------------------------------
+                if not membres:
+                    # Si rien n'est sélectionné jusqu'ici,
+                    # on débute avec tous les membres sinon
+                    # on continue avec les membres existants
+                    membres = Membre.objects.filter(actif=True)
+
+                if nationalite and membres:
+                    membres = membres.filter(nationalite=nationalite)
+                if niveau and membres:
+                    membres = membres.filter(niveauscolaire__niveau=niveau)
+                if niveauscolaire and membres:
+                    membres = membres.filter(niveauscolaire=niveauscolaire)
+                if utilisateur and membres:
+                    membres = membres.filter(utilisateur=utilisateur)
+
+        else:  # On récupère tous les membres actif
+            membres = Membre.objects.filter(actif=True)
+
+        # On parcourt la liste des membres pour leur ajouter
+        # des propriétés
+        for membre in membres:
+            membre.accident = membre.get_nombre_etat_parent('Enfant', _parametre.id_accident)
+            total_accident += membre.accident
+            imembres.append(membre)
+
+        context = {
+            'title': "Nombre Total d'accidents enfants",
+            'imembres': membres,
+            'total': total_accident,
+        }
+
+        return render(request, 'etat/membre/total_accident_enfant.html', context)
+
+    return HttpResponseRedirect(reverse('etat:etat'))
+
+#print(imembres[0].get_etat_sante(_parametre.id_accident))
+#get_nombre_deces_parent('Enfant', _parametre.id_acciden)
