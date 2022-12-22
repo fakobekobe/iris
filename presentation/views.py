@@ -688,7 +688,7 @@ def supprimer_etatsante_membre(request):
 
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
-def detail_parent_secteuragricole(request, id):
+def detail_parent_secteuragricole(request, id, id_retour):
     try:
         parent = Parent.objects.get(id=id)
     except Parent.DoesNotExist:
@@ -703,6 +703,7 @@ def detail_parent_secteuragricole(request, id):
         'typeetatsantes': typeetatsantes,
         'etatsantes': etatsantes,
         'parent': parent,
+        'id_retour': id_retour,
     }
     return render(request, 'presentation/detail_parent_secteuragricole.html', context)
 
