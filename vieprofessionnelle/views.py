@@ -14,8 +14,7 @@ from utilisateur.models import Parametre
 _active_onglet = ""  # Variable globale pour l'activation des onglets
 
 @login_required
-@permission_required('auth.view_user', raise_exception=True)
-@permission_required('auth.view_group', raise_exception=True)
+@permission_required('vieprofessionnelle.view_membre', raise_exception=True)
 def vieprofessionnelle(request):
     typesecteurs = TypeSecteur.objects.order_by("type")
     secteurs = Secteur.objects.order_by("secteur")
@@ -925,6 +924,7 @@ def ajouter_cooperative(request):
             nom_cooperative = request.POST.get('nom_cooperative', None)
             presidente = request.POST.get('presidente', None)
             contact_presidente = request.POST.get('contact_presidente', None)
+            ville = request.POST.get('ville', None)
             speculation_agricole = request.POST.get('speculation_agricole', None)
             superficie_en_culture = request.POST.get('superficie_en_culture', None)
             superficie_en_production = request.POST.get('superficie_en_production', None)
@@ -933,7 +933,7 @@ def ajouter_cooperative(request):
             dateenre = request.POST.get('dateenre', None)
 
 
-            if nom_cooperative: #On vérifie si la champ a été saisi
+            if nom_cooperative and ville: #On vérifie si la champ a été saisi
 
                 nom_cooperative = nom_cooperative.title() # On formate la variable
 
@@ -951,13 +951,13 @@ def ajouter_cooperative(request):
                 secteur_agricole.nom = nom_cooperative
                 secteur_agricole.presidente = presidente.title()
                 secteur_agricole.contact = contact_presidente
+                secteur_agricole.ville = Ville.objects.get(id=ville)
                 secteur_agricole.speculation_agricole = speculation_agricole
                 secteur_agricole.superficie_en_culture = superficie_en_culture
                 secteur_agricole.superficie_en_production = superficie_en_production
                 secteur_agricole.gps_longitude = gps_longitude
                 secteur_agricole.gps_latitude = gps_latitude
                 secteur_agricole.dateenre = dateenre
-                #secteur_agricole.date_adhesion = None
 
                 secteur_agricole.save()
 

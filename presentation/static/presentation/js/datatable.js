@@ -242,6 +242,37 @@ $(document).ready(function(){
     });
 
 
+// ******************* GESTION DES AFFICHAGES DU CHAMP VILLE *****************************
+    var ville_texte = $('#ville_texte');
+    var label_ville_times = $('#label_ville_times');
+    var ville_btn_ajouter = $('#ville_btn_ajouter');
+    var ville = $('#ville');
+    var ville_Modal = $('#ville_Modal');
+    var ville_btn_fermer = $('#ville_btn_fermer');
+
+    label_ville_times.click(function(){
+        ville_texte.val('');
+        ville.val('');
+    });
+
+    ville_btn_ajouter.click(function(e){
+        e.preventDefault();
+        select_ville.each(function(){
+            if($(this).val()){
+                $('select[name=select_ville] option:selected').each(function(n,v){
+                    if(n == 1){
+                        ville_texte.val($(this).text());
+                    }
+                });
+                ville.val($(this).val());
+                ville_Modal.hide('slow');
+                ville_btn_fermer.trigger('click');
+            }
+
+        });
+    });
+
+
 // ******************* GESTION AJAX DE L'AJOUT D'UNE COOPERATIVE *****************************
 
     var cooperative_a_ajouter = $('#cooperative_a_ajouter');
@@ -272,6 +303,7 @@ $(document).ready(function(){
                     nom_cooperative: $('#nom_cooperative').val(),
                     presidente: $('#presidente').val(),
                     contact_presidente: $('#contact_presidente').val(),
+                    ville: ville.val(),
                     speculation_agricole: $('#speculation_agricole').val(),
                     superficie_en_culture: $('#superficie_en_culture').val(),
                     superficie_en_production: $('#superficie_en_production').val(),
@@ -320,6 +352,7 @@ $(document).ready(function(){
             });
 
         });
+
 
 // ******************* GESTION DES AFFICHAGES DU CHAMP LIEU D'HABITATION *****************************
     var label_lieu_habitation = $('#label_lieu_habitation');

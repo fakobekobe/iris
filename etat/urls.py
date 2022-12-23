@@ -5,7 +5,7 @@ app_name = 'etat'
 urlpatterns = [
     path('', views.etat, name='etat'),
 
-    # Url des bouttons
+    # Url des bouttons Membre
     path('fiche-identification', views.fiche_identification, name='fiche_identification'),
     path('retour-etat/<str:id>', views.retour_etat, name='retour_etat'),
     path('liste-badge', views.liste_badge, name='liste_badge'),
@@ -15,5 +15,8 @@ urlpatterns = [
     path('total-deces-enfant', views.total_deces_enfant, name='total_deces_enfant'),
     path('total-accident', views.total_accident, name='total_accident'),
     path('total-accident-enfant', views.total_accident_enfant, name='total_accident_enfant'),
+
+    # Url des bouttons Coopérative et groupement
+    path('liste-secteur-activite', views.liste_secteur_activite, name='liste_secteur_activite'),
 
 ]

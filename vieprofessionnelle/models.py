@@ -150,6 +150,7 @@ class SecteurAgricole(SecteurActive):
     superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
     superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
 
+    ville = models.ForeignKey(Ville, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through='MembreSecteurAgricole', through_fields=('secteuragricole', 'membre'))
 
     def __str__(self):
@@ -168,7 +169,7 @@ class MembreSecteurAgricole(models.Model):
 
 class SecteurInformel(SecteurActive):
     metier = models.ForeignKey(Secteur, null=True,blank=True, on_delete=models.SET_NULL)
-
+    ville = models.ForeignKey(Ville, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through="MembreSecteurInformel", through_fields=('secteurinformel','membre'))
 
     def __str__(self):

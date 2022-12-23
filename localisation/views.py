@@ -9,8 +9,7 @@ from django.http import JsonResponse
 _active_onglet = "" # Variable globale pour l'activation des onglets
 
 @login_required
-@permission_required('auth.view_user', raise_exception=True)
-@permission_required('auth.view_group', raise_exception=True)
+@permission_required('vieprofessionnelle.view_membre', raise_exception=True)
 def localisation(request):
 
     districts = District.objects.all().order_by("libelle")

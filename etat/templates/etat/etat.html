@@ -369,11 +369,211 @@
 
     <!-- CONTENU Coopérative -->
     <div class="tab-pane fade {{ active_cooperative|last }}" id="cooperative" role="tabpanel" aria-labelledby="cooperative-tab">
-      <div>
-        <h1 class="text-primary"><i class="fa fa-group"></i> Liste des membres</h1>
-        <hr />
+      <form id="form_cooperative" method="post" action="#" autocomplete="off">
+        {% csrf_token %}
+        <div class="row m-0 p-0 pt-3">
 
-      </div>
+          <!-- SECTEUR D'ACTIVITE -->
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-white bg-primary text-center" style="padding:0px;">SECTEUR D'ACTIVITE</div>
+              <div class="card-body">
+
+                <!-- Type Secteur -->
+                <div class="row mb-2">
+                  <select name="typesecteur_c" id="typesecteur_c" class="form-control">
+                    <option value="" selected>--- Type de secteur d'activité ---</option>
+                    {% for typesecteur in typesecteurs %}
+                    <option value="{{typesecteur.id}}" >{{typesecteur.type|upper}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Activité -->
+                <div class="row mb-2">
+                  <select name="activite_c" id="activite_c" class="form-control">
+                    <option value="" selected>--- Coopérative ou Groupement  ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Qauntité groupement -->
+                <div class="row mb-2">
+                  <select name="quantitegroupement" id="quantitegroupement" class="form-control">
+                    <option value="" selected>--- Quantité du groupement ---</option>
+                    {% for quantitegroupement in quantitegroupements %}
+                    <option value="{{quantitegroupement.id}}" >{{quantitegroupement.quantite}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Spéculation agricole -->
+                <div id="speculation">
+                  <h6 class="text-center">Spéculation agricole</h6>
+                  <div class="row mb-2">
+                    <!-- Spéculation agricole début-->
+                    <div class="input-group mb-2">
+                        <span class="input-group-text label-sans-fond">Entre</span>
+                        <input type="number" name="speculation_debut" value="0"  min="0" class="form-control" >
+                        <div class="input-group-append">
+                            <span class="input-group-text label-sans-fond">Kg</span>
+                        </div>
+                    </div>
+                    <!-- -->
+                  </div>
+                  <div class="row mb-2">
+                    <!-- Spéculation agricole fin-->
+                    <div class="input-group mb-2">
+                        <span class="input-group-text label-sans-fond">et</span>
+                        <input type="number" name="speculation_fin" value="0"  min="0" class="form-control" >
+                        <div class="input-group-append">
+                            <span class="input-group-text label-sans-fond">Kg</span>
+                        </div>
+                    </div>
+                    <!-- -->
+                  </div>
+                </div>
+                <!-- -->
+
+              </div>
+            </div>
+          </div>
+          <!-- -->
+
+          <!-- LOCALISATION -->
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-white bg-warning text-center" style="padding:0px;">LOCALISATION</div>
+              <div class="card-body">
+
+                <!-- District -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_district_c"><i class="fas fa-igloo"></i></label>
+                  </div>
+                  <select name="select_district_c" id="select_district_c" class="form-control">
+                    <option value="" selected>--- District ---</option>
+                    {% for district in districts %}
+                    <option value="{{district.id}}" >{{district.libelle}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Region -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_region_c"><i class="fas fa-home"></i></label>
+                  </div>
+                  <select name="select_region_c" id="select_region_c" class="form-control">
+                    <option value="" selected>--- Région ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Departement -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_departement_c"><i class="fas fa-building"></i></label>
+                  </div>
+                  <select name="select_departement_c" id="select_departement_c" class="form-control">
+                    <option value="" selected>--- Département ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+                <!-- Ville -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="select_ville_c"><i class="fas fa-city"></i></label>
+                  </div>
+                  <select name="select_ville_c" id="select_ville_c" class="form-control">
+                    <option value="" selected>--- Ville ---</option>
+                  </select>
+                </div>
+                <!-- -->
+
+              </div>
+            </div>
+          </div>
+          <!-- -->
+
+          <!-- CRITAIRES -->
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-white bg-info text-center" style="padding:0px;">CRITAIRES</div>
+              <div class="card-body">
+
+                <!-- Identifiant -->
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="identifiant" class="form-control" placeholder="identifiant Ex: 0010020040007">
+                  </div>
+                </div>
+                <!-- -->
+
+                <!-- Coopérative ou Groupement -->
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="cooperative" class="form-control" placeholder="Cooperative ou Groupement">
+                  </div>
+                </div>
+                <!-- -->
+
+              </div>
+            </div>
+          </div>
+          <!-- -->
+
+        </div>
+        <hr />
+        <div class="row m-0 p-0 mb-3">
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-list-alt text-success"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-success">
+                <h5>
+                  <button id="btn_liste_secteur_activite" class="a_decoration">Liste secteur d'activité</button>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-people-arrows text-warning"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-warning">
+                <h5>
+                  <button id="btn_liste_membre" class="a_decoration">Liste des membres</button>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header text-center">
+                <h1>
+                  <i class="fas fa-users text-primary"></i>
+                </h1>
+              </div>
+              <div class="card-body text-center bg-primary">
+                <h5>
+                  <button id="btn_total_membre_secteur" class="a_decoration">Total membres secteur</button>
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
     <!-- FIN DE CONTENU Coopérative -->
 
@@ -394,5 +594,35 @@
 {% endblock %}
 
 {% block javascript %}
+<script>
+// Script pour l'affichage des champs selon le type de secteur d'activité
+
+  var typesecteur = $('#typesecteur_c');
+  var quantitegroupement = $('#quantitegroupement');
+  var speculation = $('#speculation');
+
+  quantitegroupement.hide('slow');
+  speculation.hide('slow');
+
+  typesecteur.change(function(){
+
+    if($(this).val() == {{parametre.id_secteuragricole}} ){
+      quantitegroupement.hide('slow');
+      speculation.show('slow');
+    } else if($(this).val() == {{parametre.id_secteurfemmeactive}} ){
+      quantitegroupement.show('slow');
+      speculation.hide('slow');
+    } else if($(this).val() == {{parametre.id_secteurinformel}} ){
+      quantitegroupement.hide('slow');
+      speculation.hide('slow');
+    }else{
+      quantitegroupement.hide('slow');
+      speculation.hide('slow');
+    }
+
+  });
+
+
+</script>
 <script src="{% static 'etat/js/membre/data.js' %}"></script>
 {% endblock javascript %}

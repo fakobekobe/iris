@@ -256,6 +256,97 @@ $(document).ready(function(){
         });
 
 
+// ******************* GESTION DES LISTES ONGLET COOPERATIVE ET GROUPEMENT *****************************
+
+    var select_district_c = $('select[name=select_district_c]');
+    var select_region_c = $('select[name=select_region_c]');
+    var select_departement_c = $('select[name=select_departement_c]');
+    var select_ville_c = $('select[name=select_ville_c]');
+
+        // Traitement AJAX de la region
+        select_district_c.change(function(){
+
+            // On utilise ajax pour récupérer les régions
+            $.ajax({
+                url: "/localisation/details-region", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection de la région
+                    select_region_c.html('');
+                    select_region_c.append("<option value='' selected>--- Région ---</option>");
+
+                    // On initialise la selection du département
+                    select_departement_c.html('');
+                    select_departement_c.append("<option value='' selected>--- Département ---</option>");
+
+                    // On initialise la selection du ville
+                    select_ville_c.html('');
+                    select_ville_c.append("<option value='' selected>--- Ville ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_region_c.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+
+
+        });
+
+        // Traitement AJAX du departement
+        select_region_c.change(function(){
+
+            // On utilise ajax pour récupérer les départements
+            $.ajax({
+                url: "/localisation/details-departement", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du département
+                    select_departement_c.html('');
+                    select_departement_c.append("<option value='' selected>--- Département ---</option>");
+
+                    // On initialise la selection du ville
+                    select_ville_c.html('');
+                    select_ville_c.append("<option value='' selected>--- Ville ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_departement_c.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+
+
+        });
+
+        // Traitement AJAX de la ville
+        select_departement_c.change(function(){
+
+            // On utilise ajax pour récupérer les villes
+            $.ajax({
+                url: "/localisation/details-ville", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du département
+                    select_ville_c.html('');
+                    select_ville_c.append("<option value='' selected>--- Ville ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_ville_c.append("<option value='" + value.id + "' >" + value.libelle + "</option>");
+                    });
+                },
+            });
+
+        });
+
+
 // ******************* GESTION DES LISTES DEROULANTES *****************************
 
     var niveau = $('select[name=niveau]');
@@ -282,7 +373,7 @@ $(document).ready(function(){
             });
         });
 
-// ------------ CHARGEMENT DES DONNEES DU FORMULAIRE DES ETATS --------------------
+// ------------ CHARGEMENT DES DONNEES DU FORMULAIRE DE L'ETATS MEMBRE --------------------
 
 var form_membre = $('#form_membre');
 var btn_fiche_identification = $('#btn_fiche_identification');
@@ -355,6 +446,48 @@ var btn_total_accident_enfant = $('#btn_total_accident_enfant');
         form_membre.attr('action','/etat/total-accident-enfant');
         form_membre.submit();
     });
+
+// ******************* GESTION AJAX DE LA LISTE DEROULANTE DU SECTEUR D'ACTIVITE DE L'ETATS COOPERATIVE ET GROUPEMENT
+    var select_typesecteur_c = $('#typesecteur_c');
+    var select_activite_c = $('#activite_c');
+
+    // Traitement AJAX du niveau
+    select_typesecteur_c.change(function(){
+            // On utilise ajax pour récupérer les cooperatives et groupements
+            $.ajax({
+                url: "/vieprofessionnelle/details-activite", // On ajoute l'url absolue en commençant par la racine
+                type: 'get',
+                data: {
+                    id: $(this).val(),
+                },
+                success: function(data){
+                    // On initialise la selection du niveau scolaire
+                    select_activite_c.html('');
+                    select_activite_c.append("<option value='' selected>--- Coopérative ou Groupement ---</option>");
+
+                    $.each(data.data, function(key, value){
+                        select_activite_c.append("<option value='" + value.id + "' >" + value.nom + "</option>");
+                    });
+                },
+            });
+        });
+
+// ------------ CHARGEMENT DES DONNEES DU FORMULAIRE DE L'ETATS COOPERATIVE ET GROUPEMENT --------------------
+var form_cooperative = $('#form_cooperative');
+var btn_liste_secteur_activite = $('#btn_liste_secteur_activite');
+
+    btn_liste_secteur_activite.click(function(e){
+        e.preventDefault();
+        // On vérifie si le type de sevteur d'activité est sélectionné
+        if (select_typesecteur_c.val()){
+            form_cooperative.attr('action','/etat/liste-secteur-activite');
+            form_cooperative.submit();
+        } else{
+            alert("Veuillez sélectionner le type de secteur d'activité avant de continuer");
+        }
+
+    });
+
 
 
 // PAGINATION DE LA TABLE LISTE N°BADGE **********************************
