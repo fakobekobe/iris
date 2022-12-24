@@ -61,6 +61,7 @@ def etat(request):
     return render(request, 'etat/etat.html', context)
 
 
+# Liste des fonction de l'onglet Membre -------------------------------------
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def fiche_identification(request):
@@ -82,6 +83,8 @@ def fiche_identification(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -94,7 +97,10 @@ def fiche_identification(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                 niveau or niveauscolaire or utilisateur:
+                 niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -129,12 +135,6 @@ def fiche_identification(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -154,18 +154,14 @@ def fiche_identification(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -268,6 +264,8 @@ def liste_badge(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -279,7 +277,10 @@ def liste_badge(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -314,12 +315,6 @@ def liste_badge(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -339,18 +334,14 @@ def liste_badge(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -391,6 +382,8 @@ def total_enfants(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -404,7 +397,10 @@ def total_enfants(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -439,12 +435,6 @@ def total_enfants(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -464,18 +454,14 @@ def total_enfants(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -521,6 +507,8 @@ def nouvelle_naissance(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -534,7 +522,10 @@ def nouvelle_naissance(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -569,12 +560,6 @@ def nouvelle_naissance(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -594,18 +579,14 @@ def nouvelle_naissance(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -653,6 +634,8 @@ def total_deces(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -666,7 +649,10 @@ def total_deces(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -701,12 +687,6 @@ def total_deces(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -726,18 +706,14 @@ def total_deces(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -783,6 +759,8 @@ def total_deces_enfant(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -796,7 +774,10 @@ def total_deces_enfant(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -831,12 +812,6 @@ def total_deces_enfant(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -856,18 +831,14 @@ def total_deces_enfant(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -913,6 +884,8 @@ def total_accident(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -926,7 +899,10 @@ def total_accident(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -961,12 +937,6 @@ def total_accident(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -986,11 +956,6 @@ def total_accident(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
 
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
@@ -998,6 +963,8 @@ def total_accident(request):
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -1043,6 +1010,8 @@ def total_accident_enfant(request):
         nationalite = request.POST.get('nationalite', None)
         niveau = request.POST.get('niveau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
+        date_debut = request.POST.get('date_debut', None)
+        date_fin = request.POST.get('date_fin', None)
         utilisateur = request.POST.get('utilisateur', None)
 
         # Les variables
@@ -1056,7 +1025,10 @@ def total_accident_enfant(request):
                 district or region or departement or \
                 ville or commune or quartier or marche or \
                 identifiant or nomprenoms or nationalite or \
-                niveau or niveauscolaire or utilisateur:
+                niveau or niveauscolaire or date_fin or utilisateur:
+
+            # on initialise la liste des membres
+            membres = Membre.objects.filter(actif=True)
 
             # On débute par les deux critaires
             if identifiant or nomprenoms:
@@ -1093,12 +1065,6 @@ def total_accident_enfant(request):
                         membres = membres.filter(secteurinformel=activite)
 
                 # On traite ensuite la localisation ---------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if district and membres:
                     membres = membres.filter(quartier__commune__ville__departement__region__district=district)
                 if region and membres:
@@ -1118,18 +1084,14 @@ def total_accident_enfant(request):
                         secteurfemmeactive__marche=marche)
 
                 # On traite enfin les derniers critaires ------------------------------------------
-                if not membres:
-                    # Si rien n'est sélectionné jusqu'ici,
-                    # on débute avec tous les membres sinon
-                    # on continue avec les membres existants
-                    membres = Membre.objects.filter(actif=True)
-
                 if nationalite and membres:
                     membres = membres.filter(nationalite=nationalite)
                 if niveau and membres:
                     membres = membres.filter(niveauscolaire__niveau=niveau)
                 if niveauscolaire and membres:
                     membres = membres.filter(niveauscolaire=niveauscolaire)
+                if date_fin and membres:
+                    membres = membres.filter(dateenre__range=(date_debut, date_fin))
                 if utilisateur and membres:
                     membres = membres.filter(utilisateur=utilisateur)
 
@@ -1152,8 +1114,10 @@ def total_accident_enfant(request):
         return render(request, 'etat/membre/total_accident_enfant.html', context)
 
     return HttpResponseRedirect(reverse('etat:etat'))
+# Fin de la gestion de Membre -------------------------------------
 
 
+# Liste des fonction de l'onglet Coopérative et groupement--------
 @login_required
 @permission_required('vieprofessionnelle.add_membre', raise_exception=True)
 def liste_secteur_activite(request):
@@ -1262,3 +1226,5 @@ def liste_secteur_activite(request):
         return render(request, 'etat/cooperative/liste_secteur_activite.html', context)
 
     return HttpResponseRedirect(reverse('etat:etat'))
+
+# Fin de la gestion de l'onglet Coopérative et groupement--------
