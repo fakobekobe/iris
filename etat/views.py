@@ -1205,8 +1205,6 @@ def liste_secteur_activite(request):
                         secteurs = secteurs.filter(ville__departement=departement)
                     if ville and secteurs:
                         secteurs = secteurs.filter(ville=ville)
-
-
             else:
                 return HttpResponseRedirect(reverse('etat:etat'))
         else:
@@ -1224,6 +1222,161 @@ def liste_secteur_activite(request):
         }
 
         return render(request, 'etat/cooperative/liste_secteur_activite.html', context)
+
+    return HttpResponseRedirect(reverse('etat:etat'))
+
+
+@login_required
+@permission_required('vieprofessionnelle.add_membre', raise_exception=True)
+def liste_membre(request):
+
+    # On initialise la variable
+    _active_onglet = "active_cooperative"
+
+    if request.method == 'POST':
+        typesecteur = request.POST.get('typesecteur_c', None)
+        activite = request.POST.get('activite_c', None)
+        quantitegroupement = request.POST.get('quantitegroupement', None)
+        speculation_debut = request.POST.get('speculation_debut', None)
+        speculation_fin = request.POST.get('speculation_fin', None)
+
+        district = request.POST.get('select_district_c', None)
+        region = request.POST.get('select_region_c', None)
+        departement = request.POST.get('select_departement_c', None)
+        ville = request.POST.get('select_ville_c', None)
+
+        identifiant = strip_tags(request.POST.get('identifiant', '')).strip()
+        cooperative = strip_tags(request.POST.get('cooperative', '')).strip()
+
+        # Les variables
+        secteurs = []
+        isecteurs = []
+        _parametre = Parametre.objects.first()
+
+        # On vérifie si au moins une donnée existe
+        if typesecteur or activite or quantitegroupement or speculation_fin or \
+                district or region or departement or \
+                ville or identifiant or cooperative:
+
+            if typesecteur:  # On vérifie si le typesecteur existe car on a besoin de lui pour commencer
+
+                # On débute par les deux critaires
+                if identifiant or cooperative:
+                    if identifiant:
+                        # On récupère le secteur selon le typesecteur
+                        if int(typesecteur) == _parametre.id_secteurfemmeactive:
+                            secteurs = SecteurFemmeActive.objects.filter(identifiant__iexact=identifiant)
+
+                    if cooperative and not secteurs:
+                        # On récupère le secteur selon le typesecteur
+                        if int(typesecteur) == _parametre.id_secteuragricole:
+                            secteurs = SecteurAgricole.objects.filter(nom__iexact=cooperative)
+                        elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                            secteurs = SecteurFemmeActive.objects.filter(nom__iexact=cooperative)
+                        elif int(typesecteur) == _parametre.id_secteurinformel:
+                            secteurs = SecteurInformel.objects.filter(nom__iexact=cooperative)
+                else:
+                    # On traitre ensuite les secteurs d'activités -----------------------------------
+                    # On débute par le typesecteur
+                    if int(typesecteur) == _parametre.id_secteuragricole:
+                        secteurs = SecteurAgricole.objects.order_by('nom')
+                    elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+                        secteurs = SecteurFemmeActive.objects.order_by('nom')
+                    elif int(typesecteur) == _parametre.id_secteurinformel:
+                        secteurs = SecteurInformel.objects.order_by('nom')
+
+                    if activite and secteurs:  # On traite l'activite
+                        secteurs = secteurs.filter(id=activite)
+
+                    if speculation_fin != '0' and secteurs:  # On traite la specification agricole
+                        try:
+                            # On exécute l'instruction dans le bloc car l'utilisateur
+                            # peut reseigner le mauvais champs et cela lèvera une erreur du type FieldError
+                            secteurs = secteurs.filter(speculation_agricole__range=(speculation_debut, speculation_fin))
+                        except:
+                            pass
+
+                    if quantitegroupement and secteurs:  # On traite la quantité de groupement
+                        try:
+                            # On exécute l'instruction dans le bloc car l'utilisateur
+                            # peut reseigner le mauvais champs et cela lèvera une erreur du type FieldError
+                            secteurs = secteurs.filter(quantitegroupement=quantitegroupement)
+                        except:
+                            pass
+
+                    # On traite enfin la localisation ------------------------------------
+                    if district and secteurs:
+                        secteurs = secteurs.filter(ville__departement__region__district=district)
+                    if region and secteurs:
+                        secteurs = secteurs.filter(ville__departement__region=region)
+                    if departement and secteurs:
+                        secteurs = secteurs.filter(ville__departement=departement)
+                    if ville and secteurs:
+                        secteurs = secteurs.filter(ville=ville)
+            else:
+                return HttpResponseRedirect(reverse('etat:etat'))
+        else:
+            return HttpResponseRedirect(reverse('etat:etat'))
+
+        # On parcourt la liste des secteurs pour leur ajouter
+        # des propriétés
+        # On détermine le typesecteur
+        isecteur = {}
+        mon_secteur = None
+        liste_membre = []
+
+        if int(typesecteur) == _parametre.id_secteuragricole:
+            for secteur in secteurs:
+                # On récupère la liste des membres du secteur
+                mon_secteur = MembreSecteurAgricole.objects.filter(secteuragricole=secteur.id)
+
+                # On récupère tous les membres du secteur
+                for secteur_simple in mon_secteur:
+                    liste_membre.append(secteur_simple.membre)
+
+                isecteur['secteur'] = secteur
+                isecteur['membres'] = liste_membre
+
+                # On ajoute le secteur et ses membres dans la liste
+                isecteurs.append(isecteur)
+
+                # On reinitialise les variables
+                isecteur = {}
+                liste_membre = []
+
+        elif int(typesecteur) == _parametre.id_secteurfemmeactive:
+            for secteur in secteurs:
+                # On récupère la liste des membres du secteur
+                mon_secteur = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=secteur.id)
+
+                # On récupère tous les membres du secteur
+                for secteur_simple in mon_secteur:
+                    liste_membre.append(secteur_simple.membre)
+
+                isecteur['secteur'] = secteur
+                isecteur['membres'] = liste_membre
+
+                # On ajoute le secteur et ses membres dans la liste
+                isecteurs.append(isecteur)
+
+                # On reinitialise les variables
+                isecteur = {}
+                liste_membre = []
+
+        elif int(typesecteur) == _parametre.id_secteurinformel:
+            pass
+
+        # test
+        for secteur in isecteurs:
+            print(secteur['secteur'].nom)
+            print(secteur['membres'])
+
+        context = {
+            'title': "Liste secteur d'activité",
+            'isecteurs': isecteurs,
+        }
+
+        return render(request, 'etat/cooperative/liste_membre.html', context)
 
     return HttpResponseRedirect(reverse('etat:etat'))
 

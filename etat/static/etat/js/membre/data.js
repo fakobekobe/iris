@@ -475,12 +475,24 @@ var btn_total_accident_enfant = $('#btn_total_accident_enfant');
 // ------------ CHARGEMENT DES DONNEES DU FORMULAIRE DE L'ETATS COOPERATIVE ET GROUPEMENT --------------------
 var form_cooperative = $('#form_cooperative');
 var btn_liste_secteur_activite = $('#btn_liste_secteur_activite');
+var btn_liste_membre = $('#btn_liste_membre');
 
     btn_liste_secteur_activite.click(function(e){
         e.preventDefault();
         // On vérifie si le type de sevteur d'activité est sélectionné
         if (select_typesecteur_c.val()){
             form_cooperative.attr('action','/etat/liste-secteur-activite');
+            form_cooperative.submit();
+        } else{
+            alert("Veuillez sélectionner le type de secteur d'activité avant de continuer");
+        }
+
+    });
+    btn_liste_membre.click(function(e){
+        e.preventDefault();
+        // On vérifie si le type de sevteur d'activité est sélectionné
+        if (select_typesecteur_c.val()){
+            form_cooperative.attr('action','/etat/liste-membre');
             form_cooperative.submit();
         } else{
             alert("Veuillez sélectionner le type de secteur d'activité avant de continuer");

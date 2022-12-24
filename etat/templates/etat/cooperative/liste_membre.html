@@ -1,0 +1,43 @@
+{% extends 'utilisateur/base.html' %}
+{% load static %}
+{% load presentation_filtre %}
+{% block titre %}{{titre}}{% endblock %}
+
+{% block tableau_de_bord %}
+<!-- page a imprimer -->
+<div id="pageImprimer" style="background:white;">
+
+    <!-- On parcourt la liste des membres  -->
+    {% for secteur in isecteurs %}
+    <div class="mb-3">
+        {{secteur.secteur.nom}}
+        {% for membre in secteur.membres %}
+        <p>
+            {{membre.nom_prenoms}}
+        </p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+
+</div>
+<!-- -->
+
+<!-- boutton d'impression et de retour -->
+<div style="position:fixed;top:0px;right:0px;">
+    <a href="{% url 'etat:retour_etat' 1 %}" class="btn btn-danger mr-3"><i class="fas fa-undo-alt"></i> Retour</a>
+    <button id="imprimer" class="btn btn-primary">
+        <i class="fas fa-print"></i> Imprimer
+    </button>
+</div>
+<!-- -->
+{% endblock %}
+
+{% block javascript %}
+<script>
+        var imprimer = $('#imprimer');
+        imprimer.click(function(){
+            $('#pageImprimer').printThis();
+        });
+</script>
+{% endblock javascript %}

@@ -18,5 +18,6 @@ urlpatterns = [
 
     # Url des bouttons Coopérative et groupement
     path('liste-secteur-activite', views.liste_secteur_activite, name='liste_secteur_activite'),
+    path('liste-membre', views.liste_membre, name='liste_membre'),
 
 ]
