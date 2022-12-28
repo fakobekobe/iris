@@ -1346,12 +1346,15 @@ def liste_membre(request):
         elif int(typesecteur) == _parametre.id_secteurfemmeactive:
             for secteur in secteurs:
                 # On récupère la liste des membres du secteur
-                mon_secteur = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=secteur.id).order_by('montantfinancement__montant')
+                mon_secteur = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=secteur.id).order_by('-montantfinancement__montant')
 
                 # On récupère tous les membres du secteur
                 for secteur_simple in mon_secteur:
                     #liste_membre.append(secteur_simple.membre)
-                    secteur_simple.membre.secteur = secteur_simple.membre.secteurs.first().secteur
+                    try:
+                        secteur_simple.membre.secteur = secteur_simple.membre.secteurs.first().secteur
+                    except:
+                        pass
 
                 isecteur['secteur'] = secteur
                 isecteur['femmeactives'] = mon_secteur
@@ -1366,12 +1369,6 @@ def liste_membre(request):
         elif int(typesecteur) == _parametre.id_secteurinformel:
             pass
 
-        # test
-        for secteur in isecteurs:
-            print(secteur['secteur'].nom)
-            for f in secteur['femmeactives']:
-                print(f.membre.nom_prenoms)
-                print(f.membre.secteur)
 
         context = {
             'title': "Liste secteur d'activité",

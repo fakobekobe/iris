@@ -869,6 +869,27 @@ def ajouter_secteurfemmeactive(request):
         situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
         lieu_habitation = request.POST.get('lieu_habitation', None)
 
+        print('sexe',sexe)
+        print('nom',nom)
+        print('prenoms',prenoms)
+        print('nomjeunefille',nomjeunefille)
+        print('date_naissance',date_naissance)
+        print('lieu_naissance', lieu_naissance)
+        print('typepiece',typepiece)
+        print('numeropiece',numeropiece)
+        print('nationalite',nationalite)
+        print('contact',contact)
+        print('groupement',groupement)
+        print('dateadhesion',dateadhesion)
+        print('numero_carte',numero_carte)
+        print('typeresponsabilite',typeresponsabilite)
+        print('montantfinancement',montantfinancement)
+        print('chapeau',chapeau)
+        print('personne_ressource',personne_ressource)
+        print('niveauscolaire',niveauscolaire)
+        print('situationmatrimoniale',situationmatrimoniale)
+        print('lieu_habitation',lieu_habitation)
+
         if not date_naissance:
             date_naissance = None
 

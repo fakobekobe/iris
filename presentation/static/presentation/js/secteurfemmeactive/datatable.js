@@ -713,16 +713,17 @@ $(document).ready(function(){
     var envoyer_fiche = $('#envoyer_fiche');
     var nom = $('input[name=nom]');
     var date_naissance = $('input[name=date_naissance]');
+    var lieu_naissance = $('#lieu_naissance');
     var numeropiece = $('input[name=numeropiece]');
     var nationalite = $('select[name=nationalite]');
     var typeresponsabilite = $('#select_typeresponsabilite');
     var montantfinancement = $('#select_montantfinancement');
     var contact = $('input[name=contact]');
+    var numero_carte = $('input[name=numero_carte]');
     var valider = true;
 
     envoyer_fiche.click(function(e){
         e.preventDefault();
-
         if(!nom.val()){
             valider = false;
             alert("Veuillez renseigner le nom.");
