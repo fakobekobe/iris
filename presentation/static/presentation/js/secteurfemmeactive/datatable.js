@@ -713,7 +713,6 @@ $(document).ready(function(){
     var envoyer_fiche = $('#envoyer_fiche');
     var nom = $('input[name=nom]');
     var date_naissance = $('input[name=date_naissance]');
-    var lieu_naissance = $('#lieu_naissance');
     var numeropiece = $('input[name=numeropiece]');
     var nationalite = $('select[name=nationalite]');
     var typeresponsabilite = $('#select_typeresponsabilite');
@@ -732,6 +731,10 @@ $(document).ready(function(){
             valider = false;
             alert("Veuillez renseigner la date de naissance.");
             date_naissance.focus();
+        }else if(!lieu_naissance.val()){
+            valider = false;
+            alert("Veuillez renseigner le lieu de naissance.");
+            label_naissance.focus();
         }else if(!numeropiece.val()){
             valider = false;
             alert("Veuillez renseigner le numéro de la pièce.");
@@ -834,8 +837,6 @@ $(document).ready(function(){
     $('#recherche_groupement').keyup(function(){
         table13.search($(this).val()).draw();
     });
-
-
 
 
 // FIN ***********************************************************************

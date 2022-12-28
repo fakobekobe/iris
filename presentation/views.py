@@ -83,7 +83,19 @@ def ajouter_secteuragricole(request):
                     messages.error(request, "Ce membre existe déjà.")
                     il_existe = False
                 except Membre.DoesNotExist:
-                    objet_membre = Membre()
+                    # On vérifie si le numeropiece existe
+                    try:
+                        Membre.objects.get(numeropiece=numeropiece)
+                        messages.error(request, "Ce numéro de pièce existe déjà.")
+                        il_existe = False
+                    except:
+                        # On vérifie si le numéro de téléphone existe
+                        try:
+                            Membre.objects.get(contact=contact)
+                            messages.error(request, "Ce contact existe déjà.")
+                            il_existe = False
+                        except:
+                            objet_membre = Membre()
             else:
                 # On vérifie si le membre à modifier existe
                 try:
@@ -909,7 +921,19 @@ def ajouter_secteurfemmeactive(request):
                     messages.error(request, "Ce membre existe déjà.")
                     il_existe = False
                 except Membre.DoesNotExist:
-                    objet_membre = Membre()
+                    # On vérifie si le numeropiece existe
+                    try:
+                        Membre.objects.get(numeropiece=numeropiece)
+                        messages.error(request, "Ce numéro de pièce existe déjà.")
+                        il_existe = False
+                    except:
+                        # On vérifie si le numéro de téléphone existe
+                        try:
+                            Membre.objects.get(contact=contact)
+                            messages.error(request, "Ce contact existe déjà.")
+                            il_existe = False
+                        except:
+                            objet_membre = Membre()
             else:  # On traite la modification
                 # On vérifie si le membre à modifier existe
                 try:
