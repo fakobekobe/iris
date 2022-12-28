@@ -1323,7 +1323,6 @@ def liste_membre(request):
         # On détermine le typesecteur
         isecteur = {}
         mon_secteur = None
-        liste_membre = []
 
         if int(typesecteur) == _parametre.id_secteuragricole:
             for secteur in secteurs:
@@ -1331,37 +1330,38 @@ def liste_membre(request):
                 mon_secteur = MembreSecteurAgricole.objects.filter(secteuragricole=secteur.id)
 
                 # On récupère tous les membres du secteur
-                for secteur_simple in mon_secteur:
-                    liste_membre.append(secteur_simple.membre)
+                #for secteur_simple in mon_secteur:
+                    # liste_membre.append(secteur_simple.membre)
 
                 isecteur['secteur'] = secteur
-                isecteur['membres'] = liste_membre
+                #isecteur['membres'] = liste_membre
+                isecteur['typesecteur'] = int(typesecteur)
 
                 # On ajoute le secteur et ses membres dans la liste
                 isecteurs.append(isecteur)
 
                 # On reinitialise les variables
                 isecteur = {}
-                liste_membre = []
 
         elif int(typesecteur) == _parametre.id_secteurfemmeactive:
             for secteur in secteurs:
                 # On récupère la liste des membres du secteur
-                mon_secteur = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=secteur.id)
+                mon_secteur = MembreSecteurFemmeActive.objects.filter(secteurfemmeactive=secteur.id).order_by('montantfinancement__montant')
 
                 # On récupère tous les membres du secteur
                 for secteur_simple in mon_secteur:
-                    liste_membre.append(secteur_simple.membre)
+                    #liste_membre.append(secteur_simple.membre)
+                    secteur_simple.membre.secteur = secteur_simple.membre.secteurs.first().secteur
 
                 isecteur['secteur'] = secteur
-                isecteur['membres'] = liste_membre
+                isecteur['femmeactives'] = mon_secteur
+                isecteur['typesecteur'] = int(typesecteur)
 
                 # On ajoute le secteur et ses membres dans la liste
                 isecteurs.append(isecteur)
 
                 # On reinitialise les variables
                 isecteur = {}
-                liste_membre = []
 
         elif int(typesecteur) == _parametre.id_secteurinformel:
             pass
@@ -1369,11 +1369,14 @@ def liste_membre(request):
         # test
         for secteur in isecteurs:
             print(secteur['secteur'].nom)
-            print(secteur['membres'])
+            for f in secteur['femmeactives']:
+                print(f.membre.nom_prenoms)
+                print(f.membre.secteur)
 
         context = {
             'title': "Liste secteur d'activité",
             'isecteurs': isecteurs,
+            'parametre': _parametre,
         }
 
         return render(request, 'etat/cooperative/liste_membre.html', context)

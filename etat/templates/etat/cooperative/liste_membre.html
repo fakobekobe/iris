@@ -7,17 +7,70 @@
 <!-- page a imprimer -->
 <div id="pageImprimer" style="background:white;">
 
-    <!-- On parcourt la liste des membres  -->
+    <!-- On parcourt la liste des secteurs  -->
     {% for secteur in isecteurs %}
+
+    {% if secteur.typesecteur == parametre.id_secteuragricole %}
+    <!-- SECTEUR AGRICOLE -->
+    <!-- FIN SECTEUR AGRICOLE -->
+    {% elif secteur.typesecteur == parametre.id_secteurfemmeactive %}
+
+    <!-- SECTEUR FEMME ACTIVE -->
     <div class="mb-3">
-        {{secteur.secteur.nom}}
-        {% for membre in secteur.membres %}
-        <p>
-            {{membre.nom_prenoms}}
-        </p>
-        {% endfor %}
+        <!-- Entête -->
+        <div class="text-center">
+            <h4 style="text-decoration:underline;">
+                GROUPEMENT SOLIDAIRE {{secteur.secteur.nom|upper}} ({{secteur.secteur.quantitegroupement.quantite}})
+            </h4>
+            <h5>
+                N°{{secteur.secteur.identifiant|slice:'0:3'}}/{{secteur.secteur.identifiant|slice:'3:6'}}/{{secteur.secteur.identifiant|slice:'6:9'}}/{{secteur.secteur.identifiant|slice:'9:12'}}/{{secteur.secteur.identifiant|slice:'12:'}}
+            </h5>
+        </div>
+        <!-- -->
+
+        <!-- Date d'identification -->
+        <h5 style="display: inline-block; text-decoration:underline;">
+            Date d'identification :
+        </h5>
+        <h6 style="display: inline-block;">
+            {{secteur.secteur.dateenre|date:'d/m/Y'}}
+        </h6>
+        <!-- -->
+
+        <!-- Liste des membres -->
+        <table class="table table-bordered table-responsive-md text-center">
+            <thead class="text-center">
+            <tr class="thead-light">
+                <th>N°</th>
+                <th>Nom et prénoms</th>
+                <th>Contacts</th>
+                <th>Activité</th>
+                <th>Montant financement</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for femmeactive in secteur.femmeactives %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{femmeactive.membre.nom_prenoms|upper}}</td>
+                <td>{{femmeactive.membre.contact}}</td>
+                <td>{{femmeactive.membre.secteur}}</td>
+                <td>{{femmeactive.montantfinancement.montant|separateur_millier}} {{parametre.monnaie}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <!-- -->
     </div>
+    <!-- FIN SECTEUR FEMME ACTIVE-->
+
+    {% elif secteur.typesecteur == parametre.id_secteurinformel %}
+    <!-- SECTEUR INFORMEL -->
+    <!-- FIN SECTEUR INFORMEL -->
+    {% endif %}
+
     {% endfor %}
+
 
 
 </div>
@@ -37,7 +90,11 @@
 <script>
         var imprimer = $('#imprimer');
         imprimer.click(function(){
-            $('#pageImprimer').printThis();
+            $('#pageImprimer').printThis(
+            {
+                loadCSS: "{% static 'css/ipaysage.css' %}", // On charge le css pour l'affichage en paysage
+            }
+            );
         });
 </script>
 {% endblock javascript %}
