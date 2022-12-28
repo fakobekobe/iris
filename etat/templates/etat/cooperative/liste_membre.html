@@ -38,7 +38,7 @@
         <!-- -->
 
         <!-- Liste des membres -->
-        <table class="table table-bordered table-responsive-md text-center">
+        <table class="table table-bordered table-responsive-md text-center mb-3">
             <thead class="text-center">
             <tr class="thead-light">
                 <th>N°</th>
@@ -51,15 +51,54 @@
             <tbody>
             {% for femmeactive in secteur.femmeactives %}
             <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{femmeactive.membre.nom_prenoms|upper}}</td>
-                <td>{{femmeactive.membre.contact}}</td>
-                <td>{{femmeactive.membre.secteur}}</td>
-                <td>{{femmeactive.montantfinancement.montant|separateur_millier}} {{parametre.monnaie}}</td>
+                <td style="height:10px;">{{forloop.counter}}</td>
+                <td style="height:10px;">{{femmeactive.membre.nom_prenoms|upper}}</td>
+                <td style="height:10px;">{{femmeactive.membre.contact}}</td>
+                <td style="height:10px;">{{femmeactive.membre.secteur}}</td>
+                <td style="height:10px;">{{femmeactive.montantfinancement.montant|separateur_millier}} {{parametre.monnaie}}</td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
+        <!-- -->
+
+        <!-- Nom et prénoms des membres -->
+        <div class="mb-2 mt-2">
+            <h5 style="display: inline-block; text-decoration:underline;">
+                Nom et prénoms Responsable :
+            </h5>
+            <h6 style="display: inline-block;">
+                KOFFI KONAN GRACE EMMANUELLA
+            </h6>
+        </div>
+
+        <div class="mb-2">
+            <h5 style="display: inline-block; text-decoration:underline;">
+                Nom et prénoms Trésorière :
+            </h5>
+            <h6 style="display: inline-block;">
+                KOFFI KONAN GRACE EMMANUELLA
+            </h6>
+        </div>
+
+        <div class="mb-2">
+            <h5 style="display: inline-block; text-decoration:underline;">
+                Nom et prénoms 1<sup>ère</sup> Conseillère :
+            </h5>
+            <h6 style="display: inline-block;">
+                KOFFI KONAN GRACE EMMANUELLA
+            </h6>
+        </div>
+
+        <div class="mb-2">
+            <h5 style="display: inline-block; text-decoration:underline;">
+                Nom et prénoms 2<sup>ème</sup> Conseillère :
+            </h5>
+            <h6 style="display: inline-block;">
+                KOFFI KONAN GRACE EMMANUELLA
+            </h6>
+        </div>
+
         <!-- -->
     </div>
     <!-- FIN SECTEUR FEMME ACTIVE-->

@@ -427,6 +427,10 @@ $(document).ready(function(){
             valider = false;
             alert("Veuillez renseigner la date de naissance.");
             date_naissance.focus();
+        }else if(!lieu_naissance.val()){
+            valider = false;
+            alert("Veuillez renseigner le lieu de naissance.");
+            label_naissance.focus();
         }else if(!numeropiece.val()){
             valider = false;
             alert("Veuillez renseigner le numéro de la pièce.");
