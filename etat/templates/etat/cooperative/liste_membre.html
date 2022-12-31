@@ -16,7 +16,7 @@
     {% elif secteur.typesecteur == parametre.id_secteurfemmeactive %}
 
     <!-- SECTEUR FEMME ACTIVE -->
-    <div class="mb-3">
+    <div style="margin-bottom:350px;">
         <!-- Entête -->
         <div class="text-center">
             <h4 style="text-decoration:underline;">
@@ -38,65 +38,69 @@
         <!-- -->
 
         <!-- Liste des membres -->
-        <table class="table table-bordered table-responsive-md text-center mb-3">
+        <div class="row m-0">
+            <div class="col-md-12">
+                <table class=" text-center mb-3 w-100">
             <thead class="text-center">
-            <tr class="thead-light">
-                <th>N°</th>
-                <th>Nom et prénoms</th>
-                <th>Contacts</th>
-                <th>Activité</th>
-                <th>Montant financement</th>
+            <tr class="thead-light" style="background:#ccc;">
+                <th style="border:1px solid #ddd;">N°</th>
+                <th style="border:1px solid #ddd;">Nom et prénoms</th>
+                <th style="border:1px solid #ddd;">Contacts</th>
+                <th style="border:1px solid #ddd;">Activité</th>
+                <th style="border:1px solid #ddd;">Montant financement</th>
             </tr>
             </thead>
             <tbody>
             {% for femmeactive in secteur.femmeactives %}
             <tr>
-                <td style="height:10px;">{{forloop.counter}}</td>
-                <td style="height:10px;">{{femmeactive.membre.nom_prenoms|upper}}</td>
-                <td style="height:10px;">{{femmeactive.membre.contact}}</td>
-                <td style="height:10px;">{{femmeactive.membre.secteur}}</td>
-                <td style="height:10px;">{{femmeactive.montantfinancement.montant|separateur_millier}} {{parametre.monnaie}}</td>
+                <td style="border:1px solid #ccc;">{{forloop.counter}}</td>
+                <td style="border:1px solid #ccc;">{{femmeactive.membre.nom_prenoms|upper}}</td>
+                <td style="border:1px solid #ccc;">{{femmeactive.membre.contact}}</td>
+                <td style="border:1px solid #ccc;">{{femmeactive.membre.secteur}}</td>
+                <td style="border:1px solid #ccc;">{{femmeactive.montantfinancement.montant|separateur_millier}} {{parametre.monnaie}}</td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
+            </div>
+        </div>
         <!-- -->
 
-        <!-- Nom et prénoms des membres -->
+        <!-- Nom et prénoms des membres du bureau -->
         <div class="mb-2 mt-2">
             <h5 style="display: inline-block; text-decoration:underline;">
                 Nom et prénoms Responsable :
             </h5>
-            <h6 style="display: inline-block;">
-                KOFFI KONAN GRACE EMMANUELLA
-            </h6>
+            <h5 style="display: inline-block;">
+                {{secteur.secteur.responsable}}
+            </h5>
         </div>
 
         <div class="mb-2">
             <h5 style="display: inline-block; text-decoration:underline;">
                 Nom et prénoms Trésorière :
             </h5>
-            <h6 style="display: inline-block;">
-                KOFFI KONAN GRACE EMMANUELLA
-            </h6>
+            <h5 style="display: inline-block;">
+                {{secteur.secteur.tresoriere}}
+            </h5>
         </div>
 
         <div class="mb-2">
             <h5 style="display: inline-block; text-decoration:underline;">
                 Nom et prénoms 1<sup>ère</sup> Conseillère :
             </h5>
-            <h6 style="display: inline-block;">
-                KOFFI KONAN GRACE EMMANUELLA
-            </h6>
+            <h5 style="display: inline-block;">
+                {{secteur.secteur.conseillere}}
+            </h5>
         </div>
 
         <div class="mb-2">
             <h5 style="display: inline-block; text-decoration:underline;">
                 Nom et prénoms 2<sup>ème</sup> Conseillère :
             </h5>
-            <h6 style="display: inline-block;">
-                KOFFI KONAN GRACE EMMANUELLA
-            </h6>
+            <h5 style="display: inline-block;">
+                {{secteur.secteur.conseilleres}}
+            </h5>
         </div>
 
         <!-- -->

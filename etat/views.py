@@ -179,6 +179,7 @@ def fiche_identification(request):
                 membre.nombrefemme = membre.get_nombre_parent('Femme')
                 membre.nombreenfant = membre.get_nombre_parent('Enfant')
                 membre.lieu_habitation = membre.get_lieu_habitation()
+                membre.secteuractivite = membre.secteurs.first()
                 try:
                     document = Document.objects.get(membre=membre)
                     membre.photo = document.get_photo_membre()
@@ -1353,6 +1354,16 @@ def liste_membre(request):
                     #liste_membre.append(secteur_simple.membre)
                     try:
                         secteur_simple.membre.secteur = secteur_simple.membre.secteurs.first().secteur
+                        # On récupère le nom des membres du bureau
+                        if secteur_simple.typeresponsabilite.id == _parametre.id_responsable:
+                            secteur.responsable = secteur_simple.membre.nom_prenoms
+                        elif secteur_simple.typeresponsabilite.id == _parametre.id_tresoriere:
+                            secteur.tresoriere = secteur_simple.membre.nom_prenoms
+                        elif secteur_simple.typeresponsabilite.id == _parametre.id_conseillere1:
+                            secteur.conseillere = secteur_simple.membre.nom_prenoms
+                        elif secteur_simple.typeresponsabilite.id == _parametre.id_conseillere2:
+                            secteur.conseilleres = secteur_simple.membre.nom_prenoms
+
                     except:
                         pass
 

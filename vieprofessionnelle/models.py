@@ -50,8 +50,6 @@ class SecteurActive(models.Model):
     presidente = models.CharField(max_length=250, null=True, blank=True, default="")
     contact = models.CharField(max_length=100, null=True, blank=True, default="")
     dateenre = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'enregistrement")
-    gps_longitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Longitude")
-    gps_latitude = models.CharField(max_length=100, null=True, blank=True, verbose_name="GPS Latitude")
 
     class Meta:
         abstract = True
@@ -146,10 +144,7 @@ class Membre(models.Model):
 
 
 class SecteurAgricole(SecteurActive):
-    speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
-    superficie_en_culture = models.IntegerField(verbose_name="Superficie en culture")
-    superficie_en_production = models.IntegerField(verbose_name="Superficie en production")
-
+    #speculation_agricole = models.IntegerField(verbose_name="Spéculation agricole")
     ville = models.ForeignKey(Ville, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     membres = models.ManyToManyField(Membre, through='MembreSecteurAgricole', through_fields=('secteuragricole', 'membre'))
 
@@ -163,6 +158,10 @@ class MembreSecteurAgricole(models.Model):
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
     chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    superficie_en_culture = models.IntegerField(default=0, verbose_name="Superficie en culture")
+    superficie_en_production = models.IntegerField(default=0, verbose_name="Superficie en production")
+    gps_longitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Longitude")
+    gps_latitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Latitude")
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteuragricole.nom
@@ -182,6 +181,8 @@ class MembreSecteurInformel(models.Model):
     date_adhesion = models.DateField(default=None, null=True, blank=True, verbose_name="Date d'adhésion")
     numero_carte = models.CharField(max_length=250, null=True, blank=True, verbose_name="N°Carte de membre")
     chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    gps_longitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Longitude")
+    gps_latitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Latitude")
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteurinformel.nom
@@ -212,6 +213,8 @@ class MembreSecteurFemmeActive(models.Model):
     typeresponsabilite = models.ForeignKey("TypeResponsabilite", null=True, blank=True, default=True, on_delete=models.SET_NULL)
     montantfinancement = models.ForeignKey("MontantFinancement", null=True, blank=True, default=True, on_delete=models.SET_NULL)
     chapeau = models.ForeignKey(Chapeau, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    gps_longitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Longitude")
+    gps_latitude = models.CharField(max_length=100, null=True, blank=True, default="", verbose_name="GPS Latitude")
 
     def __str__(self):
         return self.membre.nom + ' ' + self.secteurfemmeactive.nom

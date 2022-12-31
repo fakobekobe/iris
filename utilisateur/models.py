@@ -12,6 +12,10 @@ class Parametre(models.Model):
     id_secteurinformel = models.IntegerField(default=0)
     id_accident = models.IntegerField(default=0)
     id_deces = models.IntegerField(default=0)
+    id_responsable = models.IntegerField(default=0)
+    id_tresoriere = models.IntegerField(default=0)
+    id_conseillere1 = models.IntegerField(default=0)
+    id_conseillere2 = models.IntegerField(default=0)
 
 # Liste des variables Globales
 LISTE_MODELS = {

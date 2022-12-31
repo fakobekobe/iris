@@ -53,7 +53,7 @@
                                             {% block id-membre %}{% endblock id-membre %}
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Sexe -->
                                             {% block sexe %}
                                             <div class="input-group mb-3 justify-content-center">
                                                 <div class="input-group-prepend">
@@ -69,7 +69,7 @@
                                             {% endblock sexe %}
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Nom et prénoms -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
                                                   <input type="text" name="nom" class="form-control" placeholder="Nom" {% block nom-value %}{% endblock nom-value %} required>
@@ -80,7 +80,7 @@
                                             </div>
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Nom jeune fille -->
                                             <div class="form-row mb-2" id="nomjeunefille">
                                                 <div class="col">
                                                   <input type="text" name="nomjeunefille" class="form-control" placeholder="Nom de jeune fille" {% block nomjeunefille %}{% endblock nomjeunefille %}>
@@ -88,7 +88,7 @@
                                             </div>
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Date de naissance -->
                                             <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text label-sans-fond">Date de naissance</span>
@@ -97,7 +97,7 @@
                                             </div>
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Lieu de naissance -->
                                             <div class="input-group mb-2">
                                                   <input type="text" name="lieunaissancetexte" id="label_naissance" class="form-control" placeholder="Lieu de naissance" {% block lieunaissancetexte %}{% endblock lieunaissancetexte %} readonly>
                                                     <div class="input-group-append">
@@ -110,7 +110,7 @@
                                             </div>
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Type de pièce -->
                                             {% block type-piece %}
                                             <div class="input-group mb-3 justify-content-center">
                                                 <div class="input-group-prepend">
@@ -128,7 +128,7 @@
                                             {% endblock type-piece %}
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- N°pièce -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
                                                   <input type="text" name="numeropiece" class="form-control" placeholder="N° de la pièce" {% block numeropiece %}{% endblock numeropiece %} required>
@@ -136,7 +136,7 @@
                                             </div>
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Nationalité -->
                                             {% block nationalite %}
                                             <div class="form-row mb-2">
                                               <select name="nationalite" id="select_nationalite" class="form-control" required>
@@ -149,7 +149,7 @@
                                             {% endblock nationalite %}
                                             <!-- -->
 
-                                            <!-- -->
+                                            <!-- Contact -->
                                             <div class="form-row mb-2">
                                                 <div class="col">
                                                   <input type="text" name="contact" class="form-control" placeholder="Contacts" {% block contact %}{% endblock contact %}>
@@ -198,6 +198,17 @@
                                                 <div class="form-row mb-2">
                                                     <div class="col">
                                                       <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre" {% block numero_carte %}{% endblock numero_carte %}>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- GPS -->
+                                                <div class="form-row mb-2">
+                                                    <div class="col">
+                                                        <input type="text" name="gps_longitude" id="gps_longitude" {% block longitude-value %}{% endblock longitude-value %} class="form-control" placeholder="GPS Longitude">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" name="gps_latitude" id="gps_latitude" {% block latitude-value %}{% endblock latitude-value %} class="form-control" placeholder="GPS Latitude">
                                                     </div>
                                                 </div>
                                                 <!-- -->

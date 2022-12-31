@@ -60,6 +60,10 @@ def ajouter_secteuragricole(request):
         cooperative = request.POST.get('cooperative', None)
         dateadhesion = request.POST.get('dateadhesion', None)
         numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        superficie_en_culture = request.POST.get('superficie_en_culture', None)
+        superficie_en_production = request.POST.get('superficie_en_production', None)
+        gps_longitude = strip_tags(request.POST.get('gps_longitude', '')).strip()
+        gps_latitude = strip_tags(request.POST.get('gps_latitude', '')).strip()
         chapeau = request.POST.get('chapeau', None)
         niveauscolaire = request.POST.get('niveauscolaire', None)
         situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
@@ -140,6 +144,10 @@ def ajouter_secteuragricole(request):
                         date_adhesion=dateadhesion,
                         numero_carte=numero_carte,
                         chapeau=Chapeau.objects.get(id=chapeau),
+                        superficie_en_culture=superficie_en_culture,
+                        superficie_en_production=superficie_en_production,
+                        gps_longitude=gps_longitude,
+                        gps_latitude=gps_latitude,
                     )
 
                     messages.success(request, "Enregistrement réussi")
@@ -151,6 +159,10 @@ def ajouter_secteuragricole(request):
                         membresecteura.date_adhesion = dateadhesion
                         membresecteura.numero_carte = numero_carte
                         membresecteura.chapeau = Chapeau.objects.get(id=chapeau)
+                        membresecteura.superficie_en_culture = superficie_en_culture,
+                        membresecteura.superficie_en_production = superficie_en_production,
+                        membresecteura.gps_longitude = gps_longitude,
+                        membresecteura.gps_latitude = gps_latitude,
                         membresecteura.save()
 
                         messages.success(request, "Modification réussi")
@@ -223,7 +235,7 @@ def ajouter_secteuragricole(request):
         "active_liste": active_liste,
     }
 
-    if request.session.get('id_membre'): # On affiche la page de modification
+    if request.session.get('id_membre'):  # On affiche la page de modification
         # On récupère le membre
         context["membre_actif"] = Membre.objects.get(id=request.session.get('id_membre'))
         context["membre_secteuragricole"] = MembreSecteurAgricole.objects.get(membre_id=request.session.get('id_membre'))
@@ -828,6 +840,7 @@ def imprimer_secteuragricole(request, id):
         membre.nombrefemme = membre.get_nombre_parent('Femme')
         membre.nombreenfant = membre.get_nombre_parent('Enfant')
         membre.lieu_habitation = membre.get_lieu_habitation()
+        membre.secteuractivite = membre.secteurs.first()
         try:
             document = Document.objects.get(membre=membre)
             membre.photo = document.get_photo_membre()
@@ -873,6 +886,8 @@ def ajouter_secteurfemmeactive(request):
         groupement = request.POST.get('groupement', None)
         dateadhesion = request.POST.get('dateadhesion', None)
         numero_carte = strip_tags(request.POST.get('numero_carte', None)).strip()
+        gps_longitude = strip_tags(request.POST.get('gps_longitude', '')).strip()
+        gps_latitude = strip_tags(request.POST.get('gps_latitude', '')).strip()
         typeresponsabilite = request.POST.get('typeresponsabilite', None)
         montantfinancement = request.POST.get('montantfinancement', None)
         chapeau = request.POST.get('chapeau', None)
@@ -880,27 +895,6 @@ def ajouter_secteurfemmeactive(request):
         niveauscolaire = request.POST.get('niveauscolaire', None)
         situationmatrimoniale = request.POST.get('situationmatrimoniale', None)
         lieu_habitation = request.POST.get('lieu_habitation', None)
-
-        print('sexe',sexe)
-        print('nom',nom)
-        print('prenoms',prenoms)
-        print('nomjeunefille',nomjeunefille)
-        print('date_naissance',date_naissance)
-        print('lieu_naissance', lieu_naissance)
-        print('typepiece',typepiece)
-        print('numeropiece',numeropiece)
-        print('nationalite',nationalite)
-        print('contact',contact)
-        print('groupement',groupement)
-        print('dateadhesion',dateadhesion)
-        print('numero_carte',numero_carte)
-        print('typeresponsabilite',typeresponsabilite)
-        print('montantfinancement',montantfinancement)
-        print('chapeau',chapeau)
-        print('personne_ressource',personne_ressource)
-        print('niveauscolaire',niveauscolaire)
-        print('situationmatrimoniale',situationmatrimoniale)
-        print('lieu_habitation',lieu_habitation)
 
         if not date_naissance:
             date_naissance = None
@@ -981,7 +975,8 @@ def ajouter_secteurfemmeactive(request):
                         personneressource=PersonneRessource.objects.get(id=personne_ressource),
                         typeresponsabilite=TypeResponsabilite.objects.get(id=typeresponsabilite),
                         montantfinancement=MontantFinancement.objects.get(id=montantfinancement),
-
+                        gps_longitude=gps_longitude,
+                        gps_latitude=gps_latitude,
                     )
 
                     messages.success(request, "Enregistrement réussi")
@@ -996,6 +991,8 @@ def ajouter_secteurfemmeactive(request):
                         membresecteur.personneressource = PersonneRessource.objects.get(id=personne_ressource)
                         membresecteur.typeresponsabilite = TypeResponsabilite.objects.get(id=typeresponsabilite)
                         membresecteur.montantfinancement = MontantFinancement.objects.get(id=montantfinancement)
+                        membresecteur.gps_longitude = gps_longitude
+                        membresecteur.gps_latitude = gps_latitude
                         membresecteur.save()
 
                         messages.success(request, "Modification réussi")

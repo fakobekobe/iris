@@ -148,6 +148,8 @@
 {% block groupement %}value="{{membre_secteurfemmeactive.secteurfemmeactive.id}}"{% endblock groupement %}
 {% block dateadhesion %}value="{{membre_secteurfemmeactive.date_adhesion|date:'Y-m-d'}}"{% endblock dateadhesion %}
 {% block numero_carte %}value="{{membre_secteurfemmeactive.numero_carte}}"{% endblock numero_carte %}
+{% block longitude-value %}value="{{membre_secteurfemmeactive.gps_longitude}}"{% endblock longitude-value %}
+{% block latitude-value %}value="{{membre_secteurfemmeactive.gps_latitude}}"{% endblock latitude-value %}
 {% block chapeau_texte %}value="{{membre_secteurfemmeactive.chapeau.chapeau}}"{% endblock chapeau_texte %}
 {% block chapeau %}value="{{membre_secteurfemmeactive.chapeau.id}}"{% endblock chapeau %}
 {% block personne_r_texte %}value="{% if membre_secteurfemmeactive.personneressource.chapeau %} {{membre_secteurfemmeactive.personneressource.chapeau.chapeau}} {% else %} {{membre_secteurfemmeactive.personneressource.membre.nom_prenoms}} {% endif %}"{% endblock personne_r_texte %}

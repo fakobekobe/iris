@@ -376,8 +376,6 @@ $(document).ready(function(){
                     ville: $('#ville').val(),
                     marche: $('#marche').val(),
                     quantitegroupement: $('#select_quantitegroupement').val(),
-                    gps_longitude: $('#gps_longitude').val(),
-                    gps_latitude: $('#gps_latitude').val(),
                     dateenre: $('#dateenre').val(),
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },

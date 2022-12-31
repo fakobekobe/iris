@@ -175,7 +175,7 @@
                                             <div class="card-header bg-success">Vie coopérative</div>
                                             <div class="card-body">
 
-                                                <!-- -->
+                                                <!-- Coopérative -->
                                                 <div class="input-group mb-2">
                                                       <input type="text" name="cooperative_texte" id="cooperative_texte" {% block cooperative_texte %}value=""{% endblock cooperative_texte %} class="form-control" placeholder="Nom de la coopérative" readonly>
                                                         <div class="input-group-append">
@@ -188,7 +188,7 @@
                                                 </div>
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!--  Date adhésion -->
                                                 <div class="input-group mb-2">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text label-sans-fond">Date d'adhésion</span>
@@ -197,7 +197,7 @@
                                                 </div>
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!-- Numéro carte -->
                                                 <div class="form-row mb-2">
                                                     <div class="col">
                                                       <input type="text" name="numero_carte" class="form-control" placeholder="N° de carte de membre" {% block numero_carte %}{% endblock numero_carte %}>
@@ -205,7 +205,42 @@
                                                 </div>
                                                 <!-- -->
 
+                                                <!-- Superficie en culture -->
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text label-sans-fond">Superficie en culture</span>
+                                                    </div>
+                                                    <input type="number" name="superficie_en_culture" id="superficie_en_culture" min="0" {% block culture-value %}value="0"{% endblock culture-value %} class="form-control" >
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text label-sans-fond">ha</span>
+                                                    </div>
+                                                </div>
                                                 <!-- -->
+
+                                                <!-- Superficie en production -->
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text label-sans-fond">Superficie en production</span>
+                                                    </div>
+                                                    <input type="number" name="superficie_en_production" id="superficie_en_production" min="0" {% block production-value %}value="0"{% endblock production-value %} class="form-control" >
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text label-sans-fond">ha</span>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- GPS -->
+                                                <div class="form-row mb-2">
+                                                    <div class="col">
+                                                        <input type="text" name="gps_longitude" id="gps_longitude" {% block longitude-value %}{% endblock longitude-value %} class="form-control" placeholder="GPS Longitude">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" name="gps_latitude" id="gps_latitude" {% block latitude-value %}{% endblock latitude-value %} class="form-control" placeholder="GPS Latitude">
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+
+                                                <!-- Chapeau -->
                                                 <div class="input-group mb-2">
                                                       <input type="text" name="chapeau_texte" id="chapeau_texte" {% block chapeau_texte %}value=""{% endblock chapeau_texte %} class="form-control" placeholder="Chapeau" readonly>
                                                         <div class="input-group-append">
@@ -218,7 +253,7 @@
                                                 </div>
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!-- Niveau -->
                                                 {% block niveau %}
                                                 <div class="form-row mb-2">
                                                     <select name="niveau" id="niveau" class="form-control" required>
@@ -231,7 +266,7 @@
                                                 {% endblock niveau %}
                                                 <!-- -->
 
-                                                <!-- -->
+                                                <!-- Niveau scolaire -->
                                                 {% block niveauscolaire %}
                                                 <div class="form-row mb-2">
                                                     <select name="niveauscolaire" id="niveauscolaire" class="form-control" required>

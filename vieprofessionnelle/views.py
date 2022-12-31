@@ -925,11 +925,6 @@ def ajouter_cooperative(request):
             presidente = request.POST.get('presidente', None)
             contact_presidente = request.POST.get('contact_presidente', None)
             ville = request.POST.get('ville', None)
-            speculation_agricole = request.POST.get('speculation_agricole', None)
-            superficie_en_culture = request.POST.get('superficie_en_culture', None)
-            superficie_en_production = request.POST.get('superficie_en_production', None)
-            gps_longitude = request.POST.get('gps_longitude', None)
-            gps_latitude = request.POST.get('gps_latitude', None)
             dateenre = request.POST.get('dateenre', None)
 
 
@@ -952,11 +947,6 @@ def ajouter_cooperative(request):
                 secteur_agricole.presidente = presidente.title()
                 secteur_agricole.contact = contact_presidente
                 secteur_agricole.ville = Ville.objects.get(id=ville)
-                secteur_agricole.speculation_agricole = speculation_agricole
-                secteur_agricole.superficie_en_culture = superficie_en_culture
-                secteur_agricole.superficie_en_production = superficie_en_production
-                secteur_agricole.gps_longitude = gps_longitude
-                secteur_agricole.gps_latitude = gps_latitude
                 secteur_agricole.dateenre = dateenre
 
                 secteur_agricole.save()
@@ -989,8 +979,6 @@ def ajouter_groupement(request):
             ville = request.POST.get('ville', None)
             marche = request.POST.get('marche', None)
             quantitegroupement = request.POST.get('quantitegroupement', None)
-            gps_longitude = request.POST.get('gps_longitude', None)
-            gps_latitude = request.POST.get('gps_latitude', None)
             dateenre = request.POST.get('dateenre', None)
 
 
@@ -1027,8 +1015,6 @@ def ajouter_groupement(request):
                 secteur_femmeactive.ville = Ville.objects.get(id=ville)
                 secteur_femmeactive.marche = marche
                 secteur_femmeactive.quantitegroupement = quantitegroupement
-                secteur_femmeactive.gps_longitude = gps_longitude
-                secteur_femmeactive.gps_latitude = gps_latitude
                 secteur_femmeactive.dateenre = dateenre
                 secteur_femmeactive.set_identifiant()
 
